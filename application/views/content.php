@@ -1,40 +1,52 @@
-<div class="container">
-  <h2 class="hidden">Modal Login Example</h2>
-  <!-- Trigger the modal with a button -->
-  <button type="button" class="btn btn-primary btn-lg hidden" id="myBtn">Login</button>
-
-  <!-- Modal -->
-  <div class="modal fade" id="myModal_login" role="dialog">
-    <div class="modal-dialog">
-    
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header btn-primary" style="padding:35px 50px;">
-          
-          <h4 id="color"><span class="glyphicon glyphicon-lock"></span> Iniciar Session</h4>
-        </div>
-        <div class="modal-body" style="padding:40px 50px;">
-            <form role="form" method="post" action="javascript:verificarusuario()">
-            <div class="form-group">
-              <label for="usrname"><span class="glyphicon glyphicon-user"></span> Usuario</label>
-              <input type="text" class="form-control" required="true" id="usrname" placeholder="nombre usuario">
-            </div>
-            <div class="form-group">
-              <label for="psw"><span class="glyphicon glyphicon-eye-open"></span> Contraseña</label>
-              <input type="text" class="form-control" required="true" id="psw" placeholder="****">
-            </div>
+<div  class="container">
+  <div class="login-box">
+      <div class="login-logo">
+        <a href="<?php echo base_url()?>"><b>Acceso de Usuario</b></a>
+      </div><!-- /.login-logo -->
+      <div id="efecto" class="login-box-body">
+        <p class="login-box-msg">Ingrese sus datos para iniciar session</p>
+        <form id="form1" action="javascript:verificarusuario()" method="post">
+          <div class="form-group has-feedback">
+              <input type="text" id="rut" class="form-control" placeholder="Rut" autofocus="true" required="true">
             
-              <button type="submit" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-off"></span> Login</button>
-          </form>
-        </div>
-        <div class="modal-footer">
+          </div>
+          <div class="form-group has-feedback">
+              <input type="password" class="form-control" placeholder="Contraseña" required="true">
+            
+          </div>
           
+       
+             <div class="row">
+            <div class="col-xs-8">
+             
+            </div><!-- /.col -->
+            <div class="col-xs-4">
+                   <button type="submit" form="form1" class="btn btn-primary btn-block btn-flat">Acceder</button>
+            </div><!-- /.col -->
+          </div>
          
-        </div>
+        </form>
+
+        
+
+       
+
       </div>
-      
+      <br />
+        <div id="mesaje"></div>
     </div>
-  </div> 
+
+   
+    <script src="<?php echo base_url()?>../plugins/iCheck/icheck.min.js"></script>
+    <script>
+      $(function () {
+        $('input').iCheck({
+          checkboxClass: 'icheckbox_square-blue',
+          radioClass: 'iradio_square-blue',
+          increaseArea: '20%' // optional
+        });
+      });
+    </script> 
 </div>
  
-</div>
+

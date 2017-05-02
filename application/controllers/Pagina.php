@@ -6,17 +6,17 @@ class Pagina extends CI_Controller {
 	
 	public function index()
 	{
-		$this->load->view('header');
+            
+            if($this->session->userdata('login')==true){
+                if($this->session->userdata('perfil')==100){
+                    
+                }
+            }else{
+                $this->load->view('header');
                 $this->load->view('content');
                 $this->load->view('footer');
+            }
+		
 	}
-        function cargarcontent(){
-              if($this->session->userdata('login')==false){
-$data['mensaje']="abrirmodal";
-              }else{
-                $data['mensaje']="cerrarmodal";
-              }
-              echo json_encode($data);
-            
-        }
+       
 }
