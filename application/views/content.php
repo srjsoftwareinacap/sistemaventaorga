@@ -11,7 +11,7 @@
             
           </div>
           <div class="form-group has-feedback">
-              <input type="password" class="form-control" placeholder="Contraseña" required="true">
+              <input  id="contraseña" type="password" class="form-control" placeholder="Contraseña" required="true">
             
           </div>
           

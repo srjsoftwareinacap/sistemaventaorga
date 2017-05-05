@@ -35,10 +35,27 @@ function volvernormal() {
     };
 function verificarusuario(){
     
-    
-     ejecutarefecto1();
-         $("#mesaje").html("<p class='msj' >"+"mostrar texto"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
-      return false;
+    var rut= $("#rut").val();
+    var contraseña=$("#contraseña").val();
+    $.post(
+    base_url+"Pagina/validarusuario",
+    {rut:rut,contraseña:contraseña},
+    function(vector){  
+         if(vector.mensaj=="usuario valido"){
+             $("#mesaje").html("<p class='msj' >"+vector.mensaj+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+     setTimeout("location.reload()",2000);  
+         }else{
+             
+             $("#mesaje").html("<p class='msjerror' >"+vector.mensaj+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+             ejecutarefecto1();
+           return false;
+             
+         }  
+    },
+    'json'
+    );
+
+     
  
     
     

@@ -16,7 +16,34 @@
 	width: 100%;
 	border:1px solid blue;
 	text-align: center;
-	background-color: rgba(255,0,0,0.7);
+	background-color: rgba(0,255,0,0.7);
+	border-radius: 10px;
+	color: white;
+}
+#sessiones{
+    color: white;
+ 
+	text-align: center;
+	   
+	
+        margin-left: 85%;
+  
+}
+
+#modificar{
+  background-color: rgba(0,0,128,1.0);  
+}
+#titulo{
+    color: white;
+}
+#menu{
+    background-color: rgba(0,0,0,0.9); 
+}
+.msjerror{
+	width: 100%;
+	border:1px solid blue;
+		text-align: center;
+	background-color: rgba(255,0,0,0.8);
 	border-radius: 10px;
 	color: #FD0;
 }
