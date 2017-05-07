@@ -22,7 +22,7 @@
 }
 #sessiones{
     color: white;
- 
+ margin-top: 0.5%;
 	text-align: center;
 	   
 	
@@ -38,6 +38,9 @@
 }
 #menu{
     background-color: rgba(0,0,0,0.9); 
+}
+#contentgproducto{
+    margin-top: -3%;
 }
 .msjerror{
 	width: 100%;

@@ -14,12 +14,63 @@ class Pagina extends CI_Controller {
 	public function index()
 	{
             
+             
+            
             if($this->session->userdata('login')==true){
                 if($this->session->userdata('perfil')==100){
-                    if($this->session->userdata('ir')==0){
-                        $this->load->view('administrador/header');
+                    //inicio
+                    if($this->session->userdata('gestion')==0){
+                        if($this->session->userdata('ir')==0){
+                            $this->load->view('administrador/header');
                         $this->load->view('administrador/contentinicio');
                         $this->load->view('administrador/footer');
+                        }
+                        
+                    }else{
+                        //gestion venta
+                        if($this->session->userdata('gestion')==1){
+                            
+                        }else{
+                            //gestion inventario
+                           if($this->session->userdata('gestion')==2){
+                               //gestion producto
+                               if($this->session->userdata('ir')==0){
+                                   $this->load->view('administrador/ginventario/gestionproducto/header');
+                        $this->load->view('administrador/ginventario/gestionproducto/content');
+                        $this->load->view('administrador/ginventario/gestionproducto/footer');
+                               }else{
+                                   //entrada de producto
+                                   if ($this->session->userdata('ir')==1){
+                                       
+                                   }else{
+                                       //salida de producto
+                                       if($this->session->userdata('ir')==2){
+                                           
+                                       }else{
+                                           //reporte de entrada
+                                       if($this->session->userdata('ir')==3){
+                                           
+                                       } else {
+                                           //reporte salida
+                                           if ($this->session->userdata('ir')==4){
+                                               
+                                           }  
+                                       }   
+                                       }
+                                   }
+                               }                               
+                           }else{
+                               //gestion odt
+                               if($this->session->userdata('gestion')==3){
+                                   
+                               }else{
+                                   //g ingreso de soporte
+                                   if($this->session->userdata('gestion')==4){
+                                       
+                                   }
+                               }
+                           } 
+                        }
                     }
                 }
             }else{
@@ -28,6 +79,48 @@ class Pagina extends CI_Controller {
                 $this->load->view('footer');
             }
 		
+	}
+        ////////////////////////////seccion de cambio de gestion venta///////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        ////////////////////////////seccion de cambio de gestion inventario///////////////////////////////////
+        	function ginventario(){
+	$rut =	$this->session->userdata('usuario');
+	$perfil = $this->session->userdata('perfil');
+	$rut_empresas = $this->session->userdata('rut_empresa');
+	$nombre= $this->session->userdata('nombre_u');
+	$ira =0;
+        $gestion=2;
+	
+	$vector =array(
+                  "usuario"=>$rut,
+                  "rut_empresa"=>$rut_empresas,
+                  "nombre_u"=>$nombre,
+                    "login"=>true,
+                    "perfil"=>$perfil,
+            "gestion"=>$gestion,
+                    "ir"=>$ira
+                );
+	
+	$this->session->set_userdata($vector);
+	redirect(base_url());
+	
+	}
+        ///////////////////////////////////////////////////fin de cambio/////////////////////////////////////////////   
+        
+        
+           ////////////////////////////seccion de cambio de gestion orden de trabajo///////////////////////////////////
+        /////////////////////////////////////////////fin de cambio///////////////////////////////////////////////////
+        
+        
+           ////////////////////////////seccion de cambio de gestion soporte///////////////////////////////////
+        ///////////////////////////////////////////////fin de cambio/////////////////////////////////////////////////
+        
+        
+        
+        	function cerrar(){
+		$this->session->sess_destroy();
+          redirect(base_url());    
 	}
         function  validarusuario(){
         $rut= $this->input->post("rut");
@@ -38,6 +131,7 @@ class Pagina extends CI_Controller {
                 //sacarrutempresa
                 $rut_empresas="";
                 $nombre="";
+                $gestion=0;
                 $sacar= $this->Modelo->consultarutempresa($rut);
                 foreach ($sacar->result() as $valor){
           $rut_empresas= $valor->rut_empresa;
@@ -51,6 +145,7 @@ class Pagina extends CI_Controller {
                   "nombre_u"=>$nombre,
                     "login"=>true,
                     "perfil"=>$perfil,
+                    "gestion"=>$gestion,
                     "ir"=>$ira
                 );
         } else {
@@ -58,6 +153,7 @@ class Pagina extends CI_Controller {
         $ira=0;
 	$rut_empresas="";
 	$nombre="";
+        $gestion=0;
 	$sacar= $this->Modelo->consultarutem($rut);
         foreach ($sacar->result() as $valor){
         $nombre= $valor->nombre_usuario;     	
@@ -71,6 +167,7 @@ class Pagina extends CI_Controller {
                   "nombre_u"=>$nombre,
                     "login"=>true,
                     "perfil"=>$perfil,
+                    "gestion"=>$gestion,
                     "ir"=>$ira
                 );	
         }else{
@@ -81,6 +178,7 @@ class Pagina extends CI_Controller {
                   "nombre_u"=>"",
                     "login"=>false,
                     "perfil"=>"",
+                    "gestion"=>"",
                     "ir"=>""
 
                 );

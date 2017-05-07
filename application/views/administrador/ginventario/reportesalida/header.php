@@ -17,7 +17,8 @@
 <script type="text/javascript" src="<?php echo base_url()?>../js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="<?php echo base_url()?>../css/AdminLTE.min.css">
 
-  
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="<?php echo base_url()?>../css/skins/_all-skins.min.css">
 <script type="text/javascript" src="<?php echo base_url()?>../js/bootstrap.js"></script>
 
