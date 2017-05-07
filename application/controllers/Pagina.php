@@ -35,25 +35,33 @@ class Pagina extends CI_Controller {
                            if($this->session->userdata('gestion')==2){
                                //gestion producto
                                if($this->session->userdata('ir')==0){
-                                   $this->load->view('administrador/ginventario/gestionproducto/header');
+                        $this->load->view('administrador/ginventario/gestionproducto/header');
                         $this->load->view('administrador/ginventario/gestionproducto/content');
                         $this->load->view('administrador/ginventario/gestionproducto/footer');
                                }else{
                                    //entrada de producto
-                                   if ($this->session->userdata('ir')==1){
-                                       
+                          if ($this->session->userdata('ir')==1){
+                        $this->load->view('administrador/ginventario/entradaproducto/header');
+                        $this->load->view('administrador/ginventario/entradaproducto/content');
+                        $this->load->view('administrador/ginventario/entradaproducto/footer');
                                    }else{
                                        //salida de producto
                                        if($this->session->userdata('ir')==2){
-                                           
+                        $this->load->view('administrador/ginventario/salidaproducto/header');
+                        $this->load->view('administrador/ginventario/salidaproducto/content');
+                        $this->load->view('administrador/ginventario/salidaproducto/footer');
                                        }else{
                                            //reporte de entrada
                                        if($this->session->userdata('ir')==3){
-                                           
+                        $this->load->view('administrador/ginventario/reporteentrada/header');
+                        $this->load->view('administrador/ginventario/reporteentrada/content');
+                        $this->load->view('administrador/ginventario/reporteentrada/footer');
                                        } else {
                                            //reporte salida
                                            if ($this->session->userdata('ir')==4){
-                                               
+                        $this->load->view('administrador/ginventario/reportesalida/header');
+                        $this->load->view('administrador/ginventario/reportesalida/content');
+                        $this->load->view('administrador/ginventario/reportesalida/footer');
                                            }  
                                        }   
                                        }
@@ -80,6 +88,30 @@ class Pagina extends CI_Controller {
             }
 		
 	}
+        
+        function volverinicio(){
+        $rut =	$this->session->userdata('usuario');
+	$perfil = $this->session->userdata('perfil');
+	$rut_empresas = $this->session->userdata('rut_empresa');
+	$nombre= $this->session->userdata('nombre_u');
+	$ira =0;
+        $gestion=0;
+	
+	$vector =array(
+                  "usuario"=>$rut,
+                  "rut_empresa"=>$rut_empresas,
+                  "nombre_u"=>$nombre,
+                    "login"=>true,
+                    "perfil"=>$perfil,
+            "gestion"=>$gestion,
+                    "ir"=>$ira
+                );
+	
+	$this->session->set_userdata($vector);
+	redirect(base_url());    
+        }
+
+
         ////////////////////////////seccion de cambio de gestion venta///////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////////////////
         
@@ -106,6 +138,101 @@ class Pagina extends CI_Controller {
 	redirect(base_url());
 	
 	}
+        function G_producto(){
+        $rut =	$this->session->userdata('usuario');
+	$perfil = $this->session->userdata('perfil');
+	$rut_empresas = $this->session->userdata('rut_empresa');
+	$nombre= $this->session->userdata('nombre_u');
+	$ira =0;
+        $gestion=2;
+	$vector =array(
+                  "usuario"=>$rut,
+                  "rut_empresa"=>$rut_empresas,
+                  "nombre_u"=>$nombre,
+                    "login"=>true,
+                    "perfil"=>$perfil,
+            "gestion"=>$gestion,
+                    "ir"=>$ira
+                );	
+	$this->session->set_userdata($vector);
+	redirect(base_url());     
+        }
+                function R_entrada(){
+        $rut =	$this->session->userdata('usuario');
+	$perfil = $this->session->userdata('perfil');
+	$rut_empresas = $this->session->userdata('rut_empresa');
+	$nombre= $this->session->userdata('nombre_u');
+	$ira =1;
+        $gestion=2;
+	$vector =array(
+                  "usuario"=>$rut,
+                  "rut_empresa"=>$rut_empresas,
+                  "nombre_u"=>$nombre,
+                    "login"=>true,
+                    "perfil"=>$perfil,
+                    "gestion"=>$gestion,
+                    "ir"=>$ira
+                );	
+	$this->session->set_userdata($vector);
+	redirect(base_url());    
+        }
+        function R_salida(){
+        $rut =	$this->session->userdata('usuario');
+	$perfil = $this->session->userdata('perfil');
+	$rut_empresas = $this->session->userdata('rut_empresa');
+	$nombre= $this->session->userdata('nombre_u');
+	$ira =2;
+        $gestion=2;
+	$vector =array(
+                  "usuario"=>$rut,
+                  "rut_empresa"=>$rut_empresas,
+                  "nombre_u"=>$nombre,
+                    "login"=>true,
+                    "perfil"=>$perfil,
+                    "gestion"=>$gestion,
+                    "ir"=>$ira
+                );	
+	$this->session->set_userdata($vector);
+	redirect(base_url());    
+        }
+        function L_entrada(){
+        $rut =	$this->session->userdata('usuario');
+	$perfil = $this->session->userdata('perfil');
+	$rut_empresas = $this->session->userdata('rut_empresa');
+	$nombre= $this->session->userdata('nombre_u');
+	$ira =3;
+        $gestion=2;
+	$vector =array(
+                  "usuario"=>$rut,
+                  "rut_empresa"=>$rut_empresas,
+                  "nombre_u"=>$nombre,
+                    "login"=>true,
+                    "perfil"=>$perfil,
+                    "gestion"=>$gestion,
+                    "ir"=>$ira
+                );	
+	$this->session->set_userdata($vector);
+	redirect(base_url());    
+        }
+        function L_salida(){
+        $rut =	$this->session->userdata('usuario');
+	$perfil = $this->session->userdata('perfil');
+	$rut_empresas = $this->session->userdata('rut_empresa');
+	$nombre= $this->session->userdata('nombre_u');
+	$ira =4;
+        $gestion=2;
+	$vector =array(
+                  "usuario"=>$rut,
+                  "rut_empresa"=>$rut_empresas,
+                  "nombre_u"=>$nombre,
+                    "login"=>true,
+                    "perfil"=>$perfil,
+                    "gestion"=>$gestion,
+                    "ir"=>$ira
+                );	
+	$this->session->set_userdata($vector);
+	redirect(base_url());    
+        }
         ///////////////////////////////////////////////////fin de cambio/////////////////////////////////////////////   
         
         

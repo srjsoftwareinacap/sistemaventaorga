@@ -6,7 +6,7 @@
           
           <span class="logo-mini"><b>A</b>LT</span>
           
-          <span class="logo-lg"><b>Sistema de Ventas</span>
+          <span class="logo-lg" id="titulo"><b>Sistema de Ventas</span>
         </a>
         
         <nav class="navbar navbar-static-top" role="navigation">
@@ -30,9 +30,9 @@
           <ul class="sidebar-menu">
               <li  style="color: white" class="header">Panel de Navegacion</li>
               
-            <li   class="active treeview">
-              <a href="#">
-                <i class="fa fa-barcode"></i> <span>Gestion Producto</span> 
+              <li   class="active treeview">
+              <a style="color: red" href="#">
+                  <i class="fa fa-barcode"></i> <strong><span>Gestion Producto</span> </strong>
               </a>
               
             </li>
@@ -57,7 +57,7 @@
               </a>  
             </li>
               <li class="treeview">
-              <a href="L_salida">
+              <a href="<?php echo base_url().'Pagina/L_salida';?>">
                 <i class="fa fa-info"></i>
                 <span>Reporte Salida</span>
                 
@@ -74,7 +74,10 @@
             
             <small>Gestion de Productos</small>
           </h1>
-          
+          <ol class="breadcrumb">
+              <h4>  <li><a href="<?php echo base_url().'Pagina/volverinicio';?>"><i class="fa fa-reply-all"></i><strong>Volver a Inicio</strong> </a></li>
+              </h4>
+          </ol>
         </section>
         <!-- Main content -->
         <section class="content">
