@@ -35,8 +35,42 @@ class Pagina extends CI_Controller {
                            if($this->session->userdata('gestion')==2){
                                //gestion producto
                                if($this->session->userdata('ir')==0){
+                                   $this->load->library('pagination');
+							$config['base_url'] = base_url().'Pagina/index';
+							$rut_empresa=$this->session->userdata('rut_empresa');
+
+							$cantidad=0;
+							$consulta=$this->Modelo->total_productode_emresa($rut_empresa);
+							foreach ($consulta->result() as $valor){
+                        $cantidad= $valor->datos;
+      							}
+
+							$config['total_rows'] = $cantidad;
+							$config['per_page'] = '8';
+    						$config['num_links']=3;
+
+    						$config['full_tag_open']="<ul class='pagination'>";
+							$config['full_tag_close']='</ul>';
+							 $config['num_tag_open'] = '<li>';
+							    $config['num_tag_close'] = '</li>';
+							    $config['cur_tag_open'] = "<li class='disabled'><li class='active' ><a href='#''>";
+							    $config['cur_tag_close'] = "<span class='sr-only'></span></a></li>";
+							$config['next_tag_open'] = "<li>";
+							    $config['next_tagl_close'] = "</li>";
+							    $config['prev_tag_open'] = "<li>";
+							    $config['prev_tagl_close'] = "</li>";
+							    $config['first_tag_open'] = "<li>";
+							    $config['first_tagl_close'] = "</ li>";
+							    $config['last_tag_open'] = "<li>";
+							    $config['last_tagl_close'] = "<li>";
+
+							 $this->pagination->initialize($config);
+							$data['productos']= $this->Modelo->fetch_productos_admin($config['per_page'] ,$this->uri->segment(3),$rut_empresa);
+							$data['links']=$this->pagination->create_links();
+                                   $data['mensaje']='';
+                                  $data['familia']= $this->Modelo->adquerirfamilia()->result();
                         $this->load->view('administrador/ginventario/gestionproducto/header');
-                        $this->load->view('administrador/ginventario/gestionproducto/content');
+                        $this->load->view('administrador/ginventario/gestionproducto/content',$data);
                         $this->load->view('administrador/ginventario/gestionproducto/footer');
                                }else{
                                    //entrada de producto
@@ -314,5 +348,31 @@ class Pagina extends CI_Controller {
         $this->session->set_userdata($vector);
         echo json_encode($data);
         }
-       
+        function almacenar_producto(){
+        $rut_empresa= $this->session->userdata('rut_empresa');
+        $codigo= $this->input->post("codigo");
+	$nombre= $this->input->post("nombre");
+	$descripcion= $this->input->post("descripcion");
+	$familia= $this->input->post("familia");
+	$stock= $this->input->post("stock");
+	$estado= "activo";
+        
+        $guardar= array(
+	"codigo_barra"=>$codigo,
+	"nombre"=>$nombre,
+	"descripcion"=>$descripcion,
+        "stock_minimo"=>$stock,
+	"idf_familia"=>$familia,
+	"rut_empresa_producto"=>$rut_empresa,
+	"estado"=>$estado
+	);
+$captar= $this->Modelo->guardarproducto($codigo,$guardar);
+$mensaje="";	
+if($captar=="si"){
+$mensaje="si";
+}else{
+	$mensaje="no";
+}
+echo json_encode(array("mensaj"=>$mensaje));
+        }
 }

@@ -11,6 +11,16 @@
     border: none;
     cursor: pointer;
 }
+#tablaproducto{
+    margin-top: -2%;
+    width: 79%;
+}
+#btnguardarproducto{
+    margin-left: 40%;
+}
+#btnguardarfamilia{
+    margin-left: 47%;
+}
 .msj{
 	
 	width: 100%;
@@ -19,6 +29,15 @@
 	background-color: rgba(0,255,0,0.7);
 	border-radius: 10px;
 	color: white;
+}
+#gestiongestion2{
+margin-left: 730px;
+	margin-top: -8%;
+	background-color: #03a9f4;
+	color: white;     
+}
+#agregarfamiliamodal{
+    background-color: #03a9f4;
 }
 #sessiones{
     color: white;

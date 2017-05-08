@@ -39,5 +39,8 @@
     <script src="<?php echo base_url()?>../js/pages/dashboard.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="<?php echo base_url()?>../js/demo.js"></script>
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url()?>../css/bootstrap.min.css">
+<script type="text/javascript" src="<?php echo base_url()?>../js/bootstrap.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url()?>../js/bootstrap.js"></script>
     </body>
 </html>

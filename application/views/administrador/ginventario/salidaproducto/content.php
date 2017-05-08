@@ -81,7 +81,11 @@
         </section>
         <!-- Main content -->
         <section class="content">
-            <p> hohola salida</p>
+            <p>hola salida</p>
+            
+            
+            
+            
         </section><!-- /.content -->
       </div><!-- /.content-wrapper -->
       <footer class="main-footer">

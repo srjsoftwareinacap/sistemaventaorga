@@ -15,17 +15,18 @@
 
 <link rel="stylesheet" type="text/css" href="<?php echo base_url()?>../css/bootstrap.min.css">
 <script type="text/javascript" src="<?php echo base_url()?>../js/bootstrap.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url()?>../js/bootstrap.js"></script>
 <link rel="stylesheet" href="<?php echo base_url()?>../css/AdminLTE.min.css">
 
   
     <link rel="stylesheet" href="<?php echo base_url()?>../css/skins/_all-skins.min.css">
-<script type="text/javascript" src="<?php echo base_url()?>../js/bootstrap.js"></script>
+
 
 
 <!-- iCheck -->
     <link rel="stylesheet" href="<?php echo base_url()?>../plugins/iCheck/flat/blue.css">
     <!-- Morris chart -->
-    <link rel="stylesheet" href="<?php echo base_url()?>../plugins/morris/morris.css">
+ 
     <!-- jvectormap -->
     <link rel="stylesheet" href="<?php echo base_url()?>../plugins/jvectormap/jquery-jvectormap-1.2.2.css">
     <!-- Date Picker -->
@@ -39,6 +40,8 @@
         <script type="text/javascript" src="<?php echo base_url()?>../js/jquery-ui.js"></script>
          <link rel="stylesheet" type="text/css" href="<?php echo base_url()?>../css/micss.css">
        <script type="text/javascript" src="<?php echo base_url()?>../js/funciones.js"></script>
+       <script type="text/javascript" src="<?php echo base_url()?>../plugins/jQuery/jQuery-2.1.4.min.js"></script>
+     
         <script type="text/javascript">
             var base_url = '<?php echo base_url()?>';
         </script>
