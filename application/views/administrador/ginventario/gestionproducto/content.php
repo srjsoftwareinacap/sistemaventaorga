@@ -100,8 +100,10 @@
         <th >Codigo barra</th>
   <th>Nombre   producto</th>
   <th>Descripccion</th>
-  <th>Categoria</th>
+  <th>Tipo Familia</th>
+  <th>Precio Neto</th>
   <th>Stock minimo</th>
+   <th>Precio bruto</th>
   <th>Seleccione</th>
   <?php foreach($productos as $valor):?>
    
@@ -109,14 +111,17 @@
       <td  > <?php echo $valor->codigo_barra;?> </td>
       <td  > <?php echo $valor->nombre;?> </td>
       <td  > <?php echo $valor->descripcion;?> </td>
-      <td  > <?php echo $valor->tipo_familia;?> </td>
+     
+        <td  > <?php echo $valor->tipo_familia;?> </td>
+      <td><?php echo $valor->precio_neto;?></td>
+    
       <td  > <?php echo $valor->stock_minimo;?> </td>
-   
+   <td  > <?php echo $valor->precio_bruto;?> </td>
       <td >
       <?php if( $valor->estado== "activo") :?>
 
 
-      <a class="fa btn fa-pencil-square-o" aria-hidden="true"  data-target="#mostrarm"  href="javascript:mostraredicion_ad_producto('<?php echo $valor->codigo_barra;?>')"></a>
+      <a class="fa btn fa-pencil-square-o" aria-hidden="true"  data-target="#mostraredicion_mo_producto"  href="javascript:mostraredicion_mo_producto('<?php echo $valor->codigo_barra;?>')"></a>
 
       <a class="fa btn fa-lock" aria-hidden="true"  data-target="#mostrarm"  href="javascript:Bloquiarproductoempresa('<?php echo $valor->codigo_barra;?>')"></a>
      <?php else: ?>
@@ -186,7 +191,14 @@
         <i style="color: white" class="fa fa-plus" aria-hidden="true"></i> Agregar nueva Familia</a>
 </td>
               </tr>
-
+              <tr>
+                  <td><label  for="psw"><span ></span>Precio Neto</label></td>
+                  <td><input type="number" required="true" class="form-control"  id="txtprecioneto" onkeyup="sacarletras(this)"   placeholder="ingrese su precio neto " maxlength="45" ></td>
+              </tr>
+              <tr>
+                <td><label  for="psw"><span ></span>Precio Bruto</label></td>
+                  <td><input type="number" required="true" class="form-control"  id="txtpreciobruto" onkeyup="sacarletras(this)"   placeholder="ingrese su precio bruto " maxlength="45" ></td>  
+              </tr>
 
               <tr>
               <td><label  for="psw"><span ></span>Stock minimo</label></td>       
@@ -231,7 +243,7 @@
  <div class="form-group">
    <tr>
               <td><label  for="psw"><span ></span> Nombre Tipo de Familia</label></td>       
-              <td>  <input type="text" required="true" autofocus="true" class="form-control"  id="txtcodigo" onkeyup="sacargeneral(this)"  placeholder="Ingrese familia" maxlength="45" ></td>
+              <td>  <input type="text" required="true" autofocus="true" class="form-control"  id="txttipofamilia" onkeyup="sacargeneral(this)"  placeholder="Ingrese familia" maxlength="45" ></td>
 
               </tr>
             </div>
@@ -254,7 +266,12 @@
             
             
             
-            
+            <div class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="mostraredicion_mo_producto">
+  <div class="modal-dialog" role="document">
+    
+    
+  </div>
+</div>
             
             
             

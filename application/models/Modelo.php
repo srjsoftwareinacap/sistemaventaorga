@@ -25,26 +25,56 @@ class Modelo extends CI_Model{
         }
         return $ver;
     }
-    function fetch_productos_admin($limit,$offsete,$rut_empresa){
-    $query = $this->db->select("producto.codigo_barra,producto.nombre ,producto.descripcion,producto.stock_minimo,f.tipo_familia ,producto.estado");
+    function mosedi_producto($codigo,$rut_empresa){
+  $this->db->select("*");
+  $this->db->where('codigo_barra',$codigo);
+  $this->db->where('rut_empresa_producto',$rut_empresa);
+        return $this->db->get('producto');
+}
+    function fetch_productos_admin($inicio,$limite,$rut_empresa){
+    $query = $this->db->select("producto.codigo_barra,producto.nombre ,producto.descripcion,producto.precio_neto,producto.stock_minimo,producto.precio_bruto,f.tipo_familia ,producto.estado");
      $query = $this->db->from("producto");
     $query = $this->db->join("familia f","f.id_familia = producto.idf_familia","inner");
-      $query = $this->db->limit($limit, $offsete);
+      $query = $this->db->limit($limite, $inicio);
     $query = $this->db->get();
-    return $query->result();
-        
-        
-        
-        
-        
-        
+    return $query->result();      
   }
   function adquerirfamilia(){
     $this->db->select("*");
         return $this->db->get('familia');
   }
+  function editarexistenteproductoempresa($codigo,$codigo_oculto,$rut_empresa,$editar){
+    $this->db->where('codigo_barra',$codigo_oculto);
+   $this->db->where("rut_empresa_producto",$rut_empresa);
+    $this->db->update("producto",$editar);
+     $consulta = "update inventario set codigo_barra_producto_inventario='".$codigo."' where codigo_barra_producto_inventario='".$codigo_oculto."' ";
+          $this->db->query($consulta);
+          return $mandar="si"; 
+  }
+function editarproductoempresa($codigo,$codigo_oculto,$rut_empresa,$editar){
+$this->db->select("*");
+  $this->db->where('codigo_barra',$codigo);
+  $consulta1= $this->db->get('producto');
+      $mandar="";
+if($consulta1->num_rows()==0){
+   $this->db->where('codigo_barra',$codigo_oculto);
+   $this->db->where("rut_empresa_producto",$rut_empresa);
+    $this->db->update("producto",$editar);
+     $consulta = "update inventario set codigo_barra_producto_inventario='".$codigo."' where codigo_barra_producto_inventario='".$codigo_oculto."' ";
+          $this->db->query($consulta);
+          $mandar="si";
+}else{
+$mandar="no";
+}
+return $mandar;
+} 
+  function verinventario($codigo,$rut_empresa){ 
+  $tipo="entrada";
+    $consulta = "SELECT MIN(stock_actual) as ver from inventario where codigo_barra_producto_inventario='".$codigo."' and rut_empresa_oculto='".$rut_empresa."' and tipo_oculto='".$tipo."'  ";
+   return $this->db->query($consulta);    
+  }
     function total_productode_emresa($rut_empresa){
-     $consulta ="select count(*) as datos from producto where rut_empresa_producto= '".$rut_empresa."' ";
+     $consulta ="select count(*) as datos from producto  ";
     return $this->db->query($consulta);
   }
     function consultarutempresa($rut){
@@ -74,6 +104,19 @@ if($resultado->num_rows()==0){
 }
 return $mandar;
   
+    }
+    function guardarfamilia($tipo_familia,$guardar){
+        $this->db->select("*");
+   $this->db->where('tipo_familia',$tipo_familia);     
+        $resultado= $this->db->get('familia');
+        $mandar="";
+        if($resultado->num_rows()==0){
+          $this->db->insert("familia",$guardar);
+ $mandar="si";  
+        }else{
+            $mandar="no";
+        }
+        return $mandar;
     }
             function consultarutem($rut){
      $this->db->select("*");
