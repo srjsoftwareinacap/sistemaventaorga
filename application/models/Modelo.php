@@ -43,6 +43,16 @@ class Modelo extends CI_Model{
     $this->db->select("*");
         return $this->db->get('familia');
   }
+  function buscar_producto_empresa($codigo,$rut_empresa){
+   $consulta = $this->db->select("producto.codigo_barra,producto.nombre ,producto.descripcion,producto.precio_neto,producto.stock_minimo,producto.precio_bruto,f.tipo_familia ,producto.estado");
+     $consulta = $this->db->from("producto");
+    $consulta = $this->db->join("familia f","f.id_familia = producto.idf_familia","inner");
+   $consulta=  $this->db->like("producto.codigo_barra",$codigo);
+    $consulta= $this->db->Or_like("producto.nombre",$codigo);
+   $consulta=  $this->db->where('rut_empresa_producto',$rut_empresa);
+    $consulta = $this->db->get();
+    return $consulta->result(); 
+}
   function editarexistenteproductoempresa($codigo,$codigo_oculto,$rut_empresa,$editar){
     $this->db->where('codigo_barra',$codigo_oculto);
    $this->db->where("rut_empresa_producto",$rut_empresa);
@@ -51,6 +61,17 @@ class Modelo extends CI_Model{
           $this->db->query($consulta);
           return $mandar="si"; 
   }
+  function desbloquiar_producto_empresa($codigo){
+  $estado="activo";
+    $consulta = "update producto set estado='".$estado."' where codigo_barra='".$codigo."' ";
+    $this->db->query($consulta);
+
+}
+  function bloquiar_producto_empresa($codigo){
+   $estado="bloquiado";
+    $consulta = "update producto set estado='".$estado."' where codigo_barra='".$codigo."' ";
+    $this->db->query($consulta);
+} 
 function editarproductoempresa($codigo,$codigo_oculto,$rut_empresa,$editar){
 $this->db->select("*");
   $this->db->where('codigo_barra',$codigo);

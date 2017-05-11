@@ -456,6 +456,33 @@ $mensaje="si";
 }
 echo json_encode(array("mensaj"=>$mensaje));
         }
+        function buscar_producto_empresa(){
+	$codigo= $this->input->post('buscar_producto');
+        if(isset($codigo) and !empty($codigo) ){
+        $data['mensaje']='Para volver, Presione el Boton Buscar';
+        $rut_empresa= $this->session->userdata('rut_empresa');
+        $data['familia']= $this->Modelo->adquerirfamilia()->result();
+        $data['productos']= $this->Modelo->buscar_producto_empresa($codigo,$rut_empresa);
+        $data['links']='';
+        $this->load->view('administrador/ginventario/gestionproducto/header');
+        $this->load->view('administrador/ginventario/gestionproducto/content',$data);
+        $this->load->view('administrador/ginventario/gestionproducto/footer');
+}else{
+	redirect(base_url());
+}
+}
+function bloquiar_producto_empresa(){
+	$codigo= $this->input->post("codigo");
+	$this->Modelo->bloquiar_producto_empresa($codigo);
+    $data="xas";
+    echo json_encode($data);
+}
+function DesBloquiar_producto_empresar(){
+	$codigo= $this->input->post("codigo");
+	$this->Modelo->desbloquiar_producto_empresa($codigo);
+    $data="xas";
+    echo json_encode($data);
+}
                 function almacenar_producto(){
         $rut_empresa= $this->session->userdata('rut_empresa');
         $codigo= $this->input->post("codigo");

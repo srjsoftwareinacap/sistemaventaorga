@@ -140,8 +140,10 @@ function almacenar_familia(){
         var stock_minimo = $("#txtstockminimonuevo").val();
         var precio_bruto = $("#txtpreciobrutonuevo").val();
         var codigo_viejo = $("#txtcodigo_viejooculto").val();
+        var stock_oculto= $("#txtstockminimo_oculto").val();
+        var informacion= $("#informacion").val();
         var precio_brutoestimado = parseInt(precio_neto) + parseInt(precio_neto)*0.19;
-        
+        if(informacion==no){
         if(id_familia!=0){
          if(parseInt(precio_bruto) >= parseInt(precio_brutoestimado)){
              
@@ -168,7 +170,66 @@ function almacenar_familia(){
      }else{
           $("#mesajemodaleditarfamilia").html("<p class='msjerror' >"+"!!Eroor , Tipo de familia no seleccionada"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
      }
+ }else{
+     if(parseInt(stock_minimo) <= parseInt(stock_oculto)){
+     if(id_familia!=0){
+         if(parseInt(precio_bruto) >= parseInt(precio_brutoestimado)){
+             
+        $.post(
+    base_url+"Pagina/editar_producto",
+    {codigo_barra_nuevo:codigo_barra_nuevo,nombre_nuevo:nombre_nuevo,descripcion:descripcion,id_familia:id_familia,precio_neto:precio_neto,stock_minimo:stock_minimo,precio_bruto:precio_bruto,codigo_viejo:codigo_viejo},
+    function(datos){  
+           if(datos.mensaj=="si"){
+               $("#mesajemodaleditarfamilia").html("<p class='msj' >"+"Producto editado Correctamente"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+     setTimeout("location.reload()",3000); 
+           }else{
+                 $("#mesajemodaleditarfamilia").html("<p class='msjerror' >"+"!! Error, El codigo ya existe "+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+                 $("#txtcodigo_barra_nuevo").val('');
+                 $("#txtcodigo_barra_nuevo").focus();
+           }   
+    },
+    'json'
+    );     
+         }else{
+  $("#mesajemodaleditarfamilia").html("<p class='msjerror' >"+"!!Error ,El Precio Bruto no es rentable"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+  $("#txtpreciobrutonuevo").val('');
+  $("#txtpreciobrutonuevo").focus();
+         }   
+     }else{
+          $("#mesajemodaleditarfamilia").html("<p class='msjerror' >"+"!!Eroor , Tipo de familia no seleccionada"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+     }
+ }else{
+     $("#mesajemodaleditarfamilia").html("<p class='msjerror' >"+"!!Error ,El stock sobrepasa el stock de el inventario"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+  $("#txtpreciobrutonuevo").val('');
+  $("#txtpreciobrutonuevo").focus();
+ }
+ }
     }
+    function Bloquiarproductoempresa(codigo){
+  $.post(
+    base_url+"Pagina/bloquiar_producto_empresa",
+    {codigo:codigo},
+    function(vector){  
+    var mes="";
+              mes="El producto ha sido bloqueado  correctamente";
+              $("#mesajefds").html("<p class='msj' >"+mes+"</p>").fadeIn(100).delay(600).fadeOut(1000);  
+     setTimeout("location.reload()",1000);        
+    },
+    'json'
+    );
+}function DesBloquiarproductoempresa(codigo){
+  $.post(
+    base_url+"Pagina/DesBloquiar_producto_empresar",
+    {codigo:codigo},
+    function(pagina){  
+      var mes="";
+              mes="El producto  ha sido desbloqueado  correctamente";
+              $("#mesajefds").html("<p class='msj' >"+mes+"</p>").fadeIn(100).delay(600).fadeOut(1000);  
+     setTimeout("location.reload()",1000);      
+    },
+    'json'
+    );
+}
 function verificarusuario(){
     
     var rut= $("#rut").val();

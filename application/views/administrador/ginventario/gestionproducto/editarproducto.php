@@ -87,9 +87,9 @@
             <div class="row">
 <div class="col-lg-4">
         <input class="form-control hidden" id="txtcodigo_viejooculto" type="text"  " value="<?php echo $codigo_barra;?>" >
-        <input class="form-control hidden" id="txtrut_inven" type="text"   value="<?php echo $minimo;?>"  >
+        <input class="form-control hidden" id="txtstockminimo_oculto" type="text"   value="<?php echo $minimo;?>"  >
       
-        <label class="hidden" ><?php echo $informacion;?></label>
+        <label id="informacion"  ><?php echo $informacion;?></label>
               </div>
               <div class="col-lg-8">
             <button type="submit" form="form2423" value="Submit" class="btn btn-primary" >Editar</button>
