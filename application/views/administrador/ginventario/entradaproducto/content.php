@@ -81,15 +81,69 @@
         </section>
         <!-- Main content -->
         <section class="content">
-            <p> hohola entrada de producto</p>
+           <form action="javascript:registrar_producto_inventario()"  method="post" id="form54321" >
+               <table id="centrarentrada" class="table"> 
+  <form class="form-inline">
+ <div class="form-group">
+
+
+   <tr>
+              <td><label  for="psw"><span ></span> Codigo barra</label></td>       
+              <td>  <input type="text" required="true" class="form-control" autofocus="true" onblur="vereficaridinventario12(this.value)" id="txtcodigo"   onkeyup="sacargeneral(this)" maxlength="45" placeholder="112234" >
+            </td>
+
+              </tr>
+
+              <tr>
+              
+ <tr>
+              <td><label  for="psw"><span ></span>Nombre</label></td>       
+            <td>  <input type="text" required="true" class="form-control" readonly="readonly"  id="txtnombrecargar"   placeholder="Se autocompletara el nombre" ></td>
+
+              </tr>
+              <tr>
+              <td><label  for="psw"><span ></span>Descripcion</label></td>       
+            <td>  <input type="text" required="true" class="form-control" readonly="readonly"  id="txtdescripcioncargar"   placeholder="Se autocompletara la descripcion" ></td>
+
+              </tr>
+
+              <tr>
+              <td><label  for="psw"><span ></span>Familia</label></td>       
+            <td>  <input type="text" required="true" class="form-control" readonly="readonly" id="txtfamiliacargar"   placeholder="Se autocompletara el tipo de familia" ></td>
+
+              </tr>
+              <tr>
+                  <td>
+                    <label  for="psw"><span ></span>Precio Bruto</label>  
+                  </td>
+                  <td>
+     <input type="text" required="true" class="form-control" readonly="readonly" id="txtprecionetocargar"   placeholder="Se autocompletara el precio de venta" >                 
+                  </td>
+              </tr>
+
+              <tr>
+              <td><label  for="psw"><span ></span>Stock</label></td>       
+            <td>  <input type="text" required="true" class="form-control"  id="txtstockcargar" onkeyup="sacarletras(this)"   placeholder="ingrese el stock" maxlength="45" ></td>
+
+              </tr>
+
+              <input type="text" required="true" class="form-control hidden"  id="txtstock_minimo"    >
+              <input type="text" required="true" class="form-control hidden"  id="txtstock_total"    >
+            </div>
+   </form>
+   </table>
+   
+   <button type="submit" id="btnregistrarentrada"  class="fa btn btn-success" form="form54321" value="Submit">Registrar Entrada</button>
+   <br />
+   <br />
+   <div id="mensajegentrada"></div>
+
+     
+</form>
         </section><!-- /.content -->
+        
       </div><!-- /.content-wrapper -->
-      <footer class="main-footer">
-        <div class="pull-right hidden-xs">
-          <b>Version</b> 2.3.0
-        </div>
-        <strong>Sistema Delta motosierras </strong> .
-      </footer>
+     
 
       
    

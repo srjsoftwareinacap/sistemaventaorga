@@ -206,7 +206,9 @@
 
               </tr>
             </div>
+      
    </form>
+     
    </table>
    <button type="submit" id="btnguardarproducto" class="fa btn btn-success  fa-floppy-o" form="form1234" value="Submit">Guardar producto</button><br />
    <br />
@@ -214,6 +216,7 @@
      <br />
      <br />
      <br />
+     
 </form>
      
         </div>
@@ -275,9 +278,11 @@
             
             
             
-            
+        <br />    
         </section><!-- /.content -->
+       
       </div><!-- /.content-wrapper -->
+      <br />
       <footer class="main-footer">
         <div class="pull-right hidden-xs">
           <b>Version</b> 2.3.0
@@ -286,5 +291,5 @@
       </footer>
 
       
-   
+   <div class="control-sidebar-bg"></div>
     </div>

@@ -143,7 +143,8 @@ function almacenar_familia(){
         var stock_oculto= $("#txtstockminimo_oculto").val();
         var informacion= $("#informacion").val();
         var precio_brutoestimado = parseInt(precio_neto) + parseInt(precio_neto)*0.19;
-        if(informacion==no){
+        
+        if(informacion=="no"){
         if(id_familia!=0){
          if(parseInt(precio_bruto) >= parseInt(precio_brutoestimado)){
              
@@ -200,11 +201,85 @@ function almacenar_familia(){
      }
  }else{
      $("#mesajemodaleditarfamilia").html("<p class='msjerror' >"+"!!Error ,El stock sobrepasa el stock de el inventario"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
-  $("#txtpreciobrutonuevo").val('');
-  $("#txtpreciobrutonuevo").focus();
+  $("#txtstockminimonuevo").val('');
+  $("#txtstockminimonuevo").focus();
  }
  }
     }
+    function vereficaridinventario12(codigos,$codigo_barra){
+        
+  $.post(
+    base_url+"Pagina/vereficarinventario",
+    {codigos:codigos},
+    function(datos){
+        if(datos.m1=="Producto en registro"){
+      $("#mensajegentrada").html("<p class='msj' >"+datos.m1+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+      $("#txtnombrecargar").val(datos.nombre);
+      $("#txtdescripcioncargar").val(datos.descripcion);
+      $("#txtfamiliacargar").val(datos.familia);
+      $("#txtstock_minimo").val(datos.stock_minimo);
+      $("#txtprecionetocargar").val(datos.precio_bruto); 
+      $("#txtstock_total").val(datos.stock_maximo);
+  }else{
+      $("#mensajegentrada").html("<p class='msjerror' >"+datos.m1+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+      $("#txtcodigo").val('');
+  $("#txtcodigo").focus();
+  }
+    },
+    'json'
+    );
+
+}
+function  registrar_producto_inventario(){
+    
+    var codigo_barra = $("#txtcodigo").val();
+    var stock_actual = $("#txtstock_total").val();
+    var stock_minimo = $("#txtstock_minimo").val();
+    var stock_ingresado = $("#txtstockcargar").val();
+    var nombre = $("#txtnombrecargar").val();
+    var suma = parseInt(stock_actual) + parseInt(stock_ingresado);
+    
+    
+    alert("hola");
+    if(nombre.trim().length > 0){
+    if(parseInt(stock_actual) ==0){
+        if(parseInt(stock_ingresado) >= parseInt(stock_minimo)){
+            
+          $.post(
+    base_url+"Pagina/registrarinventario",
+    {codigo_barra:codigo_barra,stock_ingresado:stock_ingresado},
+    function(pagina){  
+              $("#mensajegentrada").html("<p class='msj' >"+pagina.mensaj+"</p>").fadeIn(100).delay(600).fadeOut(1000);
+    },
+    'json'
+    );  
+        }else{
+        $("#mensajegentrada").html("<p class='msjerror' >"+"Error!!!, No cumple con el stock minimo"+"</p>").fadeIn(100).delay(600).fadeOut(1000);
+         $("#txtstockcargar").val('');
+        $("#txtstockcargar").focus();  
+        }
+    }else{
+        //ver con stock
+        $.post(
+    base_url+"Pagina/registrarinventario",
+    {codigo_barra:codigo_barra,stock_ingresado:stock_ingresado},
+    function(pagina){  
+              $("#mensajegentrada").html("<p class='msj' >"+pagina.mensaj+"</p>").fadeIn(100).delay(600).fadeOut(1000);
+    },
+    'json'
+    ); 
+    }    
+    }else{
+        $("#mensajegentrada").html("<p class='msjerror' >"+"Error!!!, El producto no esta registrado"+"</p>").fadeIn(100).delay(600).fadeOut(1000);
+        $("#txtcodigo").val('');
+        $("#txtcodigo").focus();
+    }
+        
+    
+    
+}
+    
+    
     function Bloquiarproductoempresa(codigo){
   $.post(
     base_url+"Pagina/bloquiar_producto_empresa",
@@ -217,7 +292,8 @@ function almacenar_familia(){
     },
     'json'
     );
-}function DesBloquiarproductoempresa(codigo){
+}
+function DesBloquiarproductoempresa(codigo){
   $.post(
     base_url+"Pagina/DesBloquiar_producto_empresar",
     {codigo:codigo},

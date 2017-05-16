@@ -4,11 +4,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Pagina extends CI_Controller {
 	Public function __construct()
  {
- 
  parent::__construct();
-
  $this->load->model('Modelo');
- 
  }
 	
 	public function index($offsete= False)
@@ -18,8 +15,6 @@ class Pagina extends CI_Controller {
     {
         $offsete = $this->uri->segment(3);
     }
-             
-            
             if($this->session->userdata('login')==true){
                 if($this->session->userdata('perfil')==100){
                     //inicio
@@ -477,11 +472,75 @@ function bloquiar_producto_empresa(){
     $data="xas";
     echo json_encode($data);
 }
-function DesBloquiar_producto_empresar(){
+function registrarinventario(){
+    $codigo_barra_producto= $this->input->post('codigo_barra');
+    $stock_ingresado = $this->input->post('stock_ingresado');
+    $nombre_usuario = $this->session->userdata('nombre_u');
+	$rut_empresa=$this->session->userdata('rut_empresa');
+	date_default_timezone_set("America/Santiago");
+	$fecha = date("Y-m-d");
+        $tipo_oculto= "entrada";
+        $guardar= array(
+            "codigo_barra_producto_inventario" => $codigo_barra_producto,
+            "fecha" => $fecha,
+            "stock_actual" => $stock_ingresado,
+            "nombre_usuario_registro" => $nombre_usuario,
+            "rut_empresa_oculto" => $rut_empresa,
+            "tipo_oculto"=>$tipo_oculto
+        );
+        $mensaje= $this->Modelo->registarentrada($codigo_barra_producto,$rut_empresa,$stock_ingresado,$fecha,$guardar,$nombre_usuario);
+          echo json_encode(array("mensaj"=>$mensaje));
+
+}
+        function DesBloquiar_producto_empresar(){
 	$codigo= $this->input->post("codigo");
 	$this->Modelo->desbloquiar_producto_empresa($codigo);
     $data="xas";
     echo json_encode($data);
+}
+function vereficarinventario(){
+	$codigoproducto= $this->input->post('codigos');
+	$rut_empresa= $this->session->userdata('rut_empresa');
+	$mensaje="";
+	$nombre="";
+	$descripcion="";
+	$familia="";
+	$stock_minimo=0;
+        $precio_bruto=0;
+	$cantidadmaxima=0;
+	$mensaje="";
+	$info= $this->Modelo->vareficcar_entrada_productoinventario($codigoproducto,$rut_empresa);
+if($info=="Se ha encontrado producto"){
+$ver12 = $this->Modelo->verificar_bloproductoinventario($codigoproducto,$rut_empresa);
+		if($ver12=="activo"){
+			$mensaje="Producto en registro";
+			$dato = $this->Modelo->obtener_productoinventario2($codigoproducto,$rut_empresa);
+			foreach ($dato->result() as $variable) {
+		$nombre = $variable->nombre;
+	$descripcion = $variable->descripcion;
+	$familia = $variable->tipo_familia;
+	$stock_minimo = $variable->stock_minimo;
+        $precio_bruto = $variable->precio_bruto;
+	}
+	$inventario= $this->Modelo->selecionar_entrada_productoinventario($codigoproducto,$rut_empresa);
+	foreach ($inventario->result() as $valor ) {
+		$cantidadmaxima = $valor->stock_actual;
+	}
+		}else{
+			$mensaje="Producto bloqueado";
+		}
+}else{
+$mensaje=$info;
+}
+		echo json_encode(array(
+		"m1"=>$mensaje,
+		"nombre"=>$nombre,
+		"descripcion"=>$descripcion,
+		"familia"=>$familia,
+		"stock_minimo"=>$stock_minimo,
+                "precio_bruto"=>$precio_bruto,
+		"stock_maximo"=>$cantidadmaxima
+		));
 }
                 function almacenar_producto(){
         $rut_empresa= $this->session->userdata('rut_empresa');

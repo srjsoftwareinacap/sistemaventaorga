@@ -18,7 +18,7 @@
               <label for="usrname"><span ></span> Codigo de barra</label>
               </div>
               <div class="col-lg-5">
-             <input class="form-control" id="txtcodigo_barra_nuevo" type="text"  required="true" value="<?php echo $codigo_barra;?>" onkeyup="sacargeneral(this)" >
+                  <input class="form-control" readonly="readonly" id="txtcodigo_barra_nuevo" type="text"  required="true" value="<?php echo $codigo_barra;?>" onkeyup="sacargeneral(this)" >
              </div>
             </div>
 
@@ -86,10 +86,10 @@
     <br />
             <div class="row">
 <div class="col-lg-4">
-        <input class="form-control hidden" id="txtcodigo_viejooculto" type="text"  " value="<?php echo $codigo_barra;?>" >
+        <input class="form-control hidden" id="txtcodigo_viejooculto" type="text"   value="<?php echo $codigo_barra;?>" >
         <input class="form-control hidden" id="txtstockminimo_oculto" type="text"   value="<?php echo $minimo;?>"  >
-      
-        <label id="informacion"  ><?php echo $informacion;?></label>
+      <input class="form-control hidden" id="informacion" type="text"   value="<?php echo $informacion;?>"  >
+        
               </div>
               <div class="col-lg-8">
             <button type="submit" form="form2423" value="Submit" class="btn btn-primary" >Editar</button>

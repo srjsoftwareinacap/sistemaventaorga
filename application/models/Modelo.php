@@ -53,6 +53,22 @@ class Modelo extends CI_Model{
     $consulta = $this->db->get();
     return $consulta->result(); 
 }
+function obtener_productoinventario2($codigoproducto,$rut_empresa){
+    $consulta = $this->db->select("producto.codigo_barra,producto.nombre ,producto.descripcion,producto.precio_neto,producto.stock_minimo,producto.precio_bruto,f.tipo_familia ,producto.estado");
+     $consulta = $this->db->from("producto");
+    $consulta = $this->db->join("familia f","f.id_familia = producto.idf_familia","inner");
+   $consulta=  $this->db->where('producto.codigo_barra',$codigoproducto);
+    $consulta = $this->db->get();
+    return $consulta; 
+  }
+  function selecionar_entrada_productoinventario($codigoproducto,$rut_empresa){
+    $tipo="entrada";
+    $this->db->select("*");
+    $this->db->where("codigo_barra_producto_inventario",$codigoproducto);
+    $this->db->where("rut_empresa_oculto",$rut_empresa);
+    $this->db->where("tipo_oculto",$tipo);
+    return $this->db->get("inventario");
+  }
   function editarexistenteproductoempresa($codigo,$codigo_oculto,$rut_empresa,$editar){
     $this->db->where('codigo_barra',$codigo_oculto);
    $this->db->where("rut_empresa_producto",$rut_empresa);
@@ -67,7 +83,72 @@ class Modelo extends CI_Model{
     $this->db->query($consulta);
 
 }
-  function bloquiar_producto_empresa($codigo){
+ function vareficcar_entrada_productoinventario($codigoproducto,$rut_empresa){
+    
+    $mensaje="";
+    $this->db->select("*");
+    $this->db->where("codigo_barra",$codigoproducto);
+   
+    $this->db->where("rut_empresa_producto",$rut_empresa);
+
+    $captarinventario= $this->db->get("producto");
+    if($captarinventario->num_rows()==0){
+      $mensaje="El registro de Producto no existe";
+    }else{
+      $mensaje="Se ha encontrado producto";
+    
+    }
+    return $mensaje;
+  }
+  function registarentrada($codigo_barra_producto,$rut_empresa,$stock_ingresado,$fecha,$guardar,$nombre_usuario){
+      $tipo="entrada";
+    $this->db->select("*");
+   $this->db->where('codigo_barra_producto_inventario',$codigo_barra_producto);
+   $this->db->where('rut_empresa_oculto',$rut_empresa); 
+   $this->db->where('tipo_oculto',$tipo);    
+   $captar= $this->db->get('inventario');
+   $mensaje="";
+   if($captar->num_rows()==0){
+    $this->db->insert("inventario",$guardar);
+    $mensaje="Se registro nuevo inventario";
+   }else{
+     
+    $this->db->select("stock_actual");
+   $this->db->where('codigo_barra_producto_inventario',$codigo_barra_producto);
+   $this->db->where('rut_empresa_oculto',$rut_empresa);
+   $this->db->where('tipo_oculto',$tipo);     
+   $captar1= $this->db->get('inventario')->result();
+   $stock= 0;
+   foreach ($captar1 as $fila ) {
+     $stock= $fila->stock_actual;
+   }
+   $datoinventario['fecha']=$fecha;
+   $datoinventario['stock_actual']=$stock+$stock_ingresado;
+   $datoinventario['nombre_usuario_registro']=$nombre_usuario;
+   $this->db->where('codigo_barra_producto_inventario',$codigo_barra_producto);
+   $this->db->where('rut_empresa_oculto',$rut_empresa);
+   $this->db->where('tipo_oculto',$tipo);
+   $this->db->update('inventario',$datoinventario);
+   $mensaje="Se a sumado el stock a su inventario respectivo";
+   }
+   return $mensaje;
+  }
+function verificar_bloproductoinventario($codigo,$rut_empresa){
+    $estado="activo";
+   $this->db->select("*");
+   $this->db->where('codigo_barra',$codigo);
+   $this->db->where('estado',$estado);
+   $this->db->where('rut_empresa_producto',$rut_empresa);     
+   $captar= $this->db->get('producto');
+   $mensaje="";
+   if($captar->num_rows()==0){
+    $mensaje="bloquiado";
+   }else{
+    $mensaje="activo";
+   }
+   return $mensaje;
+  }
+          function bloquiar_producto_empresa($codigo){
    $estado="bloquiado";
     $consulta = "update producto set estado='".$estado."' where codigo_barra='".$codigo."' ";
     $this->db->query($consulta);
