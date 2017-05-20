@@ -6,7 +6,7 @@
           
           <span class="logo-mini"><b>A</b>LT</span>
           
-          <span class="logo-lg"><b>Sistema de Ventas</span>
+          <span  style="color: white" class="logo-lg"><b>Sistema de Ventas</span>
         </a>
         
         <nav class="navbar navbar-static-top" role="navigation">
@@ -31,7 +31,7 @@
               <li  style="color: white" class="header">Panel de Navegacion</li>
               
             <li   class="active treeview">
-              <a href="">
+              <a href="<?php echo base_url().'Pagina/G_producto';?>">
                 <i class="fa fa-barcode"></i> <span>Gestion Producto</span> 
               </a>
               
@@ -81,7 +81,65 @@
         </section>
         <!-- Main content -->
         <section class="content">
-            <p>hola salida</p>
+           <form action="javascript:registrar_salidaproducto_inventario()"  method="post" id="form54322" >
+               <table id="centrarsalida" class="table"> 
+  <form class="form-inline">
+ <div class="form-group">
+
+
+   <tr>
+              <td><label  for="psw"><span ></span> Codigo barra</label></td>       
+              <td>  <input type="text" required="true" class="form-control" autofocus="true" onblur="vereficaridinventario12(this.value)" id="txtcodigo"   onkeyup="sacargeneral(this)" maxlength="45" placeholder="112234" >
+            </td>
+
+              </tr>
+
+              <tr>
+              
+ <tr>
+              <td><label  for="psw"><span ></span>Nombre</label></td>       
+            <td>  <input type="text" required="true" class="form-control" readonly="readonly"  id="txtnombrecargar"   placeholder="Se autocompletara el nombre" ></td>
+
+              </tr>
+              <tr>
+              <td><label  for="psw"><span ></span>Descripcion</label></td>       
+            <td>  <input type="text" required="true" class="form-control" readonly="readonly"  id="txtdescripcioncargar"   placeholder="Se autocompletara la descripcion" ></td>
+
+              </tr>
+
+              <tr>
+              <td><label  for="psw"><span ></span>Familia</label></td>       
+            <td>  <input type="text" required="true" class="form-control" readonly="readonly" id="txtfamiliacargar"   placeholder="Se autocompletara el tipo de familia" ></td>
+
+              </tr>
+              <tr>
+                  <td>
+                    <label  for="psw"><span ></span>Precio Bruto</label>  
+                  </td>
+                  <td>
+     <input type="text" required="true" class="form-control" readonly="readonly" id="txtprecionetocargar"   placeholder="Se autocompletara el precio de venta" >                 
+                  </td>
+              </tr>
+
+              <tr>
+              <td><label  for="psw"><span ></span>Stock de salida</label></td>       
+            <td>  <input type="text" required="true" class="form-control"  id="txtstockcargar" onkeyup="sacarletras(this)"   placeholder="ingrese el stock" maxlength="45" ></td>
+
+              </tr>
+
+              <input type="text" required="true" class="form-control hidden"  id="txtstock_minimo"    >
+              <input type="text" required="true" class="form-control hidden"  id="txtstock_total"    >
+            </div>
+   </form>
+   </table>
+   
+   <button type="submit" id="btnregistrarentrada"  class="fa btn btn-success" form="form54322" value="Submit">Registrar Salida</button>
+   <br />
+   <br />
+   <div id="mensajegsalida"></div>
+
+     
+</form>
             
             
             

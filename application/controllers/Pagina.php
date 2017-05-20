@@ -472,7 +472,16 @@ function bloquiar_producto_empresa(){
     $data="xas";
     echo json_encode($data);
 }
-function registrarinventario(){
+function  verproducto(){
+    $codigo= $this->input->post("codigo_barra");
+    $captar=$this->Modelo->versiestabn($codigo);
+    $mensaje =$captar;
+    echo json_encode($data);
+    
+    
+}
+
+        function registrarinventario(){
     $codigo_barra_producto= $this->input->post('codigo_barra');
     $stock_ingresado = $this->input->post('stock_ingresado');
     $nombre_usuario = $this->session->userdata('nombre_u');
@@ -542,7 +551,27 @@ $mensaje=$info;
 		"stock_maximo"=>$cantidadmaxima
 		));
 }
-                function almacenar_producto(){
+function registrar_salida(){
+    $codigo= $this->input->post("codigo_barra");
+	$cantidad_salida= $this->input->post("stock_ingresado");
+	$nombre_usuario = $this->session->userdata('nombre_u');
+	$rut_empresa=$this->session->userdata('rut_empresa');
+	date_default_timezone_set("America/Santiago");
+	$fecha =date("Y-m-d");
+ 	$tipo="salida";
+ 	$estado="activo";
+ 	$guardar = array(
+ 		"codigo_barra_producto_inventario"=>$codigo,
+ 		"fecha"=>$fecha,
+ 		"stock_actual"=>$cantidad_salida,
+ 		"nombre_usuario_registro"=>$nombre_usuario,
+ 		"rut_empresa_oculto"=>$rut_empresa,
+ 		"tipo_oculto"=>$tipo
+ 		);
+ 	$info1=$this->Modelo->registrarsalida($codigo,$rut_empresa,$cantidad_salida,$fecha,$guardar,$nombre_usuario);
+ 	echo json_encode(array("mensaj"=>$info1));
+}
+        function almacenar_producto(){
         $rut_empresa= $this->session->userdata('rut_empresa');
         $codigo= $this->input->post("codigo");
 	$nombre= $this->input->post("nombre");

@@ -101,9 +101,9 @@
   <th>Nombre   producto</th>
   <th>Descripccion</th>
   <th>Tipo Familia</th>
-  <th>Precio Neto</th>
+
   <th>Stock minimo</th>
-   <th>Precio bruto</th>
+   
   <th>Seleccione</th>
   <?php foreach($productos as $valor):?>
    
@@ -113,10 +113,10 @@
       <td  > <?php echo $valor->descripcion;?> </td>
      
         <td  > <?php echo $valor->tipo_familia;?> </td>
-      <td><?php echo $valor->precio_neto;?></td>
+     
     
       <td  > <?php echo $valor->stock_minimo;?> </td>
-   <td  > <?php echo $valor->precio_bruto;?> </td>
+
       <td >
       <?php if( $valor->estado== "activo") :?>
 
@@ -191,14 +191,8 @@
         <i style="color: white" class="fa fa-plus" aria-hidden="true"></i> Agregar nueva Familia</a>
 </td>
               </tr>
-              <tr>
-                  <td><label  for="psw"><span ></span>Precio Neto</label></td>
-                  <td><input type="number" required="true" class="form-control"  id="txtprecioneto" onkeyup="sacarletras(this)"   placeholder="ingrese su precio neto " maxlength="45" ></td>
-              </tr>
-              <tr>
-                <td><label  for="psw"><span ></span>Precio Bruto</label></td>
-                  <td><input type="number" required="true" class="form-control"  id="txtpreciobruto" onkeyup="sacarletras(this)"   placeholder="ingrese su precio bruto " maxlength="45" ></td>  
-              </tr>
+             
+              
 
               <tr>
               <td><label  for="psw"><span ></span>Stock minimo</label></td>       

@@ -79,20 +79,18 @@ function almacenar_familia(){
   var nombre= $("#txtnombre").val();
   var descripcion= $("#txtdescripcion").val();
   var familia= $("#productoseleccioado").val();
-  var precioneto= $("#txtprecioneto").val();
-  var preciobruto= $("#txtpreciobruto").val();
+  
   var stock= $("#txtstock").val();
   var mensaje="";
-  var precio_bruto= parseInt(precioneto)*0.19 +parseInt(precioneto);
+  
   if(familia==0){
       $("#mesajemodalproducto").html("<p class='msjerror' >"+"!!Eroor , Tipo de familia no seleccionada"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
   }else{
       if( parseInt(stock)>=1){
-          var estimarpreciobruto= parseInt(precioneto)*0.19 +parseInt(precioneto);
-          if(parseInt(preciobruto) >= parseInt(estimarpreciobruto)  ){
+          
              $.post(
     base_url+"Pagina/almacenar_producto",
-    {codigo:codigo,nombre:nombre,descripcion:descripcion,familia:familia,precioneto:precioneto,stock:stock,precio_bruto:preciobruto},
+    {codigo:codigo,nombre:nombre,descripcion:descripcion,familia:familia,stock:stock},
     function(datos){  
     if(datos.mensaj=="si"){
              $("#mesajemodalproducto").html("<p class='msj' >"+"Producto guardado Correctamente"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
@@ -105,11 +103,7 @@ function almacenar_familia(){
     },
     'json'
     ); 
-          }else{
-              $("#mesajemodalproducto").html("<p class='msjerror' >"+"!!Error ,El Precio Bruto no es rentable"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
-  $("#txtpreciobruto").val('');
-  $("#txtpreciobruto").focus();
-          }
+          
       }else{
           $("#mesajemodalproducto").html("<p class='msjerror' >"+"!!Error ,El Stock minimo Insuficiente"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
   $("#txtstock").val('');
@@ -240,7 +234,7 @@ function  registrar_producto_inventario(){
     var suma = parseInt(stock_actual) + parseInt(stock_ingresado);
     
     
-    alert("hola");
+   
     if(nombre.trim().length > 0){
     if(parseInt(stock_actual) ==0){
         if(parseInt(stock_ingresado) >= parseInt(stock_minimo)){
@@ -278,6 +272,64 @@ function  registrar_producto_inventario(){
     
     
 }
+ function  registrar_salidaproducto_inventario(){
+    var codigo_barra = $("#txtcodigo").val();
+    var stock_actual = $("#txtstock_total").val();
+    var stock_minimo = $("#txtstock_minimo").val();
+    var stock_ingresado = $("#txtstockcargar").val();
+    var nombre = $("#txtnombrecargar").val();
+    var diferencia=parseInt(stock_actual)-parseInt(stock_ingresado);
+    $.post(
+    base_url+"Pagina/verproducto",
+    {codigo_barra:codigo_barra},
+    function(vector){  
+    if(vector.mensaje=="si"){
+        if(nombre.trim().length > 0){
+        if(parseInt(stock_actual)>0){
+        if(parseInt(diferencia) >= stock_minimo){
+            $.post(
+    base_url+"Pagina/registrar_salida",
+    {codigo_barra:codigo_barra,stock_ingresado:stock_ingresado},
+    function(data){       
+         
+        $("#mensajegsalida").html("<p class='msj' >"+data.mensaj+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+          setTimeout("location.reload()",1000);  
+    },
+    'json'
+    );
+            
+        }else{
+            $("#mensajegsalida").html("<p class='msjerror' >"+"Error , la cantidad ingresada sobrepasa al stock real"+"</p>").fadeIn(100).delay(600).fadeOut(1000);
+            $("#txtstockcargar").val('');
+        }
+        
+        
+    }else{
+        $("#mensajegsalida").html("<p class='msjerror' >"+"Error , no hay stock en el inventario"+"</p>").fadeIn(100).delay(600).fadeOut(1000);
+    }
+        
+    }else{
+        $("#mensajegsalida").html("<p class='msjerror' >"+"Error , no se ha encontrado registro"+"</p>").fadeIn(100).delay(600).fadeOut(1000);
+        $("#txtcodigo").val('');
+    }
+        
+        
+    }else{
+        $("#mensajegsalida").html("<p class='msjerror' >"+"Error ,codigo no valido"+"</p>").fadeIn(100).delay(600).fadeOut(1000); 
+    }
+              
+           
+    },
+    'json'
+    ); 
+    
+    
+    
+    
+    
+    
+    
+ }
     
     
     function Bloquiarproductoempresa(codigo){

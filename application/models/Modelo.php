@@ -1,11 +1,12 @@
 <?php
 class Modelo extends CI_Model{
     function  validarempresario($rut,$contraseña){
-        $ver="";
+        $ver="hola";
+        
         $this->db->select("*");
         $estado="activo";
         $this->db->where('rut_empresa',$rut);
-        $this->db->where('contraseña',$contraseña);
+
         $this->db->where('estado',$estado);
         $resultado = $this->db->get('empresa');
         if($resultado->num_rows()==0){
@@ -32,7 +33,7 @@ class Modelo extends CI_Model{
         return $this->db->get('producto');
 }
     function fetch_productos_admin($inicio,$limite,$rut_empresa){
-    $query = $this->db->select("producto.codigo_barra,producto.nombre ,producto.descripcion,producto.precio_neto,producto.stock_minimo,producto.precio_bruto,f.tipo_familia ,producto.estado");
+    $query = $this->db->select("producto.codigo_barra,producto.nombre ,producto.descripcion,producto.stock_minimo,f.tipo_familia ,producto.estado");
      $query = $this->db->from("producto");
     $query = $this->db->join("familia f","f.id_familia = producto.idf_familia","inner");
       $query = $this->db->limit($limite, $inicio);
@@ -83,7 +84,42 @@ function obtener_productoinventario2($codigoproducto,$rut_empresa){
     $this->db->query($consulta);
 
 }
- function vareficcar_entrada_productoinventario($codigoproducto,$rut_empresa){
+function  versiestabn($codigo){
+    $this->db->select("*");
+    $this->db->where("codigo_barra",$codigo);
+    $captarinventario= $this->db->get("producto");
+    if($captarinventario->num_rows()==0){
+      $mensaje="si";
+    }else{
+      $mensaje="no";
+    
+    }
+    return $mensaje;
+}
+ function registrarsalida($codigo,$rut_empresa,$cantidad_salida,$fecha,$guardar,$nombre_usuario){
+    $tipo="entrada";
+    $this->db->select("cantidad");
+   $this->db->where('codigo_barra_producto_inventario',$codigo);
+   $this->db->where('rut_empresa_oculto',$rut_empresa);
+   $this->db->where('tipo_oculto',$tipo);     
+   $captar1= $this->db->get('inventario')->result();
+   $stock= 0;
+   foreach ($captar1 as $fila ) {
+     $stock= $fila->cantidad;
+   }
+   $datoinventario['fecha']=$fecha;
+   $datoinventario['cantidad']=$stock-$cantidad_salida;
+   $datoinventario['nombre_usuario_registro']=$nombre_usuario;
+   $this->db->where('codigo_barra_producto_inventario',$codigo);
+   $this->db->where('rut_empresa_oculto',$rut_empresa);
+   $this->db->where('tipo_oculto',$tipo);
+   $this->db->update('inventario',$datoinventario);
+   $mensaje="Producto Retirado Exitosamente";
+
+   $this->db->insert("inventario",$guardar);
+return $mensaje;
+  }
+        function vareficcar_entrada_productoinventario($codigoproducto,$rut_empresa){
     
     $mensaje="";
     $this->db->select("*");
