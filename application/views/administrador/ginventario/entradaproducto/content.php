@@ -63,6 +63,13 @@
                 
               </a>  
             </li>
+            
+            <li class="treeview">
+              <a href="<?php echo base_url().'Pagina/G_proveedor';?>">
+                <i class="fa fa-shopping-cart"></i>
+                <span>Gestion Proveedor</span>
+              </a>  
+            </li>
         </ul>
         </section>
       </aside>
@@ -86,15 +93,36 @@
   <form class="form-inline">
  <div class="form-group">
 
+     <tr>
+      <td><label  for="psw"><span ></span>Ingrese numero de factura</label></td>       
+      <td>
+          <input class="form-control" required="true" type="text" id="txtcodigofacturaver" onkeyup="sacargeneral(this)" maxlength="45" placeholder="671827"   >
+      </td>     
+     </tr>
+     <tr>
+         <td><label  for="psw"><span ></span>Nombre proveedor </label></td>
+         <td>
+            <select class="form-control" id="prooveedorseleccioado"  >
+  <option  value="0" >  Seleccione proveedor</option>
+ <?php foreach(proveedores as $valor):?>
+ 
+<option value="<?php echo $valor->rut_empresa;?>" ><?php echo $valor->nombre_empresa;?></option>  
 
+     <?php endforeach?>
+</select>  
+         </td>
+     </tr>
+     <tr>
+         
+     </tr>
    <tr>
               <td><label  for="psw"><span ></span> Codigo barra</label></td>       
-              <td>  <input type="text" required="true" class="form-control" autofocus="true" onblur="vereficaridinventario12(this.value)" id="txtcodigo"   onkeyup="sacargeneral(this)" maxlength="45" placeholder="112234" >
+              <td>  <input type="text" required="true" class="form-control"  onblur="vereficaridinventario12(this.value)" id="txtcodigo"   onkeyup="sacargeneral(this)" maxlength="45" placeholder="112234" >
             </td>
 
               </tr>
 
-              <tr>
+             
               
  <tr>
               <td><label  for="psw"><span ></span>Nombre</label></td>       

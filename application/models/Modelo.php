@@ -1,7 +1,7 @@
 <?php
 class Modelo extends CI_Model{
     function  validarempresario($rut,$contraseña){
-        $ver="hola";
+        
         
         $this->db->select("*");
         $estado="activo";
@@ -26,10 +26,10 @@ class Modelo extends CI_Model{
         }
         return $ver;
     }
-    function mosedi_producto($codigo,$rut_empresa){
+    function mosedi_producto($codigo){
   $this->db->select("*");
   $this->db->where('codigo_barra',$codigo);
-  $this->db->where('rut_empresa_producto',$rut_empresa);
+  
         return $this->db->get('producto');
 }
     function fetch_productos_admin($inicio,$limite,$rut_empresa){
@@ -40,22 +40,36 @@ class Modelo extends CI_Model{
     $query = $this->db->get();
     return $query->result();      
   }
-  function adquerirfamilia(){
+  function  ver_proveedor($inicio,$limite,$rut_empresa){
+      $ver ="proveedor";
+      $query = $this->db->select("*");
+      $query = $this->db->from("empresa");
+      $query = $this->db->where('tipo_empresa',$ver);
+      $query = $this->db->limit($limite, $inicio);
+    $query = $this->db->get();
+    return $query->result(); 
+  }
+          function adquerirfamilia(){
     $this->db->select("*");
         return $this->db->get('familia');
   }
-  function buscar_producto_empresa($codigo,$rut_empresa){
-   $consulta = $this->db->select("producto.codigo_barra,producto.nombre ,producto.descripcion,producto.precio_neto,producto.stock_minimo,producto.precio_bruto,f.tipo_familia ,producto.estado");
+  function adquerirproveedores(){
+      $ver ="proveedor";
+      $this->db->select("*");
+      $this->db->where('tipo_empresa',$ver);
+      return $this->db->get('empresa');
+  }
+          function buscar_producto_empresa($codigo,$rut_empresa){
+   $consulta = $this->db->select("producto.codigo_barra,producto.nombre ,producto.descripcion,producto.stock_minimo,f.tipo_familia ,producto.estado");
      $consulta = $this->db->from("producto");
     $consulta = $this->db->join("familia f","f.id_familia = producto.idf_familia","inner");
    $consulta=  $this->db->like("producto.codigo_barra",$codigo);
     $consulta= $this->db->Or_like("producto.nombre",$codigo);
-   $consulta=  $this->db->where('rut_empresa_producto',$rut_empresa);
     $consulta = $this->db->get();
     return $consulta->result(); 
 }
 function obtener_productoinventario2($codigoproducto,$rut_empresa){
-    $consulta = $this->db->select("producto.codigo_barra,producto.nombre ,producto.descripcion,producto.precio_neto,producto.stock_minimo,producto.precio_bruto,f.tipo_familia ,producto.estado");
+    $consulta = $this->db->select("producto.codigo_barra,producto.nombre ,producto.descripcion,producto.stock_minimo,producto.precio_bruto,f.tipo_familia ,producto.estado");
      $consulta = $this->db->from("producto");
     $consulta = $this->db->join("familia f","f.id_familia = producto.idf_familia","inner");
    $consulta=  $this->db->where('producto.codigo_barra',$codigoproducto);
@@ -70,11 +84,11 @@ function obtener_productoinventario2($codigoproducto,$rut_empresa){
     $this->db->where("tipo_oculto",$tipo);
     return $this->db->get("inventario");
   }
-  function editarexistenteproductoempresa($codigo,$codigo_oculto,$rut_empresa,$editar){
+  function editarexistenteproductoempresa($codigo,$codigo_oculto,$editar){
     $this->db->where('codigo_barra',$codigo_oculto);
-   $this->db->where("rut_empresa_producto",$rut_empresa);
+   
     $this->db->update("producto",$editar);
-     $consulta = "update inventario set codigo_barra_producto_inventario='".$codigo."' where codigo_barra_producto_inventario='".$codigo_oculto."' ";
+     $consulta = "update detalle_entrada set codigo_barra_entrada='".$codigo."' where codigo_barra_entrada='".$codigo_oculto."' ";
           $this->db->query($consulta);
           return $mandar="si"; 
   }
@@ -84,7 +98,12 @@ function obtener_productoinventario2($codigoproducto,$rut_empresa){
     $this->db->query($consulta);
 
 }
-function  versiestabn($codigo){
+function desbloquiar_proveedor($codigo){
+    $estado="activo";
+    $consulta = "update empresa set estado='".$estado."' where rut_empresa='".$codigo."' ";
+    $this->db->query($consulta);
+}
+        function  versiestabn($codigo){
     $this->db->select("*");
     $this->db->where("codigo_barra",$codigo);
     $captarinventario= $this->db->get("producto");
@@ -189,16 +208,33 @@ function verificar_bloproductoinventario($codigo,$rut_empresa){
     $consulta = "update producto set estado='".$estado."' where codigo_barra='".$codigo."' ";
     $this->db->query($consulta);
 } 
-function editarproductoempresa($codigo,$codigo_oculto,$rut_empresa,$editar){
+function bloquiar_proveedor($codigo){
+    $estado="bloquiado";
+    $consulta = "update empresa set estado='".$estado."' where rut_empresa='".$codigo."' ";
+    $this->db->query($consulta);
+}
+        function consulrutprove($rute){
+    $this->db->select("*");
+  $this->db->where('rut_empresa',$rute);
+  $consulta1= $this->db->get('empresa');
+   $mandar="";
+  if($consulta1->num_rows()==0){
+       $mandar="noexite";
+  }else{
+      $mandar="siexiste";
+  }
+  return $mandar;
+}
+        function editarproductoempresa($codigo,$codigo_oculto,$editar){
 $this->db->select("*");
   $this->db->where('codigo_barra',$codigo);
   $consulta1= $this->db->get('producto');
       $mandar="";
 if($consulta1->num_rows()==0){
    $this->db->where('codigo_barra',$codigo_oculto);
-   $this->db->where("rut_empresa_producto",$rut_empresa);
     $this->db->update("producto",$editar);
-     $consulta = "update inventario set codigo_barra_producto_inventario='".$codigo."' where codigo_barra_producto_inventario='".$codigo_oculto."' ";
+    
+     $consulta = "update detalle_entrada set codigo_barra_entrada='".$codigo."' where codigo_barra_entrada='".$codigo_oculto."' ";
           $this->db->query($consulta);
           $mandar="si";
 }else{
@@ -207,20 +243,54 @@ $mandar="no";
 return $mandar;
 } 
   function verinventario($codigo,$rut_empresa){ 
-  $tipo="entrada";
-    $consulta = "SELECT MIN(stock_actual) as ver from inventario where codigo_barra_producto_inventario='".$codigo."' and rut_empresa_oculto='".$rut_empresa."' and tipo_oculto='".$tipo."'  ";
+    $tipo="entrada";
+    $consulta = "SELECT MIN(cantidad) as ver from detalle_entrada where codigo_barra_entrada='".$codigo."'  ";
    return $this->db->query($consulta);    
   }
     function total_productode_emresa($rut_empresa){
-     $consulta ="select count(*) as datos from producto  ";
+     $consulta ="select count(*) as datos from producto";
     return $this->db->query($consulta);
   }
-    function consultarutempresa($rut){
+  function  total_proveedor_($rut_empresa){
+      $tipo_empresa ="proveedor";
+      $consulta = "select count(*) as datos from empresa where tipo_empresa ='".$tipo_empresa."'";
+      return $this->db->query($consulta);
+  }
+          function consultarutempresa($rut){
     $this->db->select("*");
         $this->db->where('rut_empresa',$rut);
         return  $this->db->get('empresa');
   }
-  function consultaPerfil($rut){
+  function verempresaespe($rut){
+      $this->db->select("*");   
+      $this->db->where('rut_empresa',$rut);
+        return  $this->db->get('empresa');
+  }
+          function  verregiones(){
+      $this->db->select("*");    
+        return  $this->db->get('regiones');
+  }
+  function verprovincias($codigo){
+      $this->db->select("*");
+      $this->db->where('regionf_id',$codigo);
+      return $this->db->get("provincias");
+  }
+  function  consulprovincia($codigo){
+      $this->db->select("*");
+      $this->db->where('provincia_id',$codigo);
+      return $this->db->get("provincias");
+  }
+  function consulregion($id_region){
+      $this->db->select("*");
+      $this->db->where('region_id',$id_region);
+      return $this->db->get("regiones");
+  }
+          function  vercomunas($codigo){
+      $this->db->select("*");
+      $this->db->where('provinciaf_id',$codigo);
+      return $this->db->get("comunas");
+  }
+          function consultaPerfil($rut){
     	  	  $this->db->select("perfil");
       $this->db->where('rut_empresa',$rut);
       $respuesta = $this->db->get("empresa");
@@ -229,7 +299,10 @@ return $mandar;
       }
       return $perfil;
     }
-    function guardarproducto($codigo,$guardar){
+    function almacenarproveedor($almacenar){
+         $this->db->insert("empresa",$almacenar);
+    }
+            function guardarproducto($codigo,$guardar){
         $this->db->select("*");
    $this->db->where('codigo_barra',$codigo);     
         $resultado= $this->db->get('producto');

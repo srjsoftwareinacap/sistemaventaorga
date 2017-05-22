@@ -79,8 +79,9 @@ class Pagina extends CI_Controller {
                                }else{
                                    //entrada de producto
                           if ($this->session->userdata('ir')==1){
+                              $contenido['proveedores']= $this->Modelo->adquerirproveedores()->result();
                         $this->load->view('administrador/ginventario/entradaproducto/header');
-                        $this->load->view('administrador/ginventario/entradaproducto/content');
+                        $this->load->view('administrador/ginventario/entradaproducto/content',$contenido);
                         $this->load->view('administrador/ginventario/entradaproducto/footer');
                                    }else{
                                        //salida de producto
@@ -100,6 +101,52 @@ class Pagina extends CI_Controller {
                         $this->load->view('administrador/ginventario/reportesalida/header');
                         $this->load->view('administrador/ginventario/reportesalida/content');
                         $this->load->view('administrador/ginventario/reportesalida/footer');
+                                           }else{
+                                 if ($this->session->userdata('ir')==5){
+                                     //gestion proveedor
+                                     $this->load->library('pagination');
+							$config['base_url'] = base_url().'Pagina/index';
+							$rut_empresa=$this->session->userdata('rut_empresa');
+
+							$cantidad=0;
+							$consulta=$this->Modelo->total_proveedor_($rut_empresa);
+							foreach ($consulta->result() as $valor){
+                                                            $cantidad= $valor->datos;
+      							}
+
+							$config['total_rows'] = $cantidad;
+							$config['per_page'] = '10';
+    						$config['num_links']=3;
+
+    						$config['full_tag_open']="<ul class='pagination'>";
+							$config['full_tag_close']='</ul>';
+							 $config['num_tag_open'] = '<li>';
+							    $config['num_tag_close'] = '</li>';
+							    $config['cur_tag_open'] = "<li class='disabled'><li class='active' ><a href='#''>";
+							    $config['cur_tag_close'] = "<span class='sr-only'></span></a></li>";
+                                                            $config['next_tag_open'] = "<li>";
+							    $config['next_tagl_close'] = "</li>";
+                                                            $config['use_page_numbers'] = TRUE;
+                                                            $config['first_link'] = "Primero";
+                                                            $config['prev_link'] = "<< Atras";
+                                                            $config['next_link'] = "Siguiente >>";
+                                                            $config['last_link'] = "Last";
+							    $config['prev_tag_open'] = "<li>";
+							    $config['prev_tagl_close'] = "</li>";
+							    $config['first_tag_open'] = "<li>";
+							    $config['first_tagl_close'] = "</ li>";
+							    $config['last_tag_open'] = "<li>";
+							    $config['last_tagl_close'] = "<li>";
+
+							 $this->pagination->initialize($config);
+                                                         $data['region'] = $this->Modelo->verregiones()->result();
+							$data['proveedores']= $this->Modelo->ver_proveedor( $offsete,$config['per_page'],$rut_empresa);
+							$data['links']=$this->pagination->create_links();
+                                     $data['mensaje']='';
+                        $this->load->view('administrador/ginventario/gestionproveedor/header');
+                        $this->load->view('administrador/ginventario/gestionproveedor/content',$data);
+                        $this->load->view('administrador/ginventario/gestionproveedor/footer'); 
+                                 }
                                            }  
                                        }   
                                        }
@@ -214,6 +261,8 @@ class Pagina extends CI_Controller {
 	$this->session->set_userdata($vector);
 	redirect(base_url());    
         }
+
+        
         function R_salida(){
         $rut =	$this->session->userdata('usuario');
 	$perfil = $this->session->userdata('perfil');
@@ -251,6 +300,25 @@ class Pagina extends CI_Controller {
                 );	
 	$this->session->set_userdata($vector);
 	redirect(base_url());    
+        }
+        function G_proveedor(){
+           $rut =	$this->session->userdata('usuario');
+	$perfil = $this->session->userdata('perfil');
+	$rut_empresas = $this->session->userdata('rut_empresa');
+	$nombre= $this->session->userdata('nombre_u');
+	$ira =5;
+        $gestion=2;
+	$vector =array(
+                  "usuario"=>$rut,
+                  "rut_empresa"=>$rut_empresas,
+                  "nombre_u"=>$nombre,
+                    "login"=>true,
+                    "perfil"=>$perfil,
+                    "gestion"=>$gestion,
+                    "ir"=>$ira
+                );	
+	$this->session->set_userdata($vector);
+	redirect(base_url());   
         }
         function L_salida(){
         $rut =	$this->session->userdata('usuario');
@@ -364,8 +432,25 @@ $mensaje="si";
 }
 echo json_encode(array("mensaj"=>$mensaje));
         }
-        
-        function cargarcodigo_producto(){
+        function cargarcodigo_proveedor(){
+            $rut= $this->input->post("codigo");
+            $verlista = $this->Modelo->verempresaespe($rut);
+           $contenido['rut'] = $rut;
+            foreach ($verlista->result() as $valor) {
+             $contenido['nombre'] = $valor->nombre_empresa;
+               $contenido['giro'] = $valor->giro;
+               $contenido['telefono'] = $valor->telefono;
+               $contenido['region'] = $valor->region;
+               $contenido['provincia'] = $valor->provincia;
+               $contenido['comuna'] = $valor->comuna;
+               $contenido['calle'] = $valor->calle;
+               $contenido['correo'] = $valor->correo_electronico;
+            }
+            $contenido['region'] = $this->Modelo->verregiones()->result();
+            $this->load->view('administrador/ginventario/gestionproveedor/editarproveedor',$contenido);
+            
+        }
+                function cargarcodigo_producto(){
             $codigo= $this->input->post("codigo");
             $rut_empresa=$this->session->userdata('rut_empresa');
 	$contenido['familia']= $this->Modelo->adquerirfamilia()->result();
@@ -374,8 +459,7 @@ echo json_encode(array("mensaj"=>$mensaje));
         $nombre="";
         $descripccion="";
         $idf_familia="";
-        $precio_neto="";
-        $stock_minimo="";
+        
         $precio_bruto="";
         
         
@@ -385,17 +469,17 @@ echo json_encode(array("mensaj"=>$mensaje));
         $nombre= $produ->nombre;
         $descripccion= $produ->descripcion;
         $idf_familia= $produ->idf_familia;
-        $precio_neto= $produ->precio_neto;
+        
         $stock_minimo= $produ->stock_minimo;
-        $precio_bruto= $produ->precio_bruto;
+        
         }
         $contenido['codigo_barra']=$codigo_barra;
         $contenido['nombre']=$nombre;
         $contenido['descripccion']=$descripccion;
         $contenido['idf_familia']= $idf_familia;
-        $contenido['precio_neto']= $precio_neto;
+        
         $contenido['stock_minimo']= $stock_minimo;
-        $contenido['precio_bruto']= $precio_bruto;
+        
         
         $variable_minimo=0;
         $contenido['informacion']="";
@@ -419,10 +503,9 @@ echo json_encode(array("mensaj"=>$mensaje));
             $nombre_nuevo = $this->input->post("nombre_nuevo");
             $descripcion  = $this->input->post("descripcion");
             $idf_familia = $this->input->post("id_familia");
-            $rut_empresa = $this->session->userdata('rut_empresa');
-            $precio_neto = $this->input->post("precio_neto");
+            
             $stock_minimo = $this->input->post("stock_minimo");
-            $precio_bruto = $this->input->post("precio_bruto");
+            
             $codigo_viejo = $this->input->post("codigo_viejo");
             $mensaje="";
             
@@ -431,16 +514,13 @@ echo json_encode(array("mensaj"=>$mensaje));
                 "nombre"=>$nombre_nuevo,
                 "descripcion"=>$descripcion,
                 "idf_familia"=>$idf_familia,
-                "rut_empresa_producto"=>$rut_empresa,
-                "precio_neto"=>$precio_neto,
-                "stock_minimo"=>$stock_minimo,
-                "precio_bruto"=>$precio_bruto
+                "stock_minimo"=>$stock_minimo
             );
             if($codigo_nuevo==$codigo_viejo){
-$captar=$this->Modelo->editarexistenteproductoempresa($codigo_nuevo,$codigo_viejo,$rut_empresa,$editar);
+$captar=$this->Modelo->editarexistenteproductoempresa($codigo_nuevo,$codigo_viejo,$editar);
 
 }else{
-	$captar=$this->Modelo->editarproductoempresa($codigo_nuevo,$codigo_viejo,$rut_empresa,$editar);	
+	$captar=$this->Modelo->editarproductoempresa($codigo_nuevo,$codigo_viejo,$editar);	
 }
 	
 	
@@ -472,7 +552,13 @@ function bloquiar_producto_empresa(){
     $data="xas";
     echo json_encode($data);
 }
-function  verproducto(){
+function  bloquiar_proveedor(){
+    $codigo= $this->input->post("codigo");
+    $this->Modelo->bloquiar_proveedor($codigo);
+    $data="xas";
+    echo json_encode($data);
+}
+        function  verproducto(){
     $codigo= $this->input->post("codigo_barra");
     $captar=$this->Modelo->versiestabn($codigo);
     $mensaje =$captar;
@@ -507,7 +593,13 @@ function  verproducto(){
     $data="xas";
     echo json_encode($data);
 }
-function vereficarinventario(){
+function DesBloquiar_proveedor(){
+    $codigo= $this->input->post("codigo");
+	$this->Modelo->desbloquiar_proveedor($codigo);
+    $data="xas";
+    echo json_encode($data);
+}
+        function vereficarinventario(){
 	$codigoproducto= $this->input->post('codigos');
 	$rut_empresa= $this->session->userdata('rut_empresa');
 	$mensaje="";
@@ -571,15 +663,80 @@ function registrar_salida(){
  	$info1=$this->Modelo->registrarsalida($codigo,$rut_empresa,$cantidad_salida,$fecha,$guardar,$nombre_usuario);
  	echo json_encode(array("mensaj"=>$info1));
 }
+function cargarproviencias(){
+       $codigo= $this->input->post("codigo");
+       $info1['provicias']= $this->Modelo->verprovincias($codigo)->result();
+        
+         $this->load->view('administrador/ginventario/gestionproveedor/cargarprovincias',$info1);
+        
+}
+function cargarprovienciaseditar(){
+    $codigo= $this->input->post("codigo");
+       $info1['provicias']= $this->Modelo->verprovincias($codigo)->result();
+        
+         $this->load->view('administrador/ginventario/gestionproveedor/cargarprovincias2',$info1);
+}
+        function cargarcomunas(){
+     $codigo= $this->input->post("codigo");
+      $info1['comunas']= $this->Modelo->vercomunas($codigo)->result();
+      $this->load->view('administrador/ginventario/gestionproveedor/cargarcomuna',$info1);
+}
+function  almacenarprovedor(){
+     $rut= $this->input->post("rut");
+      $des = $this->input->post("des");
+       $nombre= $this->input->post("nombre");
+        $giro= $this->input->post("giro");
+         $telefono= $this->input->post("telefono");
+          $id_region= $this->input->post("region");
+          $id_provincia= $this->input->post("provincia");
+           $comuna= $this->input->post("comuna");
+            $calle= $this->input->post("calle");
+             $correo_electronico= $this->input->post("correo");
+          $nombreregion ="";
+          $sacarregion= $this->Modelo->consulregion($id_region);
+          foreach ($sacarregion->result() as $valor){
+          $nombreregion =  $valor->region_ordinal." ".$valor->region_nombre;
+      }
+          
+            $nombreprovincia=""; 
+       $sacarprovincia= $this->Modelo->consulprovincia($id_provincia);
+                foreach ($sacarprovincia->result() as $valor){
+          $nombreprovincia = $valor->provincia_nombre;   
+      }
+      $rute=$rut."-".$des;
+      $validar = $this->Modelo->consulrutprove($rute);
+      $tipo_oculto="proveedor";
+      $estado="activo";
+      $almacenar = array(
+          "rut_empresa"=>$rute,
+          "nombre_empresa"=>$nombre,
+          "giro"=>$giro,
+          "telefono"=>$telefono,
+          "region"=>$nombreregion,
+          "provincia"=>$nombreprovincia,
+          "comuna"=>$comuna,
+          "calle"=>$calle,
+          "correo_electronico"=>$correo_electronico,
+          "tipo_empresa"=>$tipo_oculto,
+          "estado"=>$estado
+      );
+      $mensaje="";
+	if($validar=="noexite"){
+            $this->Modelo->almacenarproveedor($almacenar);
+            $mensaje="si";
+        }else{
+            $mensaje="no";
+        }	       
+             echo json_encode(array("mensaj"=>$mensaje));
+             
+}
         function almacenar_producto(){
         $rut_empresa= $this->session->userdata('rut_empresa');
         $codigo= $this->input->post("codigo");
 	$nombre= $this->input->post("nombre");
 	$descripcion= $this->input->post("descripcion");
 	$familia= $this->input->post("familia");
-        $precioneto= $this->input->post("precioneto");
 	$stock= $this->input->post("stock");
-        $precio_bruto= $this->input->post("precio_bruto");
 	$estado= "activo";
      $stock_actual=0;
         
@@ -588,10 +745,8 @@ function registrar_salida(){
 	"nombre"=>$nombre,
 	"descripcion"=>$descripcion,
         "idf_familia"=>$familia,
-        "rut_empresa_producto"=>$rut_empresa,
-            "precio_neto"=>$precioneto,
+        
         "stock_minimo"=>$stock,
-            "precio_bruto"=>$precio_bruto,
 	"estado"=>$estado
 	);
 $captar= $this->Modelo->guardarproducto($codigo,$guardar);

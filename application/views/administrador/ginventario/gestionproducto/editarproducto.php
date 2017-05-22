@@ -57,14 +57,7 @@
 </select>
              </div>
             </div>
-    <div class="row"  >
-        <div class="col-lg-4">
-            <label for=""><span ></span>Precio neto</label>
-        </div>
-        <div class="col-lg-5">
-            <input class="form-control" id="txtprecionetonuevo" type="number"  required="true" value="<?php echo $precio_neto;?>" onkeyup="sacarletras(this)" maxlength="45" >
-        </div>
-    </div>
+    
             <div class="row">
 <div class="col-lg-4">
       
@@ -75,14 +68,7 @@
              </div>
             </div>
           
-           <div class="row">
-               <div class="col-lg-4">
-                   <label for=""><span ></span>Precio bruto</label>
-               </div>
-               <div class="col-lg-5">
-                   <input class="form-control" id="txtpreciobrutonuevo" type="number"  required="true" value="<?php echo $precio_bruto;?>" onkeyup="sacarletras(this)" maxlength="45" >
-               </div>
-           </div>
+         
     <br />
             <div class="row">
 <div class="col-lg-4">

@@ -63,6 +63,12 @@
                 
               </a>  
             </li>
+            <li class="treeview">
+              <a href="<?php echo base_url().'Pagina/G_proveedor';?>">
+                <i class="fa fa-shopping-cart"></i>
+                <span>Gestion Proveedor</span>
+              </a>  
+            </li>
         </ul>
         </section>
       </aside>

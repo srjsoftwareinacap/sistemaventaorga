@@ -63,6 +63,12 @@
                 
               </a>  
             </li>
+            <li class="treeview">
+              <a href="<?php echo base_url().'Pagina/G_proveedor';?>">
+                <i class="fa fa-shopping-cart"></i>
+                <span>Gestion Proveedor</span>
+              </a>  
+            </li>
         </ul>
         </section>
       </aside>
@@ -178,7 +184,7 @@
 
               <tr>
               <td><label  for="psw"><span ></span> Familia</label></td>       
-            <td> <select class="form-control" id="productoseleccioado"  >
+            <td> <select  class="form-control" id="productoseleccioado"  >
   <option  value="0" >  Seleccione familia</option>
  <?php foreach($familia as $valor):?>
  
@@ -277,12 +283,7 @@
        
       </div><!-- /.content-wrapper -->
       <br />
-      <footer class="main-footer">
-        <div class="pull-right hidden-xs">
-          <b>Version</b> 2.3.0
-        </div>
-        <strong>Sistema Delta motosierras </strong> .
-      </footer>
+    
 
       
    <div class="control-sidebar-bg"></div>

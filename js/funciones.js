@@ -38,6 +38,11 @@ function volvernormal() {
         show:true
       });
     }
+    function  abrirmodalproveedor(){
+        $("#modalproveedor").modal({
+        show:true
+      });
+    }
     function  abrirmodalfamiliaycerrardeproducto(){
           $("#modalproducto_suempresa").modal('hide');
           $("#modalfamiala").modal({
@@ -125,26 +130,38 @@ function almacenar_familia(){
     }
     );
     }
+    function mostraredicion_mo_proveedor(codigo){
+        $.post(
+    base_url+"Pagina/cargarcodigo_proveedor",
+    {codigo:codigo},
+    function(pagina){  
+        $("#mostraredicion_mo_proveedor").html(pagina);
+      $("#mostraredicion_mo_proveedor").modal({
+        show:true
+      });      
+    }
+    );
+    }
     function Editarproductoempresa(){
         var codigo_barra_nuevo =$("#txtcodigo_barra_nuevo").val();
         var nombre_nuevo= $("#txtnombree_nuevo").val();
         var descripcion = $("#txtdescripcion_nuevo").val();
         var id_familia = $("#productoseleccioado_modificar").val();
-        var precio_neto = $("#txtprecionetonuevo").val();
+       
         var stock_minimo = $("#txtstockminimonuevo").val();
-        var precio_bruto = $("#txtpreciobrutonuevo").val();
+      
         var codigo_viejo = $("#txtcodigo_viejooculto").val();
         var stock_oculto= $("#txtstockminimo_oculto").val();
         var informacion= $("#informacion").val();
-        var precio_brutoestimado = parseInt(precio_neto) + parseInt(precio_neto)*0.19;
+       
         
         if(informacion=="no"){
         if(id_familia!=0){
-         if(parseInt(precio_bruto) >= parseInt(precio_brutoestimado)){
+        
              
         $.post(
     base_url+"Pagina/editar_producto",
-    {codigo_barra_nuevo:codigo_barra_nuevo,nombre_nuevo:nombre_nuevo,descripcion:descripcion,id_familia:id_familia,precio_neto:precio_neto,stock_minimo:stock_minimo,precio_bruto:precio_bruto,codigo_viejo:codigo_viejo},
+    {codigo_barra_nuevo:codigo_barra_nuevo,nombre_nuevo:nombre_nuevo,descripcion:descripcion,id_familia:id_familia,stock_minimo:stock_minimo,codigo_viejo:codigo_viejo},
     function(datos){  
            if(datos.mensaj=="si"){
                $("#mesajemodaleditarfamilia").html("<p class='msj' >"+"Producto editado Correctamente"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
@@ -157,19 +174,13 @@ function almacenar_familia(){
     },
     'json'
     );     
-         }else{
-  $("#mesajemodaleditarfamilia").html("<p class='msjerror' >"+"!!Error ,El Precio Bruto no es rentable"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
-  $("#txtpreciobrutonuevo").val('');
-  $("#txtpreciobrutonuevo").focus();
-         }   
+          
      }else{
           $("#mesajemodaleditarfamilia").html("<p class='msjerror' >"+"!!Eroor , Tipo de familia no seleccionada"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
      }
  }else{
      if(parseInt(stock_minimo) <= parseInt(stock_oculto)){
-     if(id_familia!=0){
-         if(parseInt(precio_bruto) >= parseInt(precio_brutoestimado)){
-             
+     if(id_familia!=0){    
         $.post(
     base_url+"Pagina/editar_producto",
     {codigo_barra_nuevo:codigo_barra_nuevo,nombre_nuevo:nombre_nuevo,descripcion:descripcion,id_familia:id_familia,precio_neto:precio_neto,stock_minimo:stock_minimo,precio_bruto:precio_bruto,codigo_viejo:codigo_viejo},
@@ -185,11 +196,7 @@ function almacenar_familia(){
     },
     'json'
     );     
-         }else{
-  $("#mesajemodaleditarfamilia").html("<p class='msjerror' >"+"!!Error ,El Precio Bruto no es rentable"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
-  $("#txtpreciobrutonuevo").val('');
-  $("#txtpreciobrutonuevo").focus();
-         }   
+          
      }else{
           $("#mesajemodaleditarfamilia").html("<p class='msjerror' >"+"!!Eroor , Tipo de familia no seleccionada"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
      }
@@ -200,6 +207,126 @@ function almacenar_familia(){
  }
  }
     }
+    function vereficarrut(des){
+          var rut1 = $("#txtRutregistrar").val();
+        if(des.trim().length==0 || rut1.trim().length==0 ){
+            $("#txtRutregistrar").val('');
+            $("#txtrutverificador").val('');
+            $("#txtRutregistrar").focus();
+        $("#mesajemodalproveedor").html("<p class='msjerror' >"+"Complete Los campos correctamente"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+        }else{
+      
+        if(dv(rut1)!=des){
+            $("#txtRutregistrar").val('');
+            $("#txtrutverificador").val('');
+            $("#txtRutregistrar").focus();
+        $("#mesajemodalproveedor").html("<p class='msjerror' >"+"Rut no valido"+"</p>").fadeIn(100).delay(600).fadeOut(3000);    
+        }else{
+            $("#mesajemodalproveedor").html("<p class='msj' >"+"Rut valido"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+        }
+    }
+        
+    }
+    function  cargarprov(codigo){
+    
+          $.post(
+    base_url+"Pagina/cargarproviencias",
+    {codigo:codigo},
+    function(pagina,datos){  
+             $("#cargarprovincia").html(pagina,datos);
+             
+             $("#mesajemodalproveedor").html("<p class='msj' >"+"Provincias encontradas"+"</p>").fadeIn(100).delay(600).fadeOut(2000);
+    }
+    );  
+    }
+    function cargarproveditar(codigo){
+        $.post(
+    base_url+"Pagina/cargarprovienciaseditar",
+    {codigo:codigo},
+    function(pagina,datos){  
+             $("#cargarprovincia2").html(pagina,datos);
+             
+             $("#mesajemodaleditarproveedor").html("<p class='msj' >"+"Provincias encontradas"+"</p>").fadeIn(100).delay(600).fadeOut(2000);
+    }
+    );  
+    }
+    function almacenar_proveedor(){
+       
+        var rut = $("#txtRutregistrar").val();
+        var des = $("#txtrutverificador").val();
+        var nombre = $("#txtnombre").val();
+        var giro = $("#txtgiro").val();
+        var telefono = $("#txttelefono").val();
+        var region = $("#regionseleccioada").val();
+        var provincia = $("#provinciaseleccioada").val();
+        var comuna = $("#comunaseleccioada").val();
+        var calle = $("#txtcalle").val();
+        var correo = $("#txtcorreo").val();
+        if(region==0){
+             $("#mesajemodalproveedor").html("<p class='msjerror' >"+"Selecione la Region"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+        }else{
+            if(provincia==0){
+   $("#mesajemodalproveedor").html("<p class='msjerror' >"+"Selecione la Provincia"+"</p>").fadeIn(100).delay(600).fadeOut(3000);             
+            }else{
+                if(comuna == 0 || comuna.trim().length==0){
+                    $("#mesajemodalproveedor").html("<p class='msjerror' >"+"Selecione la Comuna"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+                }else{
+                    //mandar informacion
+                $.post(
+    base_url+"Pagina/almacenarprovedor",
+    {rut:rut,des:des,nombre:nombre,giro:giro,telefono:telefono,region:region,provincia:provincia,comuna:comuna,calle:calle,correo:correo},
+    function(pagina){  
+        if(pagina.mensaj=="si"){
+            $("#mesajemodalproveedor").html("<p class='msj' >"+"Proveedor almacenado correctamente"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+             setTimeout("location.reload()",3000); 
+        }else{
+              $("#mesajemodalproveedor").html("<p class='msjerror' >"+"Error,El proveedor ya existe" +"</p>").fadeIn(100).delay(600).fadeOut(3000);
+              $("#txtRutregistrar").val('');
+       $("#txtrutverificador").val('');
+       $("#txtRutregistrar").focus();
+      
+        }
+        
+        
+             $("#cargarcomuna").html(pagina,datos);
+             $("#mesajemodalproveedor").html("<p class='msj' >"+"Comunas encontradas "+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+    },
+    'json'
+    );      
+                    
+                }
+            }
+        }
+        
+        
+        
+    }
+    function cargarcomuna(codigo){
+        $.post(
+    base_url+"Pagina/cargarcomunas",
+    {codigo:codigo},
+    function(pagina,datos){  
+             $("#cargarcomuna").html(pagina,datos);
+             $("#mesajemodalproveedor").html("<p class='msj' >"+"Comunas encontradas "+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+    }
+    );   
+    } 
+    function cargarcomunaediatar(codigo){
+            $.post(
+    base_url+"Pagina/cargarcomunas",
+    {codigo:codigo},
+    function(pagina,datos){  
+             $("#cargarcomuna2").html(pagina,datos);
+             $("#mesajemodaleditarproveedor").html("<p class='msj' >"+"Comunas encontradas "+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+    }
+    ); 
+    }
+    function dv(rut){
+  var M=0,S=1;
+  for(;rut;rut=Math.floor(rut/10))
+S=(S+rut%10*(9-M++%6))%11;
+return S?S-1:'k';
+}
     function vereficaridinventario12(codigos,$codigo_barra){
         
   $.post(
@@ -330,7 +457,19 @@ function  registrar_producto_inventario(){
     
     
  }
-    
+    function Bloquiarprovedor(codigo){
+        $.post(
+    base_url+"Pagina/bloquiar_proveedor",
+    {codigo:codigo},
+    function(vector){  
+    var mes="";
+              mes="El Proveedor ha sido bloqueado  correctamente";
+              $("#mesajeproveedor").html("<p class='msj' >"+mes+"</p>").fadeIn(100).delay(600).fadeOut(1000);  
+     setTimeout("location.reload()",1000);        
+    },
+    'json'
+    );
+    }
     
     function Bloquiarproductoempresa(codigo){
   $.post(
@@ -341,6 +480,19 @@ function  registrar_producto_inventario(){
               mes="El producto ha sido bloqueado  correctamente";
               $("#mesajefds").html("<p class='msj' >"+mes+"</p>").fadeIn(100).delay(600).fadeOut(1000);  
      setTimeout("location.reload()",1000);        
+    },
+    'json'
+    );
+}
+function DesBloquiarprovedor(codigo){
+     $.post(
+    base_url+"Pagina/DesBloquiar_proveedor",
+    {codigo:codigo},
+    function(pagina){  
+      var mes="";
+              mes="El Proveedor  ha sido desbloqueado  correctamente";
+              $("#mesajeproveedor").html("<p class='msj' >"+mes+"</p>").fadeIn(100).delay(600).fadeOut(1000);  
+     setTimeout("location.reload()",1000);      
     },
     'json'
     );
