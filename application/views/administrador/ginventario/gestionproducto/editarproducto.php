@@ -37,7 +37,7 @@
               <label for=""><span ></span>descripcion</label>
               </div>
               <div class="col-lg-5">
-             <input class="form-control" id="txtdescripcion_nuevo" type="text"  required="true" value="<?php echo $descripccion;?>" onkeyup="sacargeneral(this)" >
+                  <textarea class="form-control" id="txtdescripcion_nuevo" type="text"  required="true"  onkeyup="sacargeneral(this)" ><?php echo $descripccion;?></textarea>
              </div>
             </div>
             <div class="row">

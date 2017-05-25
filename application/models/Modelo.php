@@ -84,7 +84,12 @@ function obtener_productoinventario2($codigoproducto,$rut_empresa){
     $this->db->where("tipo_oculto",$tipo);
     return $this->db->get("inventario");
   }
-  function editarexistenteproductoempresa($codigo,$codigo_oculto,$editar){
+  function editarproveedor($editar,$rut){
+      $this->db->where('rut_empresa',$rut);
+   
+    $this->db->update("empresa",$editar); 
+  }
+          function editarexistenteproductoempresa($codigo,$codigo_oculto,$editar){
     $this->db->where('codigo_barra',$codigo_oculto);
    
     $this->db->update("producto",$editar);

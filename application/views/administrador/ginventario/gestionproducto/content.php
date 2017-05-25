@@ -178,8 +178,11 @@
 
               <tr>
               <td><label  for="psw"><span ></span>Descripcion</label></td>       
-            <td>  <input type="text" required="true" class="form-control"  id="txtdescripcion" onkeyup="sacargeneral(this)"   placeholder="ingrese la descripcion" maxlength="45" ></td>
-
+              <td>  <textarea type="text" required="true" class="form-control"  id="txtdescripcion" onkeyup="sacargeneral(this)"   placeholder="ingrese la descripcion" maxlength="45" ></textarea></td>
+<td>
+    <a class="btn" style="color: white" data-target="#modalfamiala" id="agregarfamiliamodal" href="javascript:abrirmodalfamiliaycerrardeproducto()">
+        <i style="color: white" class="fa fa-plus" aria-hidden="true"></i> Agregar nueva Familia</a>
+</td>
               </tr>
 
               <tr>
@@ -192,10 +195,7 @@
 
      <?php endforeach?>
 </select> </td>
-<td>
-    <a class="btn" style="color: white" data-target="#modalfamiala" id="agregarfamiliamodal" href="javascript:abrirmodalfamiliaycerrardeproducto()">
-        <i style="color: white" class="fa fa-plus" aria-hidden="true"></i> Agregar nueva Familia</a>
-</td>
+
               </tr>
              
               

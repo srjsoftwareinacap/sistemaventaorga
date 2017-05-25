@@ -89,28 +89,41 @@
         <!-- Main content -->
         <section class="content">
            <form action="javascript:registrar_producto_inventario()"  method="post" id="form54321" >
-               <table id="centrarentrada" class="table"> 
+               <table id="centrarentradadeproductos" class="table"> 
   <form class="form-inline">
  <div class="form-group">
 
-     <tr>
-      <td><label  for="psw"><span ></span>Ingrese numero de factura</label></td>       
-      <td>
-          <input class="form-control" required="true" type="text" id="txtcodigofacturaver" onkeyup="sacargeneral(this)" maxlength="45" placeholder="671827"   >
-      </td>     
-     </tr>
+     
      <tr>
          <td><label  for="psw"><span ></span>Nombre proveedor </label></td>
          <td>
             <select class="form-control" id="prooveedorseleccioado"  >
   <option  value="0" >  Seleccione proveedor</option>
- <?php foreach(proveedores as $valor):?>
+ <?php foreach($proveedores as $valor):?>
  
 <option value="<?php echo $valor->rut_empresa;?>" ><?php echo $valor->nombre_empresa;?></option>  
 
      <?php endforeach?>
 </select>  
          </td>
+         <td>
+     <li id="sacarpunto" >
+              <a href="<?php echo base_url().'Pagina/G_proveedor';?>">
+                <i class="fa fa-shopping-cart"></i>
+                <span>Agregar Nuevo Proveedor</span>
+              </a>  
+            </li>
+         </td>
+     </tr>
+     <tr>
+      <td><label  for="psw"><span ></span>Ingrese numero de factura</label></td>       
+      <td>
+          <input class="form-control" required="true" type="text" id="txtcodigofacturaver" onkeyup="sacargeneral(this)" maxlength="45" placeholder="671827"   >
+      </td>
+      <td>
+          <a class="btn" data-target="#modalentradaproducto" id="entradaproducto2" href="javascript:abrirmodalentrada()">
+  <i class="fa fa-plus" aria-hidden="true"></i> Agregar nueva Factura</a>
+      </td>
      </tr>
      <tr>
          
@@ -168,6 +181,73 @@
 
      
 </form>
+            
+             <div class="modal fade" id="modalentradaproducto" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div id="idhee" class="modal-header alert-info">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h2 style="text-align: center"> Agregar nueva Factura</h2>      
+        </div>
+        <div class="modal-body">
+        
+    
+<form action="javascript:almacenar_facturaentrada()"  method="post" id="form123456facturaentrada" >
+  <table class="table"> 
+  <form class="form-inline">
+ <div class="form-group">
+   <tr>
+              <td><label  for="psw"><span ></span> Seleccione Proveedor</label></td>       
+            <td>  
+                <select class="form-control" id="prooveedorseleccioadoentrada"  >
+  <option  value="0" >  Seleccione proveedor</option>
+ <?php foreach($proveedores as $valor):?>
+ 
+<option value="<?php echo $valor->rut_empresa;?>" ><?php echo $valor->nombre_empresa;?></option>  
+
+     <?php endforeach?>
+</select>  
+            </td>
+              </tr>
+
+              <tr>
+              <td><label  for="psw"><span ></span>Numero de Factura</label></td>       
+            <td>  <input type="number" required="true" class="form-control"  id="txtnombre" onkeyup="sacarletras(this)"  placeholder="0001" maxlength="45" ></td>
+
+              </tr>
+
+              <tr>
+              <td><label  for="psw"><span ></span>Descripcion</label></td>       
+              <td>  <textarea type="text" required="true" class="form-control"  id="txtdescripcion_entrada" onkeyup="sacargeneral(this)"   placeholder="ingrese la descripcion" maxlength="45" ></textarea></td>
+
+              </tr>
+
+             
+             
+              
+
+            </div>
+      
+   </form>
+     
+   </table>
+   <button type="submit" id="btnguardarentradafactura" class="fa btn btn-success  fa-floppy-o" form="form123456facturaentrada" value="Submit">Guardar Fctura</button><br />
+   <br />
+<div id="mesajemodalnuevafactura"></div>
+     <br />
+     <br />
+     <br />
+     
+</form>
+     
+        </div>
+        
+      </div>
+    </div>
+  </div>
+            
         </section><!-- /.content -->
         
       </div><!-- /.content-wrapper -->

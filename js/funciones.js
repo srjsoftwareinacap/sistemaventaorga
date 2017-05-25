@@ -38,6 +38,11 @@ function volvernormal() {
         show:true
       });
     }
+    function abrirmodalentrada(){
+        $("#modalentradaproducto").modal({
+        show:true
+      });
+    }
     function  abrirmodalproveedor(){
         $("#modalproveedor").modal({
         show:true
@@ -68,10 +73,10 @@ function almacenar_familia(){
     {tipo_familia:tipo_familia},
     function(vector){  
              if(vector.mensaj=="si"){
-                 $("#mesajemodalfamilia").html("<p class='msj' >"+"Tipo Familia Almacenada  Correctamente"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+                 $("#mesajemodalfamilia").html("<p class='alert alert-success' role='alert' >"+"Tipo Familia Almacenada  Correctamente"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
      setTimeout("location.reload()",3000);
              }else{
-                $("#mesajemodalfamilia").html("<p class='msjerror' >"+"!!Eroor ,El codigo ya existe"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+                $("#mesajemodalfamilia").html("<p class='alert alert-danger' role='alert' >"+"!!Eroor ,El codigo ya existe"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
   $("#txttipofamilia").val('');
   $("#txttipofamilia").focus(); 
              }
@@ -89,7 +94,7 @@ function almacenar_familia(){
   var mensaje="";
   
   if(familia==0){
-      $("#mesajemodalproducto").html("<p class='msjerror' >"+"!!Eroor , Tipo de familia no seleccionada"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+      $("#mesajemodalproducto").html("<p class='alert alert-danger' role='alert' >"+"!!Eroor , Tipo de familia no seleccionada"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
   }else{
       if( parseInt(stock)>=1){
           
@@ -98,10 +103,10 @@ function almacenar_familia(){
     {codigo:codigo,nombre:nombre,descripcion:descripcion,familia:familia,stock:stock},
     function(datos){  
     if(datos.mensaj=="si"){
-             $("#mesajemodalproducto").html("<p class='msj' >"+"Producto guardado Correctamente"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+             $("#mesajemodalproducto").html("<p class='alert alert-success' role='alert' >"+"Producto guardado Correctamente"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
      setTimeout("location.reload()",3000); 
  }else{
-  $("#mesajemodalproducto").html("<p class='msjerror' >"+"!!Error ,El codigo ya existe"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+  $("#mesajemodalproducto").html("<p class='alert alert-danger' role='alert' >"+"!!Error ,El codigo ya existe"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
   $("#txtcodigo").val('');
   $("#txtcodigo").focus();
      }       
@@ -110,7 +115,7 @@ function almacenar_familia(){
     ); 
           
       }else{
-          $("#mesajemodalproducto").html("<p class='msjerror' >"+"!!Error ,El Stock minimo Insuficiente"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+          $("#mesajemodalproducto").html("<p class='alert alert-danger' role='alert' >"+"!!Error ,El Stock minimo Insuficiente"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
   $("#txtstock").val('');
   $("#txtstock").focus();
       }
@@ -142,6 +147,51 @@ function almacenar_familia(){
     }
     );
     }
+    function Editarproveedor(){
+        var rut = $("#txtrut").val();
+        var nombre = $("#txteditnombre").val();
+        var giro = $("#txteditgiro").val();
+        var telefono = $("#txtedittelefono").val();
+        var region_id = $("#regionseleccioadaedir").val();
+        var provincia = $("#provinciaseleccioada").val();
+        var comuna = $("#comunaseleccioada").val();
+        var calle = $("#txteditcalle").val();
+        var correo = $("#txteditcorreo").val();
+        if(region_id==0){
+             $("#mesajemodaleditarproveedor").html("<p class='alert alert-danger' role='alert' >"+"!! Error, Region no seleccionada"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+        }else{
+            if(provincia==0){
+ $("#mesajemodaleditarproveedor").html("<p class='alert alert-danger' role='alert' >"+"!! Error, Provincia no seleccionada"+"</p>").fadeIn(100).delay(600).fadeOut(3000);               
+            }else{
+                if(comuna == 0 || comuna.trim().length==0){
+ $("#mesajemodaleditarproveedor").html("<p class='alert alert-danger' role='alert' >"+"!! Error, Comuna no seleccionada"+"</p>").fadeIn(100).delay(600).fadeOut(3000);                   
+                }else{
+                 $.post(
+    base_url+"Pagina/ediarproveedor",
+    {rut:rut,nombre:nombre,giro:giro,telefono:telefono,region_id:region_id,provincia:provincia,comuna:comuna,calle:calle,correo:correo},
+    function(pagina){  
+             
+             if(pagina.mensaj=="si"){
+                 $("#mesajemodaleditarproveedor").html("<p class='alert alert-success' role='alert' >"+"Se ha editado el proveedor correspondiente"+"</p>").fadeIn(100).delay(600).fadeOut(2000);
+                 setTimeout("location.reload()",3000); 
+             }else{
+                 $("#mesajemodaleditarproveedor").html("<p class='alert alert-danger' role='alert' >"+"Error, No es poblible hacer conecxion a la base de datos"+"</p>").fadeIn(100).delay(600).fadeOut(2000);
+             }
+             
+    },
+    'json'
+    );   
+                    
+                    
+                    
+                    
+                }
+            }
+        }
+        
+        
+        
+    }
     function Editarproductoempresa(){
         var codigo_barra_nuevo =$("#txtcodigo_barra_nuevo").val();
         var nombre_nuevo= $("#txtnombree_nuevo").val();
@@ -164,10 +214,10 @@ function almacenar_familia(){
     {codigo_barra_nuevo:codigo_barra_nuevo,nombre_nuevo:nombre_nuevo,descripcion:descripcion,id_familia:id_familia,stock_minimo:stock_minimo,codigo_viejo:codigo_viejo},
     function(datos){  
            if(datos.mensaj=="si"){
-               $("#mesajemodaleditarfamilia").html("<p class='msj' >"+"Producto editado Correctamente"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+               $("#mesajemodaleditarfamilia").html("<p class='alert alert-success' role='alert' >"+"Producto editado Correctamente"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
      setTimeout("location.reload()",3000); 
            }else{
-                 $("#mesajemodaleditarfamilia").html("<p class='msjerror' >"+"!! Error, El codigo ya existe "+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+                 $("#mesajemodaleditarfamilia").html("<p class='alert alert-danger' role='alert' >"+"!! Error, El codigo ya existe "+"</p>").fadeIn(100).delay(600).fadeOut(3000);
                  $("#txtcodigo_barra_nuevo").val('');
                  $("#txtcodigo_barra_nuevo").focus();
            }   
@@ -176,7 +226,7 @@ function almacenar_familia(){
     );     
           
      }else{
-          $("#mesajemodaleditarfamilia").html("<p class='msjerror' >"+"!!Eroor , Tipo de familia no seleccionada"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+          $("#mesajemodaleditarfamilia").html("<p class='alert alert-danger' role='alert' >"+"!!Eroor , Tipo de familia no seleccionada"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
      }
  }else{
      if(parseInt(stock_minimo) <= parseInt(stock_oculto)){
@@ -186,10 +236,10 @@ function almacenar_familia(){
     {codigo_barra_nuevo:codigo_barra_nuevo,nombre_nuevo:nombre_nuevo,descripcion:descripcion,id_familia:id_familia,precio_neto:precio_neto,stock_minimo:stock_minimo,precio_bruto:precio_bruto,codigo_viejo:codigo_viejo},
     function(datos){  
            if(datos.mensaj=="si"){
-               $("#mesajemodaleditarfamilia").html("<p class='msj' >"+"Producto editado Correctamente"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+               $("#mesajemodaleditarfamilia").html("<p class='alert alert-success' role='alert' >"+"Producto editado Correctamente"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
      setTimeout("location.reload()",3000); 
            }else{
-                 $("#mesajemodaleditarfamilia").html("<p class='msjerror' >"+"!! Error, El codigo ya existe "+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+                 $("#mesajemodaleditarfamilia").html("<p class='alert alert-danger' role='alert' >"+"!! Error, El codigo ya existe "+"</p>").fadeIn(100).delay(600).fadeOut(3000);
                  $("#txtcodigo_barra_nuevo").val('');
                  $("#txtcodigo_barra_nuevo").focus();
            }   
@@ -198,10 +248,10 @@ function almacenar_familia(){
     );     
           
      }else{
-          $("#mesajemodaleditarfamilia").html("<p class='msjerror' >"+"!!Eroor , Tipo de familia no seleccionada"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+          $("#mesajemodaleditarfamilia").html("<p class='alert alert-danger' role='alert' >"+"!!Eroor , Tipo de familia no seleccionada"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
      }
  }else{
-     $("#mesajemodaleditarfamilia").html("<p class='msjerror' >"+"!!Error ,El stock sobrepasa el stock de el inventario"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+     $("#mesajemodaleditarfamilia").html("<p class='alert alert-danger' role='alert' >"+"!!Error ,El stock sobrepasa el stock de el inventario"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
   $("#txtstockminimonuevo").val('');
   $("#txtstockminimonuevo").focus();
  }
@@ -213,16 +263,16 @@ function almacenar_familia(){
             $("#txtRutregistrar").val('');
             $("#txtrutverificador").val('');
             $("#txtRutregistrar").focus();
-        $("#mesajemodalproveedor").html("<p class='msjerror' >"+"Complete Los campos correctamente"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+        $("#mesajemodalproveedor").html("<p class='alert alert-danger' role='alert' >"+"Complete Los campos correctamente"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
         }else{
       
         if(dv(rut1)!=des){
             $("#txtRutregistrar").val('');
             $("#txtrutverificador").val('');
             $("#txtRutregistrar").focus();
-        $("#mesajemodalproveedor").html("<p class='msjerror' >"+"Rut no valido"+"</p>").fadeIn(100).delay(600).fadeOut(3000);    
+        $("#mesajemodalproveedor").html("<p class='alert alert-danger' role='alert' >"+"Rut no valido"+"</p>").fadeIn(100).delay(600).fadeOut(3000);    
         }else{
-            $("#mesajemodalproveedor").html("<p class='msj' >"+"Rut valido"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+            $("#mesajemodalproveedor").html("<p class='alert alert-success' role='alert' >"+"Rut valido"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
         }
     }
         
@@ -235,7 +285,7 @@ function almacenar_familia(){
     function(pagina,datos){  
              $("#cargarprovincia").html(pagina,datos);
              
-             $("#mesajemodalproveedor").html("<p class='msj' >"+"Provincias encontradas"+"</p>").fadeIn(100).delay(600).fadeOut(2000);
+             $("#mesajemodalproveedor").html("<p class='alert alert-success' role='alert' >"+"Provincias encontradas"+"</p>").fadeIn(100).delay(600).fadeOut(2000);
     }
     );  
     }
@@ -246,7 +296,7 @@ function almacenar_familia(){
     function(pagina,datos){  
              $("#cargarprovincia2").html(pagina,datos);
              
-             $("#mesajemodaleditarproveedor").html("<p class='msj' >"+"Provincias encontradas"+"</p>").fadeIn(100).delay(600).fadeOut(2000);
+             $("#mesajemodaleditarproveedor").html("<p class='alert alert-success' role='alert' >"+"Provincias encontradas"+"</p>").fadeIn(100).delay(600).fadeOut(2000);
     }
     );  
     }
@@ -263,13 +313,13 @@ function almacenar_familia(){
         var calle = $("#txtcalle").val();
         var correo = $("#txtcorreo").val();
         if(region==0){
-             $("#mesajemodalproveedor").html("<p class='msjerror' >"+"Selecione la Region"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+             $("#mesajemodalproveedor").html("<p class='alert alert-danger' role='alert' >"+"Selecione la Region"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
         }else{
             if(provincia==0){
-   $("#mesajemodalproveedor").html("<p class='msjerror' >"+"Selecione la Provincia"+"</p>").fadeIn(100).delay(600).fadeOut(3000);             
+   $("#mesajemodalproveedor").html("<p class='alert alert-danger' role='alert' >"+"Selecione la Provincia"+"</p>").fadeIn(100).delay(600).fadeOut(3000);             
             }else{
                 if(comuna == 0 || comuna.trim().length==0){
-                    $("#mesajemodalproveedor").html("<p class='msjerror' >"+"Selecione la Comuna"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+                    $("#mesajemodalproveedor").html("<p class='alert alert-danger' role='alert' >"+"Selecione la Comuna"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
                 }else{
                     //mandar informacion
                 $.post(
@@ -277,10 +327,10 @@ function almacenar_familia(){
     {rut:rut,des:des,nombre:nombre,giro:giro,telefono:telefono,region:region,provincia:provincia,comuna:comuna,calle:calle,correo:correo},
     function(pagina){  
         if(pagina.mensaj=="si"){
-            $("#mesajemodalproveedor").html("<p class='msj' >"+"Proveedor almacenado correctamente"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+            $("#mesajemodalproveedor").html("<p class='alert alert-success' role='alert' >"+"Proveedor almacenado correctamente"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
              setTimeout("location.reload()",3000); 
         }else{
-              $("#mesajemodalproveedor").html("<p class='msjerror' >"+"Error,El proveedor ya existe" +"</p>").fadeIn(100).delay(600).fadeOut(3000);
+              $("#mesajemodalproveedor").html("<p class='alert alert-danger' role='alert' >"+"Error,El proveedor ya existe" +"</p>").fadeIn(100).delay(600).fadeOut(3000);
               $("#txtRutregistrar").val('');
        $("#txtrutverificador").val('');
        $("#txtRutregistrar").focus();
@@ -289,7 +339,7 @@ function almacenar_familia(){
         
         
              $("#cargarcomuna").html(pagina,datos);
-             $("#mesajemodalproveedor").html("<p class='msj' >"+"Comunas encontradas "+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+             $("#mesajemodalproveedor").html("<p class='alert alert-success' role='alert' >"+"Comunas encontradas "+"</p>").fadeIn(100).delay(600).fadeOut(3000);
     },
     'json'
     );      
@@ -307,7 +357,7 @@ function almacenar_familia(){
     {codigo:codigo},
     function(pagina,datos){  
              $("#cargarcomuna").html(pagina,datos);
-             $("#mesajemodalproveedor").html("<p class='msj' >"+"Comunas encontradas "+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+             $("#mesajemodalproveedor").html("<p class='alert alert-success' role='alert' >"+"Comunas encontradas "+"</p>").fadeIn(100).delay(600).fadeOut(3000);
     }
     );   
     } 
@@ -317,7 +367,7 @@ function almacenar_familia(){
     {codigo:codigo},
     function(pagina,datos){  
              $("#cargarcomuna2").html(pagina,datos);
-             $("#mesajemodaleditarproveedor").html("<p class='msj' >"+"Comunas encontradas "+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+             $("#mesajemodaleditarproveedor").html("<p class='alert alert-success' role='alert' >"+"Comunas encontradas "+"</p>").fadeIn(100).delay(600).fadeOut(3000);
     }
     ); 
     }
@@ -334,7 +384,7 @@ return S?S-1:'k';
     {codigos:codigos},
     function(datos){
         if(datos.m1=="Producto en registro"){
-      $("#mensajegentrada").html("<p class='msj' >"+datos.m1+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+      $("#mensajegentrada").html("<p class='alert alert-success' role='alert' >"+datos.m1+"</p>").fadeIn(100).delay(600).fadeOut(3000);
       $("#txtnombrecargar").val(datos.nombre);
       $("#txtdescripcioncargar").val(datos.descripcion);
       $("#txtfamiliacargar").val(datos.familia);
@@ -342,7 +392,7 @@ return S?S-1:'k';
       $("#txtprecionetocargar").val(datos.precio_bruto); 
       $("#txtstock_total").val(datos.stock_maximo);
   }else{
-      $("#mensajegentrada").html("<p class='msjerror' >"+datos.m1+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+      $("#mensajegentrada").html("<p class='alert alert-danger' role='alert' >"+datos.m1+"</p>").fadeIn(100).delay(600).fadeOut(3000);
       $("#txtcodigo").val('');
   $("#txtcodigo").focus();
   }
@@ -370,12 +420,12 @@ function  registrar_producto_inventario(){
     base_url+"Pagina/registrarinventario",
     {codigo_barra:codigo_barra,stock_ingresado:stock_ingresado},
     function(pagina){  
-              $("#mensajegentrada").html("<p class='msj' >"+pagina.mensaj+"</p>").fadeIn(100).delay(600).fadeOut(1000);
+              $("#mensajegentrada").html("<p class='alert alert-success' role='alert' >"+pagina.mensaj+"</p>").fadeIn(100).delay(600).fadeOut(1000);
     },
     'json'
     );  
         }else{
-        $("#mensajegentrada").html("<p class='msjerror' >"+"Error!!!, No cumple con el stock minimo"+"</p>").fadeIn(100).delay(600).fadeOut(1000);
+        $("#mensajegentrada").html("<p class='alert alert-danger' role='alert' >"+"Error!!!, No cumple con el stock minimo"+"</p>").fadeIn(100).delay(600).fadeOut(1000);
          $("#txtstockcargar").val('');
         $("#txtstockcargar").focus();  
         }
@@ -385,13 +435,13 @@ function  registrar_producto_inventario(){
     base_url+"Pagina/registrarinventario",
     {codigo_barra:codigo_barra,stock_ingresado:stock_ingresado},
     function(pagina){  
-              $("#mensajegentrada").html("<p class='msj' >"+pagina.mensaj+"</p>").fadeIn(100).delay(600).fadeOut(1000);
+              $("#mensajegentrada").html("<p class='alert alert-success' role='alert' >"+pagina.mensaj+"</p>").fadeIn(100).delay(600).fadeOut(1000);
     },
     'json'
     ); 
     }    
     }else{
-        $("#mensajegentrada").html("<p class='msjerror' >"+"Error!!!, El producto no esta registrado"+"</p>").fadeIn(100).delay(600).fadeOut(1000);
+        $("#mensajegentrada").html("<p class='alert alert-danger' role='alert' >"+"Error!!!, El producto no esta registrado"+"</p>").fadeIn(100).delay(600).fadeOut(1000);
         $("#txtcodigo").val('');
         $("#txtcodigo").focus();
     }
@@ -419,30 +469,30 @@ function  registrar_producto_inventario(){
     {codigo_barra:codigo_barra,stock_ingresado:stock_ingresado},
     function(data){       
          
-        $("#mensajegsalida").html("<p class='msj' >"+data.mensaj+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+        $("#mensajegsalida").html("<p class='alert alert-success' role='alert' >"+data.mensaj+"</p>").fadeIn(100).delay(600).fadeOut(3000);
           setTimeout("location.reload()",1000);  
     },
     'json'
     );
             
         }else{
-            $("#mensajegsalida").html("<p class='msjerror' >"+"Error , la cantidad ingresada sobrepasa al stock real"+"</p>").fadeIn(100).delay(600).fadeOut(1000);
+            $("#mensajegsalida").html("<p class='alert alert-danger' role='alert' >"+"Error , la cantidad ingresada sobrepasa al stock real"+"</p>").fadeIn(100).delay(600).fadeOut(1000);
             $("#txtstockcargar").val('');
         }
         
         
     }else{
-        $("#mensajegsalida").html("<p class='msjerror' >"+"Error , no hay stock en el inventario"+"</p>").fadeIn(100).delay(600).fadeOut(1000);
+        $("#mensajegsalida").html("<p class='alert alert-danger' role='alert' >"+"Error , no hay stock en el inventario"+"</p>").fadeIn(100).delay(600).fadeOut(1000);
     }
         
     }else{
-        $("#mensajegsalida").html("<p class='msjerror' >"+"Error , no se ha encontrado registro"+"</p>").fadeIn(100).delay(600).fadeOut(1000);
+        $("#mensajegsalida").html("<p class='alert alert-danger' role='alert'' >"+"Error , no se ha encontrado registro"+"</p>").fadeIn(100).delay(600).fadeOut(1000);
         $("#txtcodigo").val('');
     }
         
         
     }else{
-        $("#mensajegsalida").html("<p class='msjerror' >"+"Error ,codigo no valido"+"</p>").fadeIn(100).delay(600).fadeOut(1000); 
+        $("#mensajegsalida").html("<p class='alert alert-danger' role='alert' >"+"Error ,codigo no valido"+"</p>").fadeIn(100).delay(600).fadeOut(1000); 
     }
               
            
@@ -464,7 +514,7 @@ function  registrar_producto_inventario(){
     function(vector){  
     var mes="";
               mes="El Proveedor ha sido bloqueado  correctamente";
-              $("#mesajeproveedor").html("<p class='msj' >"+mes+"</p>").fadeIn(100).delay(600).fadeOut(1000);  
+              $("#mesajeproveedor").html("<p class='alert alert-success' role='alert' >"+mes+"</p>").fadeIn(100).delay(600).fadeOut(1000);  
      setTimeout("location.reload()",1000);        
     },
     'json'
@@ -478,7 +528,7 @@ function  registrar_producto_inventario(){
     function(vector){  
     var mes="";
               mes="El producto ha sido bloqueado  correctamente";
-              $("#mesajefds").html("<p class='msj' >"+mes+"</p>").fadeIn(100).delay(600).fadeOut(1000);  
+              $("#mesajefds").html("<p class='alert alert-success' role='alert' >"+mes+"</p>").fadeIn(100).delay(600).fadeOut(1000);  
      setTimeout("location.reload()",1000);        
     },
     'json'
@@ -491,7 +541,7 @@ function DesBloquiarprovedor(codigo){
     function(pagina){  
       var mes="";
               mes="El Proveedor  ha sido desbloqueado  correctamente";
-              $("#mesajeproveedor").html("<p class='msj' >"+mes+"</p>").fadeIn(100).delay(600).fadeOut(1000);  
+              $("#mesajeproveedor").html("<p class='alert alert-success' role='alert'  >"+mes+"</p>").fadeIn(100).delay(600).fadeOut(1000);  
      setTimeout("location.reload()",1000);      
     },
     'json'
@@ -504,7 +554,7 @@ function DesBloquiarproductoempresa(codigo){
     function(pagina){  
       var mes="";
               mes="El producto  ha sido desbloqueado  correctamente";
-              $("#mesajefds").html("<p class='msj' >"+mes+"</p>").fadeIn(100).delay(600).fadeOut(1000);  
+              $("#mesajefds").html("<p class='alert alert-success' role='alert' >"+mes+"</p>").fadeIn(100).delay(600).fadeOut(1000);  
      setTimeout("location.reload()",1000);      
     },
     'json'
@@ -519,10 +569,10 @@ function verificarusuario(){
     {rut:rut,contraseña:contraseña},
     function(vector){  
          if(vector.mensaj=="usuario valido"){
-             $("#mesaje").html("<p class='msj' >"+vector.mensaj+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+             $("#mesaje").html("<div class='alert alert-success' role='alert' >"+vector.mensaj+"</div>").fadeIn(100).delay(600).fadeOut(3000);
      setTimeout("location.reload()",2000);  
          }else{
- $("#mesaje").html("<p class='msjerror' >"+vector.mensaj+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+ $("#mesaje").html("<div class='alert alert-danger' role='alert' >"+vector.mensaj+"</div>").fadeIn(100).delay(600).fadeOut(3000);
              ejecutarefecto1();
            return false;
              

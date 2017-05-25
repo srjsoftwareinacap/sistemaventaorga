@@ -10,7 +10,7 @@
 
     
      <div class="modal-body">
-     <form id="form2423"  action="javascript:Editarproveedor()"  method="post" >
+     <form id="form2bnv423"  action="javascript:Editarproveedor()"  method="post" >
 
 
         <table class="table"> 
@@ -53,7 +53,7 @@
                   <label  for="psw"><span ></span>Region</label>
               </td>
               <td>
-                 <select onchange="cargarproveditar(this.value)" class="form-control" id="regionseleccioada"  >
+                 <select onchange="cargarproveditar(this.value)" class="form-control" id="regionseleccioadaedir"  >
   <option  value="0" >  Seleccione Region</option>
  <?php foreach($region as $valor):?>
  
@@ -73,26 +73,32 @@
         
           
          
-    <br />
-            <div class="row">
-<div class="col-lg-4">
-       
-        
-              </div>
-              <div class="col-lg-8">
-            <button type="submit" form="form2423" value="Submit" class="btn btn-primary" >Editar</button>
-            
-            </div>
-
- 
-      </div>
+              <tr>
+                  <td>  <label  for="psw"><span ></span>Calle</label></td>
+                  <td>
+<input id="txteditcalle" type="text"  value="<?php echo $calle;?>"   required="true"  onkeyup="sacargeneral(this)" class="form-control"  >                      
+                  </td>
+              </tr>
+              <tr>
+                  <td><label  for="psw"><span ></span>Correo electronico</label></td>
+                  <td><input id="txteditcorreo" type="email"  value="<?php echo $correo;?>"   required="true"  class="form-control"  ></td>
+              </tr>
+              <tr>
+                  <td></td>
+                  <td><button type="submit" form="form2bnv423" value="Submit" class="btn btn-primary" >Editar Proveedor</button></td>
+              </tr>   
+  
+      
 
      	
-     <div id="mesajemodaleditarproveedor"></div>
-    </form>
+     
    </div>
-  </form>
+          </form>
+
         </table>
+         <div id="mesajemodaleditarproveedor"></div>
+           </form>
+
       </div>
      
       

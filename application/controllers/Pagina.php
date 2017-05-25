@@ -440,9 +440,6 @@ echo json_encode(array("mensaj"=>$mensaje));
              $contenido['nombre'] = $valor->nombre_empresa;
                $contenido['giro'] = $valor->giro;
                $contenido['telefono'] = $valor->telefono;
-               $contenido['region'] = $valor->region;
-               $contenido['provincia'] = $valor->provincia;
-               $contenido['comuna'] = $valor->comuna;
                $contenido['calle'] = $valor->calle;
                $contenido['correo'] = $valor->correo_electronico;
             }
@@ -681,6 +678,42 @@ function cargarprovienciaseditar(){
       $info1['comunas']= $this->Modelo->vercomunas($codigo)->result();
       $this->load->view('administrador/ginventario/gestionproveedor/cargarcomuna',$info1);
 }
+function ediarproveedor(){
+    $rut= $this->input->post("rut");
+       $nombre= $this->input->post("nombre");
+        $giro= $this->input->post("giro");
+         $telefono= $this->input->post("telefono");
+          $id_region= $this->input->post("region_id");
+          $id_provincia= $this->input->post("provincia");
+           $comuna= $this->input->post("comuna");
+            $calle= $this->input->post("calle");
+             $correo_electronico= $this->input->post("correo");
+          $nombreregion ="";
+          $sacarregion= $this->Modelo->consulregion($id_region);
+          foreach ($sacarregion->result() as $valor){
+          $nombreregion =  $valor->region_ordinal." ".$valor->region_nombre;
+      }
+          
+            $nombreprovincia=""; 
+       $sacarprovincia= $this->Modelo->consulprovincia($id_provincia);
+                foreach ($sacarprovincia->result() as $valor){
+          $nombreprovincia = $valor->provincia_nombre;   
+      }
+  
+      $editar = array(
+          "nombre_empresa"=>$nombre,
+          "giro"=>$giro,
+          "telefono"=>$telefono,
+          "region"=>$nombreregion,
+          "provincia"=>$nombreprovincia,
+          "comuna"=>$comuna,
+          "calle"=>$calle,
+          "correo_electronico"=>$correo_electronico
+      );
+      $mensaje="si";
+      $this->Modelo->editarproveedor($editar,$rut);
+       echo json_encode(array("mensaj"=>$mensaje));
+} 
 function  almacenarprovedor(){
      $rut= $this->input->post("rut");
       $des = $this->input->post("des");

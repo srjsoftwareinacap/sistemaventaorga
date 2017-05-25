@@ -39,7 +39,7 @@
 }
 #vermodaleditarproveedor{
      margin-left: 27%;
-    margin-top: 7%;
+    margin-top: 1%;
         width: 50%;
 }
 .msj{
@@ -57,6 +57,10 @@ margin-left: 730px;
 	background-color: #03a9f4;
 	color: white;     
 }
+#entradaproducto2{
+    background-color: #03a9f4;
+	color: white;  
+}
 #gestiongestionproveedor{
 margin-left: 900px;
 	margin-top: -8%;
@@ -70,7 +74,7 @@ margin-left: 900px;
     color: white;
  margin-top: 0.5%;
 	text-align: center;
-	   
+	list-style:none;   
 	
         margin-left: 85%;
   
@@ -86,11 +90,21 @@ modalcontentprovee{
     width: 50%;
     margin-left: 15%;
 }
+#centrarentradadeproductos{
+    width: 62%;
+    margin-left: 15%;
+}
+#sacarpunto{
+    list-style:none;
+}
 #btnregistrarentrada{
-    margin-left: 32%;
+    margin-left: 34%;
 }
 #btnguardarproveedor{
     margin-left: 22%;
+}
+#btnguardarentradafactura{
+     margin-left: 40%;
 }
 #modificar{
   background-color: rgba(0,0,128,1.0);  
@@ -98,6 +112,9 @@ modalcontentprovee{
 #mensajegentrada{
     width: 30%;
     margin-left: 32%;
+}
+#trificador{
+    width: 25%;
 }
 #titulo{
     color: white;
