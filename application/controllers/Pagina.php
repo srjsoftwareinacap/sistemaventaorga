@@ -543,7 +543,21 @@ echo json_encode(array("mensaj"=>$mensaje));
 	redirect(base_url());
 }
 }
-function bloquiar_producto_empresa(){
+function buscar_proveedor_empresa(){
+    $codigo= $this->input->post('buscar_proveedor');
+    if(isset($codigo) and !empty($codigo) ){
+        $data['mensaje']='Para volver, Presione el Boton Buscar';
+        $data['region'] = $this->Modelo->verregiones()->result();
+        $data['proveedores']= $this->Modelo->buscar_proveedor($codigo);
+        $data['links']='';
+        $this->load->view('administrador/ginventario/gestionproveedor/header');
+                        $this->load->view('administrador/ginventario/gestionproveedor/content',$data);
+                        $this->load->view('administrador/ginventario/gestionproveedor/footer'); 
+    }else{
+        redirect(base_url());
+    }
+}
+        function bloquiar_producto_empresa(){
 	$codigo= $this->input->post("codigo");
 	$this->Modelo->bloquiar_producto_empresa($codigo);
     $data="xas";
@@ -678,7 +692,13 @@ function cargarprovienciaseditar(){
       $info1['comunas']= $this->Modelo->vercomunas($codigo)->result();
       $this->load->view('administrador/ginventario/gestionproveedor/cargarcomuna',$info1);
 }
-function ediarproveedor(){
+function almacenarentrada(){
+    $rut_proveedor= $this->input->post("rut_proveedor");
+    $numero_factura= $this->input->post("numero_factura");
+    $descripcion = $this->input->post("descripcion");
+    
+}
+        function ediarproveedor(){
     $rut= $this->input->post("rut");
        $nombre= $this->input->post("nombre");
         $giro= $this->input->post("giro");

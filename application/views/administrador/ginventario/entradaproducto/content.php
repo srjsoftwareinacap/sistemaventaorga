@@ -116,6 +116,7 @@
          </td>
      </tr>
      <tr>
+    
       <td><label  for="psw"><span ></span>Ingrese numero de factura</label></td>       
       <td>
           <input class="form-control" required="true" type="text" id="txtcodigofacturaver" onkeyup="sacargeneral(this)" maxlength="45" placeholder="671827"   >

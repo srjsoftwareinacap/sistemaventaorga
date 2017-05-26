@@ -289,6 +289,25 @@ function almacenar_familia(){
     }
     );  
     }
+    function almacenar_facturaentrada(){
+        var rut_proveedor =$("#prooveedorseleccioadoentrada").val();
+        var numero_factura = ("#txtnombre").val();
+        var descripcion = ("#txtdescripcion_entrada").val();
+        if(rut_proveedor==0){
+            $("#mesajemodalnuevafactura").html("<p class='alert alert-success' style='text-align: center' role='alert' >"+"Seleccione Proveedor"+"</p>").fadeIn(100).delay(600).fadeOut(2000);
+        }else{
+       $.post(
+    base_url+"Pagina/almacenarentrada",
+    {rut_proveedor:rut_proveedor,numero_factura:numero_factura,descripcion:descripcion},
+    function(pagina,datos){ 
+        
+             $("#cargarprovincia").html(pagina,datos);
+             
+             $("#mesajemodalproveedor").html("<p class='alert alert-success' role='alert' >"+"Provincias encontradas"+"</p>").fadeIn(100).delay(600).fadeOut(2000);
+    }
+    ); 
+        }  
+    } 
     function cargarproveditar(codigo){
         $.post(
     base_url+"Pagina/cargarprovienciaseditar",

@@ -49,6 +49,16 @@ class Modelo extends CI_Model{
     $query = $this->db->get();
     return $query->result(); 
   }
+  function buscar_proveedor($codigo){
+      $ver ="proveedor";
+      $query = $this->db->select("*");
+      $query = $this->db->from("empresa");
+      $query = $this->db->like('rut_empresa',$codigo);
+    $query= $this->db->Or_like("nombre_empresa",$codigo);
+     $query = $this->db->where('tipo_empresa',$ver);
+    $query = $this->db->get();
+    return $query->result(); 
+  }
           function adquerirfamilia(){
     $this->db->select("*");
         return $this->db->get('familia');

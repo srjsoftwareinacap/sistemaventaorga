@@ -91,7 +91,7 @@
   <div class="form-group">
   <button type="submit" form="form1fasdf24122" class="btn alert-success fa fa-search">Buscar por</button>  
   </div>
-  <input type="text" class="form-control"  name="buscar_producto" placeholder="codigo o por nombre" onkeyup="sacargeneral(this)"  >
+  <input type="text" class="form-control"  name="buscar_proveedor" placeholder="codigo o por nombre" onkeyup="sacargeneral(this)"  >
   
   <p style="color:#03a9f4;" ><?php echo $mensaje;?></p>
 </form>
