@@ -157,9 +157,15 @@ class Pagina extends CI_Controller {
                                if($this->session->userdata('gestion')==3){
                                    
                                }else{
-                                   //g ingreso de soporte
+                                   //g ingreso de usuarios
                                    if($this->session->userdata('gestion')==4){
-                                       
+                                       $data['mensaje']= "";
+                                       $rut_empresas = $this->session->userdata('rut_empresa');
+                                       $data['lista']= $this->Modelo->VerUsuario($rut_empresas);
+                                      
+                                    $this->load->view('administrador/gusuario/header');
+                                    $this->load->view('administrador/gusuario/content',$data);
+                                    $this->load->view('administrador/gusuario/footer');  
                                    }
                                }
                            } 
@@ -346,7 +352,28 @@ class Pagina extends CI_Controller {
         /////////////////////////////////////////////fin de cambio///////////////////////////////////////////////////
         
         
-           ////////////////////////////seccion de cambio de gestion soporte///////////////////////////////////
+           ////////////////////////////seccion de cambio de gestion usuario///////////////////////////////////
+           
+        function gusuario(){
+             $rut =	$this->session->userdata('usuario');
+	$perfil = $this->session->userdata('perfil');
+	$rut_empresas = $this->session->userdata('rut_empresa');
+	$nombre= $this->session->userdata('nombre_u');
+	$ira =1;
+        $gestion=4;
+	$vector =array(
+                  "usuario"=>$rut,
+                  "rut_empresa"=>$rut_empresas,
+                  "nombre_u"=>$nombre,
+                    "login"=>true,
+                    "perfil"=>$perfil,
+                    "gestion"=>$gestion,
+                    "ir"=>$ira
+                );	
+	$this->session->set_userdata($vector);
+	redirect(base_url());
+        }
+        
         ///////////////////////////////////////////////fin de cambio/////////////////////////////////////////////////
         
         

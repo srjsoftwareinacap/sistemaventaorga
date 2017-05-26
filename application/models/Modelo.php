@@ -32,6 +32,14 @@ class Modelo extends CI_Model{
   
         return $this->db->get('producto');
 }
+
+function VerUsuario($rutempresa){
+    $perfil=50;
+     $this->db->select("*");
+  $this->db->where('rut_empresa_peterneciente',$rutempresa);
+  $this->db->where('perfil_usuario',$perfil);
+        return $this->db->get('usuario_empresa');
+}
     function fetch_productos_admin($inicio,$limite,$rut_empresa){
     $query = $this->db->select("producto.codigo_barra,producto.nombre ,producto.descripcion,producto.stock_minimo,f.tipo_familia ,producto.estado");
      $query = $this->db->from("producto");

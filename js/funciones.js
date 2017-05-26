@@ -38,6 +38,12 @@ function volvernormal() {
         show:true
       });
     }
+    
+    function abrirmodalgusuario(){
+        $("#modalgestion_usuario").modal({
+        show:true
+      });
+    }
     function abrirmodalentrada(){
         $("#modalentradaproducto").modal({
         show:true
@@ -257,6 +263,26 @@ function almacenar_familia(){
  }
  }
     }
+    
+    function vereficarrutusuario(des){
+        var rut=$("#txtRutusuario").val();
+        if (des.trim().length==0 || rut.trim().length==0) {
+        $("#txtRutusuario").val('');
+        $("#trificadorusuario").val('');
+        $("#txtRutusuario").focus();
+        $("#mesajemodalgusuario").html("<p class='alert alert-danger' role='alert' >"+"Complete Los campos correctamente"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+    }else{
+        if (dv(rut)!= des) {
+        $("#txtRutusuario").val('');
+        $("#trificadorusuario").val('');
+        $("#txtRutusuario").focus();
+        $("#mesajemodalgusuario").html("<p class='alert alert-danger' role='alert' >"+"Error !! Rut Invalido"+"</p>").fadeIn(100).delay(600).fadeOut(3000);    
+        }else{
+        $("#mesajemodalgusuario").html("<p class='alert alert-success' role='alert' >"+"Rut Valido"+"</p>").fadeIn(100).delay(600).fadeOut(3000);        
+        }
+    }
+    }
+    
     function vereficarrut(des){
           var rut1 = $("#txtRutregistrar").val();
         if(des.trim().length==0 || rut1.trim().length==0 ){

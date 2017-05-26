@@ -104,12 +104,12 @@
               <div class="small-box bg-red">
                 <div class="inner">
                   <h3>Gestión</h3>
-                  <h4>Ingreso de Soporte</h4>
+                  <h4>Usuarios</h4>
                 </div>
                 <div class="icon">
                   <i class="ion ion-calendar"></i>
                 </div>
-                <a href="<?php echo base_url().'Pagina/isoporte';?>" class="small-box-footer">Ir <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="<?php echo base_url().'Pagina/gusuario';?>" class="small-box-footer">Ir <i class="fa fa-arrow-circle-right"></i></a>
               </div>
             </div><!-- ./col -->
           </div><!-- /.row -->
