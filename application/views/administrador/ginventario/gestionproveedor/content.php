@@ -169,7 +169,7 @@
               <td><label  for="psw"><span ></span> Rut de Empresa</label></td>       
             <td>  <input type="text" required="true" class="form-control"  id="txtRutregistrar" onkeyup="sacarletras(this)" onkeyup="sacargeneral(this)"  placeholder="12345678" maxlength="45" ></td>
             <td>
-                <input id="trificador" xtrutvetype="number"   placeholder="9" onblur="vereficarrut(this.value)" required="true" onkeyup="sacarletras(this)" class="form-control"  >
+                <input id="txtrutverificador" type="number"   placeholder="9" onblur="vereficarrut(this.value)" required="true" onkeyup="sacarletras(this)" class="form-control"  >
             </td>
 
               </tr>

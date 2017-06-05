@@ -131,7 +131,7 @@
      </tr>
    <tr>
               <td><label  for="psw"><span ></span> Codigo barra</label></td>       
-              <td>  <input type="text" required="true" class="form-control"  onblur="vereficaridinventario12(this.value)" id="txtcodigo"   onkeyup="sacargeneral(this)" maxlength="45" placeholder="112234" >
+              <td>  <input type="text" required="true" class="form-control"  onblur="vereficaridinventario12(this.value)" id="txtcodigoentrada"   onkeyup="sacargeneral(this)" maxlength="45" placeholder="112234" >
             </td>
 
               </tr>
@@ -156,21 +156,30 @@
               </tr>
               <tr>
                   <td>
-                    <label  for="psw"><span ></span>Precio Bruto</label>  
+                    <label  for="psw"><span ></span>Precio venta neto</label>  
                   </td>
                   <td>
-     <input type="text" required="true" class="form-control" readonly="readonly" id="txtprecionetocargar"   placeholder="Se autocompletara el precio de venta" >                 
+     <input type="text" required="true" class="form-control"  id="txtptrcioneto"   placeholder="$" >                 
+                  </td>
+              </tr>
+              <tr>
+                  <td>
+                    <label  for="psw"><span ></span>Precio venta Bruto</label>  
+                  </td>
+                  <td>
+                      <input type="text" required="true" class="form-control"  readonly="readonly" id="txtpreciobruto"   placeholder="$" >                 
                   </td>
               </tr>
 
               <tr>
               <td><label  for="psw"><span ></span>Stock</label></td>       
-            <td>  <input type="text" required="true" class="form-control"  id="txtstockcargar" onkeyup="sacarletras(this)"   placeholder="ingrese el stock" maxlength="45" ></td>
+            <td>  <input type="text" required="true" class="form-control"  id="txtstockingresado" onkeyup="sacarletras(this)"   placeholder="ingrese el stock" maxlength="45" ></td>
 
               </tr>
 
               <input type="text" required="true" class="form-control hidden"  id="txtstock_minimo"    >
               <input type="text" required="true" class="form-control hidden"  id="txtstock_total"    >
+              <input type="text" required="true" class="form-control hidden"  id="txtidentrada"    >
             </div>
    </form>
    </table>
@@ -178,14 +187,14 @@
    <button type="submit" id="btnregistrarentrada"  class="fa btn btn-success" form="form54321" value="Submit">Registrar Entrada</button>
    <br />
    <br />
-   <div id="mensajegentrada"></div>
+   
 
      
 </form>
+            <div style="text-align: center" id="mensajegregistarentrada"></div>   
             
              <div class="modal fade" id="modalentradaproducto" role="dialog">
     <div class="modal-dialog">
-
       <!-- Modal content-->
       <div class="modal-content">
         <div id="idhee" class="modal-header alert-info">
@@ -193,8 +202,6 @@
           <h2 style="text-align: center"> Agregar nueva Factura</h2>      
         </div>
         <div class="modal-body">
-        
-    
 <form action="javascript:almacenar_facturaentrada()"  method="post" id="form123456facturaentrada" >
   <table class="table"> 
   <form class="form-inline">
@@ -205,9 +212,7 @@
                 <select class="form-control" id="prooveedorseleccioadoentrada"  >
   <option  value="0" >  Seleccione proveedor</option>
  <?php foreach($proveedores as $valor):?>
- 
 <option value="<?php echo $valor->rut_empresa;?>" ><?php echo $valor->nombre_empresa;?></option>  
-
      <?php endforeach?>
 </select>  
             </td>
@@ -224,19 +229,14 @@
               <td>  <textarea type="text" required="true" class="form-control"  id="txtdescripcion_entrada" onkeyup="sacargeneral(this)"   placeholder="ingrese la descripcion" maxlength="45" ></textarea></td>
 
               </tr>
-
-             
-             
-              
-
             </div>
       
    </form>
      
    </table>
-   <button type="submit" id="btnguardarentradafactura" class="fa btn btn-success  fa-floppy-o" form="form123456facturaentrada" value="Submit">Guardar Fctura</button><br />
+   <button type="submit" id="btnguardarentradafactura" class="fa btn btn-success  fa-floppy-o" form="form123456facturaentrada" value="Submit">Guardar Factura</button><br />
    <br />
-<div id="mesajemodalnuevafactura"></div>
+<div style="text-align: center" id="mesajemodalnuevafactura"></div>
      <br />
      <br />
      <br />

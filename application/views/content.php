@@ -33,7 +33,7 @@
 
       </div>
       <br />
-        <div id="mesaje"></div>
+        <div style="text-align: center" id="mesaje"></div>
     </div>
 
    

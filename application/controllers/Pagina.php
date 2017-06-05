@@ -79,15 +79,16 @@ class Pagina extends CI_Controller {
                                }else{
                                    //entrada de producto
                           if ($this->session->userdata('ir')==1){
-                              $contenido['proveedores']= $this->Modelo->adquerirproveedores()->result();
+                        $contenido['proveedores']= $this->Modelo->adquerirproveedores()->result();
                         $this->load->view('administrador/ginventario/entradaproducto/header');
                         $this->load->view('administrador/ginventario/entradaproducto/content',$contenido);
                         $this->load->view('administrador/ginventario/entradaproducto/footer');
                                    }else{
                                        //salida de producto
                                        if($this->session->userdata('ir')==2){
+                       $contenido['proveedores']= $this->Modelo->adquerirproveedores()->result();                    
                         $this->load->view('administrador/ginventario/salidaproducto/header');
-                        $this->load->view('administrador/ginventario/salidaproducto/content');
+                        $this->load->view('administrador/ginventario/salidaproducto/content',$contenido);
                         $this->load->view('administrador/ginventario/salidaproducto/footer');
                                        }else{
                                            //reporte de entrada
@@ -495,7 +496,7 @@ echo json_encode(array("mensaj"=>$mensaje));
         $idf_familia= $produ->idf_familia;
         
         $stock_minimo= $produ->stock_minimo;
-        
+        $precio_bruto = $produ->precio_bruto;
         }
         $contenido['codigo_barra']=$codigo_barra;
         $contenido['nombre']=$nombre;
@@ -503,23 +504,30 @@ echo json_encode(array("mensaj"=>$mensaje));
         $contenido['idf_familia']= $idf_familia;
         
         $contenido['stock_minimo']= $stock_minimo;
-        
+        $contenido['precio_bruto']= $precio_bruto;
         
         $variable_minimo=0;
         $contenido['informacion']="";
+        $variable = $this->Modelo->verinventariosio($codigo);
+        if($variable=="si"){
         $resultado2=$this->Modelo->verinventario($codigo,$rut_empresa);
         foreach ($resultado2->result() as $valor) {
-            if($valor->ver!=0){
+            if($valor->cantidad!=0){
                $contenido['informacion']="si";
-               $variable_minimo= $valor->ver;
+               $variable_minimo= $valor->cantidad;
             }else{
                $contenido['informacion']="no"; 
-               $variable_minimo= $valor->ver;
+               $variable_minimo= 0;
             }
+        }
+        }else{
+            $contenido['informacion']="no";
+            $variable_minimo= 0;
+        }
             $contenido['minimo']=$variable_minimo;
             $this->load->view('administrador/ginventario/gestionproducto/editarproducto',$contenido);
 	
-}    
+    
         }
         
         function editar_producto(){
@@ -531,6 +539,7 @@ echo json_encode(array("mensaj"=>$mensaje));
             $stock_minimo = $this->input->post("stock_minimo");
             
             $codigo_viejo = $this->input->post("codigo_viejo");
+            $precio_bruto = $this->input->post("precio_bruto");
             $mensaje="";
             
             $editar = array(
@@ -538,7 +547,8 @@ echo json_encode(array("mensaj"=>$mensaje));
                 "nombre"=>$nombre_nuevo,
                 "descripcion"=>$descripcion,
                 "idf_familia"=>$idf_familia,
-                "stock_minimo"=>$stock_minimo
+                "stock_minimo"=>$stock_minimo,
+                "precio_bruto"=>$precio_bruto
             );
             if($codigo_nuevo==$codigo_viejo){
 $captar=$this->Modelo->editarexistenteproductoempresa($codigo_nuevo,$codigo_viejo,$editar);
@@ -608,20 +618,16 @@ function  bloquiar_proveedor(){
         function registrarinventario(){
     $codigo_barra_producto= $this->input->post('codigo_barra');
     $stock_ingresado = $this->input->post('stock_ingresado');
-    $nombre_usuario = $this->session->userdata('nombre_u');
-	$rut_empresa=$this->session->userdata('rut_empresa');
-	date_default_timezone_set("America/Santiago");
-	$fecha = date("Y-m-d");
-        $tipo_oculto= "entrada";
+    $idf_entrada = $this->input->post('idf_entrada');
+    $precio_neto = $this->input->post('precio_neto');
+    $precio_bruto = $this->input->post('precio_bruto');
         $guardar= array(
-            "codigo_barra_producto_inventario" => $codigo_barra_producto,
-            "fecha" => $fecha,
-            "stock_actual" => $stock_ingresado,
-            "nombre_usuario_registro" => $nombre_usuario,
-            "rut_empresa_oculto" => $rut_empresa,
-            "tipo_oculto"=>$tipo_oculto
+            "idf_entrada"=>$idf_entrada,
+            "codigo_barra_entrada"=>$codigo_barra_producto,
+            "cantidad"=>$stock_ingresado,
+            "precio_neto"=>$precio_neto
         );
-        $mensaje= $this->Modelo->registarentrada($codigo_barra_producto,$rut_empresa,$stock_ingresado,$fecha,$guardar,$nombre_usuario);
+        $mensaje= $this->Modelo->registarentrada($codigo_barra_producto,$idf_entrada,$stock_ingresado,$guardar,$precio_neto);
           echo json_encode(array("mensaj"=>$mensaje));
 
 }
@@ -631,39 +637,68 @@ function  bloquiar_proveedor(){
     $data="xas";
     echo json_encode($data);
 }
-function DesBloquiar_proveedor(){
+function almacenarfacturasalida(){
+    $rut_proveedor=$this->input->post('rut_proveedor');
+    $numero_factura =$this->input->post('numero_factura');
+    $descripcion = $this->input->post('descripcion');
+    date_default_timezone_set("America/Santiago");
+    $fecha =date("Y-m-d");
+    $guardar= array(
+        "rut_proveedor"=>$rut_proveedor,
+        "fecha"=>$fecha,
+        "numero_factura_despacho"=>$numero_factura,
+        "descripcion"=>$descripcion
+    );
+    $ver = $this->Modelo->almacenarsalida1($rut_proveedor,$numero_factura,$guardar);
+     echo json_encode(array(
+        "m1"=>$ver
+    ));
+}
+        function DesBloquiar_proveedor(){
     $codigo= $this->input->post("codigo");
 	$this->Modelo->desbloquiar_proveedor($codigo);
     $data="xas";
     echo json_encode($data);
 }
         function vereficarinventario(){
-	$codigoproducto= $this->input->post('codigos');
-	$rut_empresa= $this->session->userdata('rut_empresa');
+	$rut_proveedor= $this->input->post('rut_proveedor');
+        $numero_factura = $this->input->post('numero_factura');
+        $codigo_barra = $this->input->post('codigo_barra');
+	$ver=$this->Modelo->verentrada($numero_factura,$rut_proveedor);
+        
 	$mensaje="";
-	$nombre="";
+         $nombre="";
 	$descripcion="";
 	$familia="";
 	$stock_minimo=0;
-        $precio_bruto=0;
 	$cantidadmaxima=0;
-	$mensaje="";
-	$info= $this->Modelo->vareficcar_entrada_productoinventario($codigoproducto,$rut_empresa);
-if($info=="Se ha encontrado producto"){
-$ver12 = $this->Modelo->verificar_bloproductoinventario($codigoproducto,$rut_empresa);
+        $id_entrada=0;
+        $precio_neto=0;
+        $precio_bruto =0;
+        $mensaje="";
+        if($ver=="existe"){  
+	$info= $this->Modelo->vareficcar_entrada_productoinventario($codigo_barra);
+if($info=="Se ha encontrado Producto"){
+$ver12 = $this->Modelo->verificar_bloproductoinventario($codigo_barra);
 		if($ver12=="activo"){
 			$mensaje="Producto en registro";
-			$dato = $this->Modelo->obtener_productoinventario2($codigoproducto,$rut_empresa);
+			$dato = $this->Modelo->obtener_productoinventario2($codigo_barra);
 			foreach ($dato->result() as $variable) {
 		$nombre = $variable->nombre;
 	$descripcion = $variable->descripcion;
 	$familia = $variable->tipo_familia;
 	$stock_minimo = $variable->stock_minimo;
-        $precio_bruto = $variable->precio_bruto;
+     $precio_bruto = $variable->precio_bruto;
 	}
-	$inventario= $this->Modelo->selecionar_entrada_productoinventario($codigoproducto,$rut_empresa);
+       $listaentrada = $this->Modelo->selleccionarentradaproveedor($rut_proveedor,$numero_factura);
+       foreach ($listaentrada->result() as $valor ) {
+           $id_entrada = $valor->id_entrada;
+       }
+	$inventario= $this->Modelo->selecionar_entrada_productoinventario($codigo_barra);
 	foreach ($inventario->result() as $valor ) {
-		$cantidadmaxima = $valor->stock_actual;
+                $precio_neto = $valor->precio_neto;
+                
+		$cantidadmaxima = $valor->cantidad;
 	}
 		}else{
 			$mensaje="Producto bloqueado";
@@ -671,35 +706,92 @@ $ver12 = $this->Modelo->verificar_bloproductoinventario($codigoproducto,$rut_emp
 }else{
 $mensaje=$info;
 }
+        }else{
+            $mensaje="No hay de factura";
+        }
+	
 		echo json_encode(array(
 		"m1"=>$mensaje,
 		"nombre"=>$nombre,
 		"descripcion"=>$descripcion,
 		"familia"=>$familia,
 		"stock_minimo"=>$stock_minimo,
-                "precio_bruto"=>$precio_bruto,
-		"stock_maximo"=>$cantidadmaxima
+		"stock_maximo"=>$cantidadmaxima,
+                "id_entrada"=>$id_entrada,
+                "precio_neto"=>$precio_neto,
+                "precio_bruto"=>$precio_bruto
 		));
 }
-function registrar_salida(){
-    $codigo= $this->input->post("codigo_barra");
-	$cantidad_salida= $this->input->post("stock_ingresado");
-	$nombre_usuario = $this->session->userdata('nombre_u');
-	$rut_empresa=$this->session->userdata('rut_empresa');
-	date_default_timezone_set("America/Santiago");
-	$fecha =date("Y-m-d");
- 	$tipo="salida";
- 	$estado="activo";
- 	$guardar = array(
- 		"codigo_barra_producto_inventario"=>$codigo,
- 		"fecha"=>$fecha,
- 		"stock_actual"=>$cantidad_salida,
- 		"nombre_usuario_registro"=>$nombre_usuario,
- 		"rut_empresa_oculto"=>$rut_empresa,
- 		"tipo_oculto"=>$tipo
- 		);
- 	$info1=$this->Modelo->registrarsalida($codigo,$rut_empresa,$cantidad_salida,$fecha,$guardar,$nombre_usuario);
- 	echo json_encode(array("mensaj"=>$info1));
+function verificarinventariosalida(){
+    $codigo = $this->input->post("codigo"); 
+    $rut_proveedor = $this->input->post("id_proveedor");
+    $numero_factura = $this->input->post("numero_factura");
+    $stock_minimo="";
+    $nombre="";
+    $descripcion="";
+    $familia="";
+    $precio_neto=0;
+    $mensaje="";
+    $cantidad=0;
+    $id_salida=0;
+    $ver= $this->Modelo->versalidas($rut_proveedor,$numero_factura);
+    if($ver=="existe"){
+        $info= $this->Modelo->vareficcar_entrada_productoinventario($codigo);
+if($info=="Se ha encontrado Producto"){
+    $vercantidad = $this->Modelo->vercantidad($codigo);
+    if($vercantidad=="si"){
+    $dato = $this->Modelo->obtener_productoinventario2($codigo);
+			foreach ($dato->result() as $variable) {
+		$nombre = $variable->nombre;
+	$descripcion = $variable->descripcion;
+	$familia = $variable->tipo_familia;
+	$stock_minimo = $variable->stock_minimo;
+	}
+        $datos= $this->Modelo->obtenerinventario($codigo);
+        foreach ($datos->result() as $valor) {
+            $cantidad=$valor->cantidad;
+        }
+        $recorrer= $this->Modelo->obtenersalidas($rut_proveedor,$numero_factura);
+        foreach ($recorrer->result() as $valor) {
+            $id_salida= $valor->id_salida;
+        }
+        $mensaje="Se ha encontrado el producto";
+        
+        
+    }else{
+        $mensaje="Error, no existe registro de inventario";
+    }
+}else{
+    $mensaje=$info;
+}
+    }else{
+        $mensaje="Error, No existe factura";
+    }
+    echo json_encode(array(
+        "m1"=>$mensaje,
+        "nombre"=>$nombre,
+        "descripcion"=>$descripcion,
+        "familia"=>$familia,
+        "stock_minimo"=>$stock_minimo,
+        "cantidad"=>$cantidad,
+        "id_salida"=>$id_salida
+    ));
+}
+function almacenarsalidaproducto(){
+    $idf_salida=$this->input->post("id_salida");
+    $codigo_barra= $this->input->post("codigo_barra");
+    $cantidad= $this->input->post("cantidad");
+    $precio_neto = $this->input->post("precio_neto");
+    $guardar = array(
+        "idf_salida"=>$idf_salida,
+        "codigo_barra_salida"=>$codigo_barra,
+        "cantidad"=>$cantidad,
+        "precio_neto"=>$precio_neto
+    );
+ $ver=$this->Modelo->registrarsalida($codigo_barra,$cantidad,$guardar,$idf_salida);   
+ echo json_encode(array(
+     "m1"=>$ver
+ ));
 }
 function cargarproviencias(){
        $codigo= $this->input->post("codigo");
@@ -723,6 +815,22 @@ function almacenarentrada(){
     $rut_proveedor= $this->input->post("rut_proveedor");
     $numero_factura= $this->input->post("numero_factura");
     $descripcion = $this->input->post("descripcion");
+    date_default_timezone_set("America/Santiago");
+    $fecha =date("Y-m-d");
+    $guardar = array(
+        "rut_proveedor"=>$rut_proveedor,
+        "fecha"=>$fecha,
+        "numero_factura"=>$numero_factura,
+        "descripcion"=>$descripcion
+    );
+    $ver= $this->Modelo->verentradas($rut_proveedor,$numero_factura);
+    if($ver=="si"){
+        $this->Modelo->alamacenarnetrada($guardar);
+        $mensaje ="Factura registrada";
+    }else{
+        $mensaje="Error, La factura ya se encuentra registrada";
+    }
+    echo json_encode(array("mensaj"=>$mensaje));
     
 }
         function ediarproveedor(){
@@ -761,7 +869,8 @@ function almacenarentrada(){
       $this->Modelo->editarproveedor($editar,$rut);
        echo json_encode(array("mensaj"=>$mensaje));
 } 
-function  almacenarprovedor(){
+
+        function  almacenarprovedor(){
      $rut= $this->input->post("rut");
       $des = $this->input->post("des");
        $nombre= $this->input->post("nombre");
@@ -817,6 +926,7 @@ function  almacenarprovedor(){
 	$descripcion= $this->input->post("descripcion");
 	$familia= $this->input->post("familia");
 	$stock= $this->input->post("stock");
+        $precio_bruto = $this->input->post("precio_bruto");
 	$estado= "activo";
      $stock_actual=0;
         
@@ -825,8 +935,8 @@ function  almacenarprovedor(){
 	"nombre"=>$nombre,
 	"descripcion"=>$descripcion,
         "idf_familia"=>$familia,
-        
         "stock_minimo"=>$stock,
+         "precio_bruto"=>$precio_bruto,
 	"estado"=>$estado
 	);
 $captar= $this->Modelo->guardarproducto($codigo,$guardar);

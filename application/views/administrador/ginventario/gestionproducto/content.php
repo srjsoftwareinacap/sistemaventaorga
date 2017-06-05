@@ -109,7 +109,7 @@
   <th>Tipo Familia</th>
 
   <th>Stock minimo</th>
-   
+  <th>Precio_bruto</th>
   <th>Seleccione</th>
   <?php foreach($productos as $valor):?>
    
@@ -122,7 +122,7 @@
      
     
       <td  > <?php echo $valor->stock_minimo;?> </td>
-
+      <td> <?php echo $valor->precio_bruto;?></td>
       <td >
       <?php if( $valor->estado== "activo") :?>
 
@@ -144,7 +144,7 @@
               echo $links
             ?>
             </ul>
-            <div id="mesajefds"></div>
+      <div  style="text-align: center" id="mesajefds"></div>
 </div> 
        </div>     
  
@@ -205,6 +205,10 @@
               <td>  <input type="number" required="true" class="form-control"  id="txtstock" onkeyup="sacarletras(this)"   placeholder="ingrese stock minimo " maxlength="45" ></td>
 
               </tr>
+              <tr>
+                  <td><label  for="psw"><span ></span>Precio venta Bruto</label></td>       
+              <td>  <input type="number" required="true" class="form-control"  id="txtpreciobrutoproducto" onkeyup="sacarletras(this)"   placeholder="ingrese su precio $" maxlength="45" ></td>
+              </tr>
             </div>
       
    </form>
@@ -212,7 +216,7 @@
    </table>
    <button type="submit" id="btnguardarproducto" class="fa btn btn-success  fa-floppy-o" form="form1234" value="Submit">Guardar producto</button><br />
    <br />
-<div id="mesajemodalproducto"></div>
+<div style="text-align: center" id="mesajemodalproducto"></div>
      <br />
      <br />
      <br />
@@ -254,7 +258,7 @@
    </table>
    <button type="submit" id="btnguardarfamilia" class="fa btn btn-success  fa-floppy-o" form="form12345" value="Submit">Guardar Tipo de familia</button><br />
    <br />
-<div id="mesajemodalfamilia"></div>
+<div style="text-align: center" id="mesajemodalfamilia"></div>
      <br />
      <br />
      <br />

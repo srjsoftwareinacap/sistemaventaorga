@@ -92,10 +92,38 @@
   <form class="form-inline">
  <div class="form-group">
 
+     <tr>
+        <td><label  for="psw"><span ></span>Nombre de Proveedor de Destino</label></td>
+        <td>
+            <select class="form-control" id="prooveedorseleccioado"  >
+  <option  value="0" >  Seleccione proveedor</option>
+ <?php foreach($proveedores as $valor):?>
+ 
+<option value="<?php echo $valor->rut_empresa;?>" ><?php echo $valor->nombre_empresa;?></option>  
 
+     <?php endforeach?>
+</select>  
+         </td>
+         <td>
+     <li id="sacarpunto" >
+              <a href="<?php echo base_url().'Pagina/G_proveedor';?>">
+                <i class="fa fa-shopping-cart"></i>
+                <span>Agregar Nuevo Proveedor</span>
+              </a>  
+            </li>
+         </td>
+     </tr>
+     <tr>
+     <td><label  for="psw"><span ></span>Numero de Factura de Despacho</label></td>
+     <td><input type="number" required="true" class="form-control"  id="txtfacturasalida" onkeyup="sacarletras(this)"   placeholder="001" maxlength="45" ></td>
+     <td>
+          <a class="btn" data-target="#modalsalidaproducto" id="salidaproducto2" href="javascript:abrirmodalsalida()">
+  <i class="fa fa-plus" aria-hidden="true"></i> Agregar nueva Factura de Despacho</a>
+      </td>
+     </tr>
    <tr>
               <td><label  for="psw"><span ></span> Codigo barra</label></td>       
-              <td>  <input type="text" required="true" class="form-control" autofocus="true" onblur="vereficaridinventario12(this.value)" id="txtcodigo"   onkeyup="sacargeneral(this)" maxlength="45" placeholder="112234" >
+              <td>  <input type="text" required="true" class="form-control"  onblur="vereficaridinventariosalida(this.value)" id="txtcodigosalida"   onkeyup="sacargeneral(this)" maxlength="45" placeholder="112234" >
             </td>
 
               </tr>
@@ -104,60 +132,115 @@
               
  <tr>
               <td><label  for="psw"><span ></span>Nombre</label></td>       
-            <td>  <input type="text" required="true" class="form-control" readonly="readonly"  id="txtnombrecargar"   placeholder="Se autocompletara el nombre" ></td>
+            <td>  <input type="text" required="true" class="form-control" readonly="readonly"  id="txtnombrecargarsalida"   placeholder="Se autocompletara el nombre" ></td>
 
               </tr>
               <tr>
               <td><label  for="psw"><span ></span>Descripcion</label></td>       
-            <td>  <input type="text" required="true" class="form-control" readonly="readonly"  id="txtdescripcioncargar"   placeholder="Se autocompletara la descripcion" ></td>
+            <td>  <input type="text" required="true" class="form-control" readonly="readonly"  id="txtdescripcioncargarsalida"   placeholder="Se autocompletara la descripcion" ></td>
 
               </tr>
 
               <tr>
               <td><label  for="psw"><span ></span>Familia</label></td>       
-            <td>  <input type="text" required="true" class="form-control" readonly="readonly" id="txtfamiliacargar"   placeholder="Se autocompletara el tipo de familia" ></td>
+            <td>  <input type="text" required="true" class="form-control" readonly="readonly" id="txtfamiliacargarsalida"   placeholder="Se autocompletara el tipo de familia" ></td>
 
               </tr>
               <tr>
                   <td>
-                    <label  for="psw"><span ></span>Precio Bruto</label>  
+                    <label  for="psw"><span ></span>Precio venta Neto</label>  
                   </td>
                   <td>
-     <input type="text" required="true" class="form-control" readonly="readonly" id="txtprecionetocargar"   placeholder="Se autocompletara el precio de venta" >                 
+                      <input type="text" required="true" onkeyup="sacarletras(this)" class="form-control"  id="txtprecionetosalida" placeholder="$"   >                 
                   </td>
               </tr>
 
               <tr>
               <td><label  for="psw"><span ></span>Stock de salida</label></td>       
-            <td>  <input type="text" required="true" class="form-control"  id="txtstockcargar" onkeyup="sacarletras(this)"   placeholder="ingrese el stock" maxlength="45" ></td>
+            <td>  <input type="text" required="true" class="form-control"  id="txtstockcargarsalida" onkeyup="sacarletras(this)"   placeholder="ingrese el stock" maxlength="45" ></td>
 
               </tr>
 
-              <input type="text" required="true" class="form-control hidden"  id="txtstock_minimo"    >
-              <input type="text" required="true" class="form-control hidden"  id="txtstock_total"    >
+              <input type="text" required="true" class="form-control hidden"  id="txtstock_minimosalida"    >
+              <input type="text" required="true" class="form-control hidden"  id="txtstock_total_inventario1"    >
+              <input type="text" required="true" class="hidden" id="txtidsalidaoculto"
             </div>
    </form>
    </table>
    
-   <button type="submit" id="btnregistrarentrada"  class="fa btn btn-success" form="form54322" value="Submit">Registrar Salida</button>
+   <button type="submit" id="btnregistrarsalida"  class="fa btn btn-success" form="form54322" value="Submit">Registrar Salida</button>
    <br />
    <br />
-   <div id="mensajegsalida"></div>
+   <div style="text-align: center" id="mensajegsalida"></div>
 
      
 </form>
             
-            
+<div class="modal fade" id="modalsalidaproducto" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div id="idhee" class="modal-header alert-info">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h2 style="text-align: center"> Agregar nueva Factura de Despacho</h2>      
+        </div>
+        <div class="modal-body">
+        
+    
+<form action="javascript:almacenar_facturasalida()"  method="post" id="form123456facturasalida" >
+  <table class="table"> 
+  <form class="form-inline">
+ <div class="form-group">
+   <tr>
+              <td><label  for="psw"><span ></span> Seleccione Proveedor</label></td>       
+            <td>  
+                <select class="form-control" id="prooveedorseleccioadosalida"  >
+  <option  value="0" >  Seleccione proveedor</option>
+ <?php foreach($proveedores as $valor):?>
+ 
+<option value="<?php echo $valor->rut_empresa;?>" ><?php echo $valor->nombre_empresa;?></option>  
+
+     <?php endforeach?>
+</select>  
+            </td>
+              </tr>
+
+              <tr>
+              <td><label  for="psw"><span ></span>Numero de Factura</label></td>       
+            <td>  <input type="number" required="true" class="form-control"  id="txtnombresalida" onkeyup="sacarletras(this)"  placeholder="0001" maxlength="45" ></td>
+
+              </tr>
+
+              <tr>
+              <td><label  for="psw"><span ></span>Descripcion</label></td>       
+              <td>  <textarea type="text" required="true" class="form-control"  id="txtdescripcion_salida" onkeyup="sacargeneral(this)"   placeholder="ingrese la descripcion" maxlength="45" ></textarea></td>
+
+              </tr>
+</div>
+      
+   </form>
+     
+   </table>
+   <button type="submit" id="btnguardarsalidafactura" class="fa btn btn-success  fa-floppy-o" form="form123456facturasalida" value="Submit">Guardar Factura</button><br />
+   <br />
+<div style="text-align: center" id="mesajemodalnuevafacturasalida"></div>
+     <br />
+     <br />
+     <br />
+     
+</form>
+     
+        </div>
+        
+      </div>
+    </div>
+  </div>            
             
             
         </section><!-- /.content -->
       </div><!-- /.content-wrapper -->
-      <footer class="main-footer">
-        <div class="pull-right hidden-xs">
-          <b>Version</b> 2.3.0
-        </div>
-        <strong>Sistema Delta motosierras </strong> .
-      </footer>
+      
 
       
    
