@@ -50,7 +50,7 @@
               </a>
             </li>
             <li class="treeview">
-              <a href="#<?php echo base_url().'Pagina/L_entrada';?>">
+              <a href="<?php echo base_url().'Pagina/L_entrada';?>">
                 <i class="fa fa-info"></i>
                 <span>Reporte Entrada</span>
                 

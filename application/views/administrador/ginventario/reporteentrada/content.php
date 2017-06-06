@@ -87,15 +87,53 @@
         </section>
         <!-- Main content -->
         <section class="content">
-            <p> hohola entrada</p>
-        </section><!-- /.content -->
+            <form class="form-inline" id="form12" action="<?php echo base_url().'Pagina/buscar_entrada';?>" method="post" >
+  <div class="form-group">
+  <button type="submit" form="form12" class="btn alert-success fa fa-search">Buscar por</button>  
+  </div>
+  <input type="text" class="form-control"  name="buscar_entrada" placeholder="codigo o por nombre" onkeyup="sacargeneral(this)"  >
+  
+  <p style="color:#03a9f4;" ><?php echo $mensaje;?></p>
+</form>
+         <div  id="tablaentrada" class="box">
+  <div   class="box-body">
+
+<table id="example2" class="table table-bordered table-hover" >
+        <th >Codigo barra</th>
+  <th>Nombre   producto</th>
+  <th>Descripccion</th>
+  <th>Tipo Familia</th>
+
+  <th>Cantidad entrada</th>
+  <th>Fecha</th>
+  
+  <?php foreach($entradas as $valor):?>
+   
+    <tr>
+      <td  > <?php echo $valor->codigo_barra;?> </td>
+      <td  > <?php echo $valor->nombre;?> </td>
+      <td  > <?php echo $valor->descripcion;?> </td>
+     
+        <td  > <?php echo $valor->tipo_familia;?> </td>
+     
+    
+      <td  > <?php echo $valor->cantidad;?> </td>
+      <td> <?php echo $valor->fecha;?></td>
+      
+    </tr>
+     <?php endforeach;?>
+      </table>
+       <ul class="pagination" id="numeros">
+            <?php
+                       
+              echo $links
+            ?>
+            </ul>
+      
+</div> 
+       </div>  </section><!-- /.content -->
       </div><!-- /.content-wrapper -->
-      <footer class="main-footer">
-        <div class="pull-right hidden-xs">
-          <b>Version</b> 2.3.0
-        </div>
-        <strong>Sistema Delta motosierras </strong> .
-      </footer>
+      
 
       
    

@@ -69,7 +69,56 @@ function VerUsuario($rutempresa){
     $query = $this->db->get();
     return $query->result(); 
   }
-  function buscar_proveedor($codigo){
+  function ver_salidas($inicio,$limite){
+      date_default_timezone_set("America/Santiago");
+	$fecha =date("Y-m-d");
+      $query = $this->db->select("p.codigo_barra, p.nombre,deesa.cantidad,em.nombre_empresa,DATE_FORMAT(sa.fecha, '%d-%m-%Y') as fecha");
+      $query = $this->db->from("producto p");
+    $query = $this->db->join("detalle_salida deesa ","deesa.codigo_barra_salida = p.codigo_barra","inner");
+    $query = $this->db->join("salida sa","sa.id_salida = deesa.idf_salida","inner");
+    $query = $this->db->join("empresa em","em.rut_empresa = sa.rut_proveedor","inner");
+    $query =$this->db->order_by("sa.fecha",$fecha);
+     $query= $this->db->limit($limite, $inicio);
+     $query = $this->db->get();
+    return $query->result();
+  }
+  
+          function ver_entradas($inicio,$limite){
+              date_default_timezone_set("America/Santiago");
+	$fecha =date("Y-m-d");
+      $query = $this->db->select("p.codigo_barra, p.nombre, p.descripcion,t.tipo_familia,dee.cantidad,DATE_FORMAT(en.fecha, '%d-%m-%Y') as fecha");
+      $query = $this->db->from("producto p");
+    $query = $this->db->join("familia t","t.id_familia = p.idf_familia","inner");
+    $query = $this->db->join("detalle_entrada dee","dee.codigo_barra_entrada = p.codigo_barra","inner");
+    $query = $this->db->join("entrada en","en.id_entrada = dee.idf_entrada","inner");
+   $query = $this->db->order_by("en.fecha",$fecha);
+     $query= $this->db->limit($limite, $inicio);
+     $query = $this->db->get();
+    return $query->result(); 
+  }
+  function buscar_entrada_empresa($codigo,$rut_empresa){
+      $query = $this->db->select("p.codigo_barra, p.nombre, p.descripcion,t.tipo_familia,dee.cantidad,DATE_FORMAT(en.fecha, '%d-%m-%Y') as fecha");
+      $query = $this->db->from("producto p");
+    $query = $this->db->join("familia t","t.id_familia = p.idf_familia","inner");
+    $query = $this->db->join("detalle_entrada dee","dee.codigo_barra_entrada = p.codigo_barra","inner");
+    $query = $this->db->join("entrada en","en.id_entrada = dee.idf_entrada","inner");
+    $query = $this->db->like('p.codigo_barra',$codigo);
+    $query= $this->db->Or_like("p.nombre",$codigo);
+     $query = $this->db->get();
+    return $query->result();
+  }
+  function buscar_salidas_empresa($codigo){
+      $query = $this->db->select("p.codigo_barra, p.nombre,deesa.cantidad,em.nombre_empresa,DATE_FORMAT(sa.fecha, '%d-%m-%Y') as fecha");
+      $query = $this->db->from("producto p");
+    $query = $this->db->join("detalle_salida deesa ","deesa.codigo_barra_salida = p.codigo_barra","inner");
+    $query = $this->db->join("salida sa","sa.id_salida = deesa.idf_salida","inner");
+    $query = $this->db->join("empresa em","em.rut_empresa = sa.rut_proveedor","inner");
+  $query = $this->db->like('p.codigo_barra',$codigo);
+    $query= $this->db->Or_like("p.nombre",$codigo);
+     $query = $this->db->get();
+    return $query->result();
+  }
+          function buscar_proveedor($codigo){
       $ver ="proveedor";
       $query = $this->db->select("*");
       $query = $this->db->from("empresa");
@@ -353,7 +402,15 @@ function verinventariosio($codigo){
      $consulta ="select count(*) as datos from producto";
     return $this->db->query($consulta);
   }
-  function  total_proveedor_($rut_empresa){
+  function total_entradas(){
+      $consulta = "select count(*) as datos from detalle_entrada";
+      return $this->db->query($consulta);
+  }
+  function total_salidas(){
+      $consulta = "select count(*) as datos from detalle_salida";
+      return $this->db->query($consulta); 
+  }
+          function  total_proveedor_($rut_empresa){
       $tipo_empresa ="proveedor";
       $consulta = "select count(*) as datos from empresa where tipo_empresa ='".$tipo_empresa."'";
       return $this->db->query($consulta);

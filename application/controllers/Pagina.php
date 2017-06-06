@@ -92,15 +92,91 @@ class Pagina extends CI_Controller {
                         $this->load->view('administrador/ginventario/salidaproducto/footer');
                                        }else{
                                            //reporte de entrada
+                                           $this->load->library('pagination');
+							$config['base_url'] = base_url().'Pagina/index';
+							$rut_empresa=$this->session->userdata('rut_empresa');
+
+							$cantidad=0;
+							$consulta=$this->Modelo->total_entradas();
+							foreach ($consulta->result() as $valor){
+                                                            $cantidad= $valor->datos;
+      							}
+
+							$config['total_rows'] = $cantidad;
+							$config['per_page'] = '15';
+    						$config['num_links']=3;
+
+    						$config['full_tag_open']="<ul class='pagination'>";
+							$config['full_tag_close']='</ul>';
+							 $config['num_tag_open'] = '<li>';
+							    $config['num_tag_close'] = '</li>';
+							    $config['cur_tag_open'] = "<li class='disabled'><li class='active' ><a href='#''>";
+							    $config['cur_tag_close'] = "<span class='sr-only'></span></a></li>";
+                                                            $config['next_tag_open'] = "<li>";
+							    $config['next_tagl_close'] = "</li>";
+                                                            $config['use_page_numbers'] = TRUE;
+                                                            $config['first_link'] = "Primero";
+                                                            $config['prev_link'] = "<< Atras";
+                                                            $config['next_link'] = "Siguiente >>";
+                                                            $config['last_link'] = "Last";
+							    $config['prev_tag_open'] = "<li>";
+							    $config['prev_tagl_close'] = "</li>";
+							    $config['first_tag_open'] = "<li>";
+							    $config['first_tagl_close'] = "</ li>";
+							    $config['last_tag_open'] = "<li>";
+							    $config['last_tagl_close'] = "<li>";
+
+							 $this->pagination->initialize($config);
+							$data['entradas']= $this->Modelo->ver_entradas( $offsete,$config['per_page']);
+							$data['links']=$this->pagination->create_links();
+                                     $data['mensaje']='';
                                        if($this->session->userdata('ir')==3){
                         $this->load->view('administrador/ginventario/reporteentrada/header');
-                        $this->load->view('administrador/ginventario/reporteentrada/content');
+                        $this->load->view('administrador/ginventario/reporteentrada/content',$data);
                         $this->load->view('administrador/ginventario/reporteentrada/footer');
                                        } else {
                                            //reporte salida
                                            if ($this->session->userdata('ir')==4){
+                        $this->load->library('pagination');
+							$config['base_url'] = base_url().'Pagina/index';
+							$rut_empresa=$this->session->userdata('rut_empresa');
+
+							$cantidad=0;
+							$consulta=$this->Modelo->total_salidas();
+							foreach ($consulta->result() as $valor){
+                                                            $cantidad= $valor->datos;
+      							}
+
+							$config['total_rows'] = $cantidad;
+							$config['per_page'] = '15';
+    						$config['num_links']=3;
+
+    						$config['full_tag_open']="<ul class='pagination'>";
+							$config['full_tag_close']='</ul>';
+							 $config['num_tag_open'] = '<li>';
+							    $config['num_tag_close'] = '</li>';
+							    $config['cur_tag_open'] = "<li class='disabled'><li class='active' ><a href='#''>";
+							    $config['cur_tag_close'] = "<span class='sr-only'></span></a></li>";
+                                                            $config['next_tag_open'] = "<li>";
+							    $config['next_tagl_close'] = "</li>";
+                                                            $config['use_page_numbers'] = TRUE;
+                                                            $config['first_link'] = "Primero";
+                                                            $config['prev_link'] = "<< Atras";
+                                                            $config['next_link'] = "Siguiente >>";
+                                                            $config['last_link'] = "Last";
+							    $config['prev_tag_open'] = "<li>";
+							    $config['prev_tagl_close'] = "</li>";
+							    $config['first_tag_open'] = "<li>";
+							    $config['first_tagl_close'] = "</ li>";
+							    $config['last_tag_open'] = "<li>";
+							    $config['last_tagl_close'] = "<li>";
+
+							 $this->pagination->initialize($config);
+							$data['salidas']= $this->Modelo->ver_salidas( $offsete,$config['per_page']);
+							$data['links']=$this->pagination->create_links();
+                        $data['mensaje']='';                       
                         $this->load->view('administrador/ginventario/reportesalida/header');
-                        $this->load->view('administrador/ginventario/reportesalida/content');
+                        $this->load->view('administrador/ginventario/reportesalida/content',$data);
                         $this->load->view('administrador/ginventario/reportesalida/footer');
                                            }else{
                                  if ($this->session->userdata('ir')==5){
@@ -580,7 +656,36 @@ echo json_encode(array("mensaj"=>$mensaje));
 	redirect(base_url());
 }
 }
-function buscar_proveedor_empresa(){
+function buscar_entrada(){
+    $codigo= $this->input->post('buscar_entrada');
+    if(isset($codigo) and !empty($codigo) ){
+ $data['mensaje']='Para volver, Presione el Boton Buscar';
+        $rut_empresa= $this->session->userdata('rut_empresa');
+        
+        $data['entradas']= $this->Modelo->buscar_entrada_empresa($codigo,$rut_empresa);
+        $data['links']='';
+        $this->load->view('administrador/ginventario/reporteentrada/header');
+        $this->load->view('administrador/ginventario/reporteentrada/content',$data);
+        $this->load->view('administrador/ginventario/reporteentrada/footer');
+        
+    }else{
+        redirect(base_url());
+    }
+}
+function  buscar_salida(){
+    $codigo= $this->input->post('buscar_salida');
+    if(isset($codigo) and !empty($codigo) ){
+        $data['salidas']= $this->Modelo->buscar_salidas_empresa($codigo);
+        $data['mensaje']='Para volver, Presione el Boton Buscar';
+        $data['links']='';
+        $this->load->view('administrador/ginventario/reportesalida/header');
+                        $this->load->view('administrador/ginventario/reportesalida/content',$data);
+                        $this->load->view('administrador/ginventario/reportesalida/footer');
+    }else{
+        redirect(base_url());
+    }
+}
+        function buscar_proveedor_empresa(){
     $codigo= $this->input->post('buscar_proveedor');
     if(isset($codigo) and !empty($codigo) ){
         $data['mensaje']='Para volver, Presione el Boton Buscar';
