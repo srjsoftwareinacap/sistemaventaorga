@@ -63,6 +63,13 @@
                 
               </a>  
             </li>
+            <li class="treeview">
+              <a href="<?php echo base_url().'Pagina/ir_inventario';?>">
+                <i class="fa fa-list-ol"></i>
+                <span>Inventario</span>
+                
+              </a>  
+            </li>
             <li  class="active treeview">
               <a style="color: red" href="#">
                 <i class="fa fa-shopping-cart"></i>

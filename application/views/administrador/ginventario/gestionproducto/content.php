@@ -64,6 +64,13 @@
               </a>  
             </li>
             <li class="treeview">
+              <a href="<?php echo base_url().'Pagina/ir_inventario';?>">
+                <i class="fa fa-list-ol"></i>
+                <span>Inventario</span>
+                
+              </a>  
+            </li>
+            <li class="treeview">
               <a href="<?php echo base_url().'Pagina/G_proveedor';?>">
                 <i class="fa fa-shopping-cart"></i>
                 <span>Gestion Proveedor</span>

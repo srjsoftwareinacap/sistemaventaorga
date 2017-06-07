@@ -223,6 +223,13 @@ class Pagina extends CI_Controller {
                         $this->load->view('administrador/ginventario/gestionproveedor/header');
                         $this->load->view('administrador/ginventario/gestionproveedor/content',$data);
                         $this->load->view('administrador/ginventario/gestionproveedor/footer'); 
+                                 }else{
+                                     //inventario
+                                        if ($this->session->userdata('ir')==6){
+                                           $this->load->view('administrador/ginventario/inventario/header');
+                        $this->load->view('administrador/ginventario/inventario/content');
+                        $this->load->view('administrador/ginventario/inventario/footer');  
+                                        }
                                  }
                                            }  
                                        }   
@@ -344,7 +351,28 @@ class Pagina extends CI_Controller {
 	$this->session->set_userdata($vector);
 	redirect(base_url());    
         }
-
+function ir_inventario(){
+	$rut =	$this->session->userdata('usuario');
+	$perfil = $this->session->userdata('perfil');
+	$rut_empresas = $this->session->userdata('rut_empresa');
+	$nombre= $this->session->userdata('nombre_u');
+	$ira =6;
+        $gestion=2;
+	
+	$vector =array(
+                  "usuario"=>$rut,
+                  "rut_empresa"=>$rut_empresas,
+                  "nombre_u"=>$nombre,
+                    "login"=>true,
+                    "perfil"=>$perfil,
+            "gestion"=>$gestion,
+                    "ir"=>$ira
+                );
+	
+	$this->session->set_userdata($vector);
+	redirect(base_url());
+	
+	}
         
         function R_salida(){
         $rut =	$this->session->userdata('usuario');
