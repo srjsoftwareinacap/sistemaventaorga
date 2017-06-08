@@ -226,8 +226,54 @@ class Pagina extends CI_Controller {
                                  }else{
                                      //inventario
                                         if ($this->session->userdata('ir')==6){
-                                           $this->load->view('administrador/ginventario/inventario/header');
-                        $this->load->view('administrador/ginventario/inventario/content');
+                                            $this->load->library('pagination');
+							$config['base_url'] = base_url().'Pagina/index';
+							$rut_empresa=$this->session->userdata('rut_empresa');
+
+							$cantidad=0;
+							$consulta=$this->Modelo->total_productos();
+							foreach ($consulta->result() as $valor){
+                                                            $cantidad= $valor->datos;
+      							}
+
+							$config['total_rows'] = $cantidad;
+							$config['per_page'] = '15';
+    						$config['num_links']=3;
+
+    						$config['full_tag_open']="<ul class='pagination'>";
+							$config['full_tag_close']='</ul>';
+							 $config['num_tag_open'] = '<li>';
+							    $config['num_tag_close'] = '</li>';
+							    $config['cur_tag_open'] = "<li class='disabled'><li class='active' ><a href='#''>";
+							    $config['cur_tag_close'] = "<span class='sr-only'></span></a></li>";
+                                                            $config['next_tag_open'] = "<li>";
+							    $config['next_tagl_close'] = "</li>";
+                                                            $config['use_page_numbers'] = TRUE;
+                                                            $config['first_link'] = "Primero";
+                                                            $config['prev_link'] = "<< Atras";
+                                                            $config['next_link'] = "Siguiente >>";
+                                                            $config['last_link'] = "Last";
+							    $config['prev_tag_open'] = "<li>";
+							    $config['prev_tagl_close'] = "</li>";
+							    $config['first_tag_open'] = "<li>";
+							    $config['first_tagl_close'] = "</ li>";
+							    $config['last_tag_open'] = "<li>";
+							    $config['last_tagl_close'] = "<li>";
+
+							 $this->pagination->initialize($config);
+                                                         $data['suma']= $this->Modelo->sumatotaldeproductos();
+							$data['productosin']= $this->Modelo->ver_productosexistentes( $offsete,$config['per_page']);
+                                                        
+                                                        $recorrer= $this->Modelo->vercantidadestockminimo();
+                                                        $lista=0;
+                                                        foreach ($recorrer->result() as $valor){
+                                                            $lista= $valor->datos;
+      							}
+                                                        $data['cantidadminimos']=$lista;
+							$data['links']=$this->pagination->create_links();
+                                     $data['mensaje']='';
+                        $this->load->view('administrador/ginventario/inventario/header');
+                        $this->load->view('administrador/ginventario/inventario/content',$data);
                         $this->load->view('administrador/ginventario/inventario/footer');  
                                         }
                                  }

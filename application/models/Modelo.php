@@ -82,7 +82,20 @@ function VerUsuario($rutempresa){
      $query = $this->db->get();
     return $query->result();
   }
-  
+  function sumatotaldeproductos(){
+      $this->db->select("SUM(cantidad)");
+  return $this->db->get("stock_inventario")->result();
+  }
+          function ver_productosexistentes($inicio,$limite){
+      $query = $this->db->select("p.codigo_barra,p.nombre,p.descripcion,f.tipo_familia,p.stock_minimo,sto.cantidad");
+      $query = $this->db->from("producto p");
+      $query = $this->db->join("familia f ","f.id_familia = p.idf_familia","inner");
+      $query = $this->db->join("stock_inventario sto ","sto.codigo_barra = p.codigo_barra","inner");
+      $query= $this->db->limit($limite, $inicio);
+     $query = $this->db->get();
+    return $query->result();
+  }
+          
           function ver_entradas($inicio,$limite){
               date_default_timezone_set("America/Santiago");
 	$fecha =date("Y-m-d");
@@ -402,11 +415,19 @@ function verinventariosio($codigo){
      $consulta ="select count(*) as datos from producto";
     return $this->db->query($consulta);
   }
-  function total_entradas(){
+  function vercantidadestockminimo(){
+      $consulta ="select count(*) as datos from stock_inventario JOIN producto on producto.codigo_barra= stock_inventario.codigo_barra where stock_inventario.cantidad= producto.stock_minimo ";
+      return $this->db->query($consulta);
+  }
+          function total_entradas(){
       $consulta = "select count(*) as datos from detalle_entrada";
       return $this->db->query($consulta);
   }
-  function total_salidas(){
+  function total_productos(){
+    $consulta = "select count(*) as datos from stock_inventario";
+      return $this->db->query($consulta);  
+  }
+          function total_salidas(){
       $consulta = "select count(*) as datos from detalle_salida";
       return $this->db->query($consulta); 
   }

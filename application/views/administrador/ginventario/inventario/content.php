@@ -96,8 +96,31 @@
         </section>
         <!-- Main content -->
         <section class="content">
-        
+         
+        <?php if( $suma>0) :?>
+             <?php
+
+?>   
             
+            
+            
+            
+            
+           <form class="form-inline" id="form1fasdf24122" action="<?php echo base_url().'Pagina/buscar_productosinventario';?>" method="post" >
+  <div class="form-group">
+  <button type="submit" form="form1fasdf24122" class="btn alert-success fa fa-search">Buscar por</button>  
+  </div>
+  <input type="text" class="form-control"  name="buscar_inventario" placeholder="codigo o por nombre" onkeyup="sacargeneral(this)"  >
+  <p style="color:#03a9f4;" ><?php echo $mensaje;?></p>
+</form> 
+            
+            
+            
+            
+            
+             <?php else: ?>
+            <div class="alert alert-info" role="alert">No hay inventario en su empresa</div>
+           <?php endif;?> 
         </section><!-- /.content -->
         
       </div><!-- /.content-wrapper -->
