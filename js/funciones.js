@@ -154,6 +154,18 @@ function almacenar_familia(){
     }
     );
     }
+    function mostraredicion_inventario(codigo){
+        $.post(
+    base_url+"Pagina/cargarcodigo_inventario",
+    {codigo:codigo},
+    function(pagina){  
+        $("#mostraredicion_inventarioproducto").html(pagina);
+      $("#mostraredicion_inventarioproducto").modal({
+        show:true
+      });      
+    }
+    );
+    }
     function mostraredicion_mo_proveedor(codigo){
         $.post(
     base_url+"Pagina/cargarcodigo_proveedor",
@@ -165,6 +177,32 @@ function almacenar_familia(){
       });      
     }
     );
+    }
+    function Editarinventario(){
+        var codigo_barra= $("#txtcodigo_barrainventario").val();
+        var valor_ingresado= $("#txtstockinventarionuevo").val();
+        var stock_minimo = $("#txtstock_minimo").val();
+        if(parseInt(valor_ingresado)>0){
+        if(parseInt(valor_ingresado)>=parseInt(stock_minimo)){
+            $.post(
+    base_url+"Pagina/actualizar_inventario",
+    {codigo_barra:codigo_barra,valor_ingresado:valor_ingresado},
+    function(pagina){  
+             if(pagina.m1=="si"){
+                 $("#mesajemodaleditarinventario").html("<p class='alert alert-success' role='alert' >"+"!! Inventario actualizado"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+                 setTimeout("location.reload()",3000); 
+             }else{
+             $("#mesajemodaleditarinventario").html("<p class='alert alert-danger' role='alert' >"+"!! Error"+"</p>").fadeIn(100).delay(600).fadeOut(3000);    
+             }
+    },
+    'json'
+    );
+        }else{
+            $("#mesajemodaleditarinventario").html("<p class='alert alert-danger' role='alert' >"+"!! Error,El stock ingresado es menor que el stock minimo"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+        }
+    }else{
+         $("#mesajemodaleditarinventario").html("<p class='alert alert-danger' role='alert' >"+"!! Error,El stock ingresado no puede ser 0 o menor"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+    }
     }
     function Editarproveedor(){
         var rut = $("#txtrut").val();
@@ -538,6 +576,7 @@ function  vereficaridinventariosalida(codigo){
           $("#txtstock_minimosalida").val(pagina.stock_minimo);
           $("#txtstock_total_inventario1").val(pagina.cantidad);
           $("#txtidsalidaoculto").val(pagina.id_salida);
+          $("#txtprecionetosalida").focus();
           $("#mensajegsalida").html("<p class='alert alert-success' role='alert' >"+pagina.m1+"</p>").fadeIn(100).delay(600).fadeOut(3000);
       }else{
           $("#mensajegsalida").html("<p class='alert alert-danger' role='alert' >"+pagina.m1+"</p>").fadeIn(100).delay(600).fadeOut(3000);
@@ -587,7 +626,7 @@ function  registrar_producto_inventario(){
     {codigo_barra:codigo_barra,stock_ingresado:stock_ingresado,idf_entrada:idf_entrada,precio_neto:precio_neto},
     function(pagina){  
               $("#mensajegregistarentrada").html("<p class='alert alert-success' role='alert' >"+pagina.mensaj+"</p>").fadeIn(100).delay(600).fadeOut(1000);
-            
+            setTimeout("location.reload()",1000);
     },
     'json'
     ); 
@@ -622,7 +661,8 @@ function  registrar_producto_inventario(){
     base_url+"Pagina/almacenarsalidaproducto",
     {id_salida:id_salida,codigo_barra:codigo_barra,cantidad:stock_ingresado,precio_neto:precio_neto},
     function(pagina){  
-  $("#mensajegsalida").html("<p class='alert alert-success' role='alert' >"+pagina.m1+"</p>").fadeIn(100).delay(600).fadeOut(1000);          
+  $("#mensajegsalida").html("<p class='alert alert-success' role='alert' >"+pagina.m1+"</p>").fadeIn(100).delay(600).fadeOut(1000);
+  setTimeout("location.reload()",1000); 
     },
     'json'
     );        

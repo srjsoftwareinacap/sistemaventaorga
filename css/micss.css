@@ -18,6 +18,13 @@
 #tablaentrada{
     width: 79%;
 }
+#alertamensaje{
+    text-align: center;
+    width: 50%;
+}
+#achicar{
+    width: 20%;
+}
 #tablaproveedor{
     margin-top: -1%;
     width: 95%;

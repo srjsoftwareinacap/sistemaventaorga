@@ -95,7 +95,17 @@ function VerUsuario($rutempresa){
      $query = $this->db->get();
     return $query->result();
   }
-          
+  function buscar_productosexistentes($codigo){
+      $query = $this->db->select("p.codigo_barra,p.nombre,p.descripcion,f.tipo_familia,p.stock_minimo,sto.cantidad");
+      $query = $this->db->from("producto p");
+      $query = $this->db->join("familia f ","f.id_familia = p.idf_familia","inner");
+      $query = $this->db->join("stock_inventario sto ","sto.codigo_barra = p.codigo_barra","inner");
+      $query = $this->db->like('sto.codigo_barra',$codigo);
+    $query= $this->db->Or_like("p.nombre",$codigo);
+     $query = $this->db->get();
+    return $query->result();
+      
+  }
           function ver_entradas($inicio,$limite){
               date_default_timezone_set("America/Santiago");
 	$fecha =date("Y-m-d");
@@ -178,6 +188,12 @@ function obtener_productoinventario2($codigoproducto){
       $this->db->where('rut_empresa',$rut);
    
     $this->db->update("empresa",$editar); 
+  }
+  function actualizarinventario($codigo,$stockactual){
+      $datoeditar['cantidad']= $stockactual;
+      $this->db->where('codigo_barra',$codigo);
+      $this->db->update("stock_inventario",$datoeditar);
+      return "si";
   }
           function editarexistenteproductoempresa($codigo,$codigo_oculto,$editar){
     $this->db->where('codigo_barra',$codigo_oculto);
@@ -335,7 +351,7 @@ function desbloquiar_proveedor($codigo){
 
    
    $datoinventario['cantidad']=$stock+$stock_ingresado;
-   $this->db->where('id_codigo',$idf_entrada);
+   
    $this->db->where('codigo_barra',$codigo_barra_producto);
    $this->db->update('stock_inventario',$datoinventario);
    $mensaje="Se registro  inventario";
@@ -407,6 +423,15 @@ function verinventariosio($codigo){
   }
   return $mandar;
 }
+function adquerirproductoinventario($codigo){
+    $query = $this->db->select("p.codigo_barra,p.nombre,p.descripcion,f.tipo_familia,p.stock_minimo,sto.cantidad");
+      $query = $this->db->from("producto p");
+      $query = $this->db->join("familia f ","f.id_familia = p.idf_familia","inner");
+      $query = $this->db->join("stock_inventario sto ","sto.codigo_barra = p.codigo_barra","inner");
+      $query= $this->db->where("p.codigo_barra",$codigo);
+     $query = $this->db->get();
+    return $query->result();
+}
         function verinventario($codigo){ 
     $consulta = "SELECT cantidad as ver from stock_inventario where codigo_barra='".$codigo."'  ";
    return $this->db->query($consulta);    
@@ -415,9 +440,14 @@ function verinventariosio($codigo){
      $consulta ="select count(*) as datos from producto";
     return $this->db->query($consulta);
   }
+  
   function vercantidadestockminimo(){
-      $consulta ="select count(*) as datos from stock_inventario JOIN producto on producto.codigo_barra= stock_inventario.codigo_barra where stock_inventario.cantidad= producto.stock_minimo ";
+      $consulta ="select count(*) as datos from stock_inventario JOIN producto on producto.codigo_barra= stock_inventario.codigo_barra where stock_inventario.cantidad<= producto.stock_minimo ";
       return $this->db->query($consulta);
+  }
+  function verretockminimo(){
+      $consulta="select si.codigo_barra, p.nombre, p.descripcion,p.stock_minimo,si.cantidad from producto p join stock_inventario si on si.codigo_barra = p.codigo_barra where si.cantidad<= p.stock_minimo ";
+      return $this->db->query($consulta)->result();
   }
           function total_entradas(){
       $consulta = "select count(*) as datos from detalle_entrada";

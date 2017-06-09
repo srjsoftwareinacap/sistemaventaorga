@@ -57,7 +57,7 @@
               </a>  
             </li>
               <li class="treeview">
-                  <a   href="<?php echo base_url().'Pagina/G_producto';?>">
+                  <a   href="<?php echo base_url().'Pagina/L_salida';?>">
                 <i class="fa fa-info"></i>
                 <span>Reporte Salida</span>
                 

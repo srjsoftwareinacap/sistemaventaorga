@@ -96,15 +96,134 @@
         </section>
         <!-- Main content -->
         <section class="content">
-         
+           <?php if( $cantidadminimos>0) :?>
+            <div class="alert alert-info" id="alertamensaje" role="alert">Alerta de stock minimo de productos, actualmente son  :   <strong><?php echo $cantidadminimos;?></strong>  </div>
+            <?php endif;?>
         <?php if( $suma>0) :?>
+            <div class="box box-solid">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Reportes</h3>
+                  <div class="box-tools pull-right">
+                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                  </div>
+            <?php foreach($stock_minimo as $valor):?>
+             <?php if($variable<=3) :?>
+           <?php if($variable==0) :?>
+            
+             <div class="row">
+                 <div id="achicar" class="col-md-3">
+              <div class="box box-danger box-solid">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Nombre:  <?php echo $valor->nombre;?></h3>
+                  <div class="box-tools pull-right">
+                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                  </div><!-- /.box-tools -->
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                   Stock actual : <?php echo $valor->cantidad;?><br />
+                Descripcion:   <?php echo $valor->descripcion;?>
+                </div><!-- /.box-body -->
+              </div><!-- /.box -->
+            </div>
+              <?php
+                $limite=$limite+1;
+?>      
+       <?php if($limite==$cantidadminimos) :?>
+                 <?php echo $fin;?>
+                 <?php endif;?>
+                <?php
+                $variable=$variable+1;
+?>    
+      <?php else: ?>
+         <?php if($variable==1) :?>  
+            <div  class="col-md-3">
+              <div class="box box-danger box-solid">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Nombre: <?php echo $valor->nombre;?></h3>
+                  <div class="box-tools pull-right">
+                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                  </div><!-- /.box-tools -->
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    Stock actual: <?php echo $valor->cantidad;?><br />
+                  Descripcion: <?php echo $valor->descripcion;?>
+                </div><!-- /.box-body -->
+              </div><!-- /.box -->
+            </div>
              <?php
-
-?>   
+                $limite=$limite+1;
+?>      
+       <?php if($limite==$cantidadminimos) :?>
+                 <?php echo $fin;?>
+                 
+                 <?php endif;?>
+                <?php
+                $variable=$variable+1;
+?>    
+      <?php else: ?>
+           <?php if($variable==2) :?> 
+                 <div class="col-md-3">
+              <div class="box box-danger box-solid">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Nombre: <?php echo $valor->nombre;?></h3>
+                  <div class="box-tools pull-right">
+                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                  </div><!-- /.box-tools -->
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                   Stock minimo <?php echo $valor->cantidad;?><br />
+                 Descripcion <?php echo $valor->descripcion;?>
+                </div><!-- /.box-body -->
+              </div><!-- /.box -->
+            </div>
+      <?php
+                $limite=$limite+1;
+?>      
+       <?php if($limite==$cantidadminimos) :?>
+                 <?php echo $fin;?>
+                 <?php endif;?>
+                <?php
+                $variable=$variable+1;
+?>    
+          <?php else: ?>       
+          <?php if($variable==3) :?> 
+                 <div class="col-md-3">
+              <div class="box box-danger box-solid">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Nombre: <?php echo $valor->nombre;?></h3>
+                  <div class="box-tools pull-right">
+                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                  </div><!-- /.box-tools -->
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                   Stock minimo <?php echo $valor->cantidad;?><br />
+                Descripcion  <?php echo $valor->descripcion;?>
+                </div><!-- /.box-body -->
+              </div><!-- /.box -->
+            </div>
+<?php echo $fin;?>
+                 <?php if($limite==$cantidadminimos) :?>
+               <?php echo $fin;?>
+                 <?php endif;?>
+                <?php
+                $variable=0;
+?>    
+                 <?php endif;?>
+                 <?php endif;?>
+                 <?php endif;?>
+<?php endif;?>
+                 
+                 <?php endif;?>
+            
+            <?php endforeach;?>
             
             
+         </div><!-- /.box-body -->
+              </div><!-- /.box -->    
             
-            
+            <?php if($cantidadminimos>=5) :?>
+              <?php echo $fin;?>
+            <?php endif;?>
             
            <form class="form-inline" id="form1fasdf24122" action="<?php echo base_url().'Pagina/buscar_productosinventario';?>" method="post" >
   <div class="form-group">
@@ -113,14 +232,62 @@
   <input type="text" class="form-control"  name="buscar_inventario" placeholder="codigo o por nombre" onkeyup="sacargeneral(this)"  >
   <p style="color:#03a9f4;" ><?php echo $mensaje;?></p>
 </form> 
-            
-            
+ <div  id="tablaproveedor" class="box">
+      <div   class="box-body">
+          <table id="example2" class="table table-bordered table-hover" >
+                   <th >Codigo barra</th>
+  <th>Nombre  producto </th>
+  <th>Descripcion</th>
+  <th>Tipo Familia</th>
+  <th>Stock minimo</th>
+  <th>Cantidad total</th>
+  
+  <th>Seleccione</th>
+  
+  <?php foreach($productosin as $valor):?>
+   
+    <tr>
+      <td  > <?php echo $valor->codigo_barra;?> </td>
+      <td  > <?php echo $valor->nombre;?> </td>
+      <td  > <?php echo $valor->descripcion;?> </td>
+        <td  > <?php echo $valor->tipo_familia;?> </td>
+      <td  > <?php echo $valor->stock_minimo;?> </td>  
+      <td  > <?php echo $valor->cantidad;?> </td>
+      <td >
+    
+
+
+      <a class="fa btn fa-pencil-square-o" aria-hidden="true"  data-target="#mostraredicion_inventarioproducto"  href="javascript:mostraredicion_inventario('<?php echo $valor->codigo_barra;?>')"></a>
+
+    
+      </td>
+    </tr>
+  
+     <?php endforeach;?>
+          </table>
+           <ul class="pagination" id="numeros">
+            <?php
+                       
+              echo $links
+            ?>
+            </ul>
+            <div id="mesajeproveedor"></div>
+      </div>
+  </div>           
+             <div class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="mostraredicion_inventarioproducto">
+  <div class="modal-dialog" role="document">
+    
+    
+  </div>
+</div>
             
             
             
              <?php else: ?>
             <div class="alert alert-info" role="alert">No hay inventario en su empresa</div>
            <?php endif;?> 
+            
+            
         </section><!-- /.content -->
         
       </div><!-- /.content-wrapper -->

@@ -264,12 +264,16 @@ class Pagina extends CI_Controller {
                                                          $data['suma']= $this->Modelo->sumatotaldeproductos();
 							$data['productosin']= $this->Modelo->ver_productosexistentes( $offsete,$config['per_page']);
                                                         
+                                                        $data['stock_minimo']=$this->Modelo->verretockminimo();
                                                         $recorrer= $this->Modelo->vercantidadestockminimo();
                                                         $lista=0;
                                                         foreach ($recorrer->result() as $valor){
                                                             $lista= $valor->datos;
       							}
                                                         $data['cantidadminimos']=$lista;
+                                                        $data['limite']=0;
+                                                        $data['variable']=0;
+                                                        $data['fin']="</div>";
 							$data['links']=$this->pagination->create_links();
                                      $data['mensaje']='';
                         $this->load->view('administrador/ginventario/inventario/header');
@@ -662,9 +666,9 @@ echo json_encode(array("mensaj"=>$mensaje));
         if($variable=="si"){
         $resultado2=$this->Modelo->verinventario($codigo,$rut_empresa);
         foreach ($resultado2->result() as $valor) {
-            if($valor->cantidad!=0){
+            if($valor->ver!=0){
                $contenido['informacion']="si";
-               $variable_minimo= $valor->cantidad;
+               $variable_minimo= $valor->ver;
             }else{
                $contenido['informacion']="no"; 
                $variable_minimo= 0;
@@ -715,7 +719,31 @@ $mensaje="si";
 }
 echo json_encode(array("mensaj"=>$mensaje));
         }
-        function buscar_producto_empresa(){
+function buscar_productosinventario(){
+    $codigo= $this->input->post('buscar_inventario');
+        if(isset($codigo) and !empty($codigo) ){      
+$data['suma']= $this->Modelo->sumatotaldeproductos();
+$data['productosin']= $this->Modelo->buscar_productosexistentes($codigo);                                                       
+$data['stock_minimo']=$this->Modelo->verretockminimo();
+$recorrer= $this->Modelo->vercantidadestockminimo();
+ $lista=0;
+foreach ($recorrer->result() as $valor){
+$lista= $valor->datos;
+ }
+$data['cantidadminimos']=$lista;
+$data['limite']=0;
+$data['variable']=0;
+$data['fin']="</div>";
+$data['links']='';                                                   
+$data['mensaje']='';
+$this->load->view('administrador/ginventario/inventario/header');
+$this->load->view('administrador/ginventario/inventario/content',$data);
+$this->load->view('administrador/ginventario/inventario/footer');
+}else{
+    redirect(base_url());
+}
+}
+                function buscar_producto_empresa(){
 	$codigo= $this->input->post('buscar_producto');
         if(isset($codigo) and !empty($codigo) ){
         $data['mensaje']='Para volver, Presione el Boton Buscar';
@@ -990,7 +1018,21 @@ function cargarprovienciaseditar(){
       $info1['comunas']= $this->Modelo->vercomunas($codigo)->result();
       $this->load->view('administrador/ginventario/gestionproveedor/cargarcomuna',$info1);
 }
-function almacenarentrada(){
+function cargarcodigo_inventario(){
+    $codigo= $this->input->post("codigo");
+    $data['inventario']= $this->Modelo->adquerirproductoinventario($codigo);
+    $this->load->view('administrador/ginventario/inventario/editarinventario',$data);
+}
+function actualizar_inventario(){
+    $codigo= $this->input->post("codigo_barra");
+    $stockactual =$this->input->post("valor_ingresado");
+    $informacion= $this->Modelo->actualizarinventario($codigo,$stockactual);
+    echo json_encode(array(
+        "m1"=>$informacion
+        ));
+    
+}
+        function almacenarentrada(){
     $rut_proveedor= $this->input->post("rut_proveedor");
     $numero_factura= $this->input->post("numero_factura");
     $descripcion = $this->input->post("descripcion");
