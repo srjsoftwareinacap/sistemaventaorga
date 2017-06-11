@@ -289,13 +289,13 @@
             
             
             
-        <br />    
+      
         </section><!-- /.content -->
        
       </div><!-- /.content-wrapper -->
-      <br />
-    
+      
 
       
-   <div class="control-sidebar-bg"></div>
+   
     </div>
+<div class="control-sidebar-bg"></div>

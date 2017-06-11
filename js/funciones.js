@@ -142,6 +142,68 @@ function almacenar_familia(){
     }
    
     }
+  
+    function mostraredicion_mo_cantidad(codigo){
+        $.post(
+    base_url+"Pagina/cargarcantidad_venta",
+    {codigo:codigo},
+    function(pagina){  
+        $("#mostraredicion_mo_venta").html(pagina);
+      $("#mostraredicion_mo_venta").modal({
+        show:true
+      });      
+    }
+    );
+    }
+    function eliminarrpoductoventa(codigo){
+        $.post(
+    base_url+"Pagina/eliminnardetalleventa",
+    {codigo:codigo},
+    function(pagina){  
+          if(pagina.m1=="listo"){
+              setTimeout("location.reload()",1);
+          }   
+    },'json'
+    );
+    }
+    function carcelarventa(){
+    var id_venta = $("#txtidventacancelar").val();
+    $.post(
+    base_url+"Pagina/cacelarventaproducto",
+    {codigo:codigo},
+    function(pagina){  
+          if(pagina.m1=="listo"){
+              setTimeout("location.reload()",1);
+          }   
+    },'json'
+    );
+    
+    
+    }
+    function Editarventa(){
+        var id_detalles = $("#txtiddetalle").val();
+        var cantidad_anterior = $("#txtcantidadanterior").val();
+        var cantidad_ahora =    $("#txtcantidadventa").val();
+        var total_cantidad =    $("#txtproducotstolaninventario").val();
+        var codigo_barra = $("#txtcodigobarraventa").val();
+        if(parseInt(cantidad_ahora)==0){
+  $("#mesajemodaleditarcantidad").html("<p class='alert alert-danger' role='alert' >"+"!! Error, la cantidad no puede ser 0"+"</p>").fadeIn(100).delay(600).fadeOut(1000);          
+        }else{
+$.post(
+    base_url+"Pagina/actualizardetalle",
+    {id_detalle:id_detalles,cantidad_ahora:cantidad_ahora,cantidad_anterior:cantidad_anterior,total_modificar:total_cantidad,codigo_barra:codigo_barra},
+    function(pagina){  
+        if(pagina.m1=="listo"){
+            setTimeout("location.reload()",1);
+        }else{
+$("#mesajemodaleditarcantidad").html("<p class='alert alert-danger' role='alert' >"+pagina.m1+"</p>").fadeIn(100).delay(600).fadeOut(1000);            
+        }      
+    },
+    'json'
+    );    
+        }
+        
+    }
     function mostraredicion_mo_producto(codigo){
         $.post(
     base_url+"Pagina/cargarcodigo_producto",
@@ -368,6 +430,38 @@ function almacenar_familia(){
              $("#mesajemodalproveedor").html("<p class='alert alert-success' role='alert' >"+"Provincias encontradas"+"</p>").fadeIn(100).delay(600).fadeOut(2000);
     }
     );  
+    }
+    function anadirdetalle(codigo){
+        var cantidad = $("#txtcantidad").val();
+        var id_venta =$("#txtidventarealizar").val();
+        var mandarcantidad=0;
+        if(parseInt(cantidad)==0){
+            mandarcantidad =1;
+        }else{
+           if(cantidad.trim().length==0){
+            mandarcantidad =1;   
+           }else{
+               mandarcantidad= cantidad;
+           }
+        }
+       
+     $.post(
+    base_url+"Pagina/anadirdetalles",
+    {codigo:codigo,id_venta:id_venta,cantidad:mandarcantidad},
+    function(pagina){  
+           if(pagina.m1=="Error, la cantidad ingresada es superior al stock"){
+    $("#txtmensajeventas").html("<p class='alert alert-danger' role='alert' >"+pagina.m1+"</p>").fadeIn(300).delay(800).fadeOut(2000);           
+           }else{
+               if(pagina.m1=="Error, el producto no existe en inventario"){
+$("#txtmensajeventas").html("<p class='alert alert-danger' role='alert' >"+pagina.m1+"</p>").fadeIn(100).delay(600).fadeOut(2000);                   
+               }else{
+                   setTimeout("location.reload()",1);
+               }
+           }
+             
+    },
+    'json'
+    );
     }
     function almacenar_facturasalida(){
        var rut_proveedor =$("#prooveedorseleccioadosalida").val();

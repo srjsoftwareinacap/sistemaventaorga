@@ -32,8 +32,12 @@ class Modelo extends CI_Model{
   
         return $this->db->get('producto');
 }
+function aquerirmedio(){
+     $this->db->select("*");
+     return $this->db->get('medio_pago');
+}
 
-function VerUsuario($rutempresa){
+        function VerUsuario($rutempresa){
     $perfil=50;
      $this->db->select("*");
   $this->db->where('rut_empresa_peterneciente',$rutempresa);
@@ -60,6 +64,26 @@ function VerUsuario($rutempresa){
   }
   return $mensaje;
   }
+  function verestableventa(){
+    $estado="pendiente";
+    $this->db->select("*");
+    $this->db->where('estado',$estado);
+    $captar= $this->db->get('venta');
+    $mensaje="";
+    if($captar->num_rows()==0){
+        $mensaje="nuevaventa";
+    }else{
+        if($captar->num_rows()==1){
+        $mensaje="seleccionarmax";    
+        }else{
+            if($captar->num_rows()>=2){
+                $mensaje="error";
+            }
+        }
+        
+    }
+    return  $mensaje;
+}
           function  ver_proveedor($inicio,$limite,$rut_empresa){
       $ver ="proveedor";
       $query = $this->db->select("*");
@@ -249,7 +273,70 @@ function desbloquiar_proveedor($codigo){
 //   $this->db->insert("inventario",$guardar);
 //return $mensaje;
 //  }
-    function registrarsalida($codigo_barra,$cantidad,$guardar,$idf_salida){
+    function  almacenardetalleventa($detalle_venta,$codigo_barra,$id_venta,$cantidad){
+         $this->db->select("*");
+         $this->db->where('codigo_detalle_venta',$id_venta);
+         $this->db->where('codigo_producto_detalle',$codigo_barra);
+         $verificar =$this->db->get('detalle_venta');
+         $mensaje="";
+         if($verificar->num_rows()==0){
+             $this->db->insert("detalle_venta",$detalle_venta);
+             $mensaje=" Producto registrado";
+         }else{
+             $this->db->select("*");
+         $this->db->where('codigo_detalle_venta',$id_venta);
+         $this->db->where('codigo_producto_detalle',$codigo_barra);
+         $sacar =$this->db->get('detalle_venta');
+         $cantidad_detalle = 0;
+         $suma=0;
+         $id_detalle=0;
+         foreach ($sacar->result() as $fila ) {
+             $id_detalle= $fila->id_detalle;
+     $cantidad_detalle= $fila->cantidad;   
+     
+         }
+         $data['cantidad']=$cantidad+$cantidad_detalle;
+         $this->db->where('id_detalle',$id_detalle);
+         $this->db->where('codigo_detalle_venta',$id_venta);
+         $this->db->where('codigo_producto_detalle',$codigo_barra);
+         $this->db->update('detalle_venta',$data);
+         $mensaje="se ha sumado producto";
+         }
+         $this->db->where('codigo_barra',$codigo_barra);
+         $ob =$this->db->get('stock_inventario');
+         foreach ($ob->result() as $fila ) {
+     $cantidad_stock= $fila->cantidad;   
+         }
+         $variable['cantidad']= $cantidad_stock-$cantidad;
+         $this->db->where('codigo_barra',$codigo_barra);
+        $this->db->update('stock_inventario',$variable);
+         
+         return $mensaje;
+    }
+            function crearnuevaventa(){
+        $crear = array( 
+            "fecha"=>"",
+            "rut_vendedor"=>"",
+            "idf_medio"=>"",
+            "rut_comprador"=>"",
+            "sub_total"=>"",
+            "iva"=>"",
+            "total"=>"",
+            "estado"=>"pendiente"
+            );
+        $this->db->insert("venta",$crear);
+        
+        $estado="pendiente";
+        $this->db->where('estado',$estado);
+        return $this->db->get("venta");
+    }
+    
+            function vermaximo(){
+        $estado="pendiente";
+        $this->db->where('estado',$estado);
+        return $this->db->get("venta");
+    }
+            function registrarsalida($codigo_barra,$cantidad,$guardar,$idf_salida){
         $this->db->insert("detalle_salida",$guardar);
         
         $this->db->where('codigo_barra',$codigo_barra);
@@ -263,6 +350,43 @@ function desbloquiar_proveedor($codigo){
         $this->db->update('stock_inventario',$datomodificar);
         return "se a registrado salida de Producto";
     }
+    function eliminardetalle($codigo){
+        $this->db->where('id_detalle',$codigo);
+        $restar= $this->db->get("detalle_venta");
+        $codigo_barra="";
+        $cantidad=0;
+        $stock_inventario=0;
+        foreach ($restar->result() as $valor) {
+            $codigo_barra = $valor->codigo_producto_detalle;
+            $cantidad= $valor->cantidad;
+        }
+        $this->db->where('codigo_barra',$codigo_barra);
+        $sacar= $this->db->get("stock_inventario");
+        foreach ($sacar->result() as $valor) {
+            $stock_inventario = $valor->cantidad;
+        }
+        $datomodificar['cantidad'] = $stock_inventario+$cantidad;
+        $this->db->where('codigo_barra',$codigo_barra);
+        $this->db->update('stock_inventario',$datomodificar);
+        
+        $this->db->where('id_detalle',$codigo);
+        $this->db->delete("detalle_venta");
+        
+    }
+    function cancelarventas($codigo){
+        
+    }
+            function editardetalle($id_detalle,$cantidad_ingresada,$stock_inventario,$codigo_barra){
+        $data['cantidad']=$stock_inventario;
+        $this->db->where('codigo_barra',$codigo_barra);
+        $this->db->update("stock_inventario",$data);
+        
+        
+        $cambiar['cantidad']= $cantidad_ingresada;
+        $this->db->where('id_detalle',$id_detalle);
+        $this->db->update("detalle_venta",$cambiar);
+    }
+            
             function versalidas($rut_proveedor,$numero_factura){
    $this->db->select("*");
    $this->db->where('rut_proveedor',$rut_proveedor);
@@ -423,6 +547,26 @@ function verinventariosio($codigo){
   }
   return $mandar;
 }
+function versinosi($codigo_barra){
+        $this->db->select("*");
+  $this->db->where('codigo_barra',$codigo_barra);
+  $consulta1= $this->db->get('stock_inventario');
+  if($consulta1->num_rows()==0){
+      $mandar="no";
+  }else{
+      $mandar="si";
+  }
+  return $mandar;
+}
+
+        function sacarproductomisto($codigo_barra){
+    $query = $this->db->select("p.stock_minimo,p.precio_bruto,si.cantidad");
+$query = $this->db->from("producto p");
+      $query = $this->db->join("stock_inventario si","si.codigo_barra = p.codigo_barra","inner");
+      $query= $this->db->where("p.codigo_barra",$codigo_barra);
+     $query = $this->db->get();
+    return $query;
+    }
 function adquerirproductoinventario($codigo){
     $query = $this->db->select("p.codigo_barra,p.nombre,p.descripcion,f.tipo_familia,p.stock_minimo,sto.cantidad");
       $query = $this->db->from("producto p");
@@ -432,7 +576,24 @@ function adquerirproductoinventario($codigo){
      $query = $this->db->get();
     return $query->result();
 }
-        function verinventario($codigo){ 
+function verdetalle($id_venta){
+     $query= $this->db->select("deta.id_detalle,p.nombre,deta.cantidad,deta.precio");
+     $query = $this->db->from("detalle_venta deta");
+     $query = $this->db->join("producto  p ","p.codigo_barra = deta.codigo_producto_detalle","inner");
+     $query= $this->db->where("deta.codigo_detalle_venta",$id_venta);
+     $query = $this->db->get();
+    return $query->result();
+    }
+    function cargardetalle($codigo){
+        $query= $this->db->select("deta.id_detalle,p.codigo_barra,p.nombre,deta.cantidad as cantidad_detalle,deta.precio,p.stock_minimo,si.cantidad");
+     $query = $this->db->from("detalle_venta deta");
+     $query = $this->db->join("producto  p ","p.codigo_barra = deta.codigo_producto_detalle","inner");
+     $query = $this->db->join("stock_inventario  si ","si.codigo_barra = deta.codigo_producto_detalle","inner");
+     $query= $this->db->where("deta.id_detalle",$codigo);
+     $query = $this->db->get();
+    return $query->result();
+    }
+            function verinventario($codigo){ 
     $consulta = "SELECT cantidad as ver from stock_inventario where codigo_barra='".$codigo."'  ";
    return $this->db->query($consulta);    
   }

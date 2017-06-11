@@ -28,6 +28,43 @@ class Pagina extends CI_Controller {
                     }else{
                         //gestion venta
                         if($this->session->userdata('gestion')==1){
+                            if($this->session->userdata('ir')==0){
+                                $id_venta=0;
+                                $data['medios']= $this->Modelo->aquerirmedio()->result();
+                                $ver= $this->Modelo->verestableventa();
+                                if($ver=="nuevaventa"){
+                                  $maximo=  $this->Modelo->crearnuevaventa();
+                                    foreach ($maximo->result() as $valor) {
+            $id_venta = $valor->id_codigo_venta;
+        }
+        $data['empesar']="estable";
+                                }else{
+                                    if ($ver=="seleccionarmax"){
+                                      $maximo2=  $this->Modelo->vermaximo();
+                                    foreach ($maximo2->result() as $valor) {
+            $id_venta = $valor->id_codigo_venta;
+        }  
+        $data['empesar']="estable";
+                                    }else{
+                                        $data['empesar']="error";
+                                    }
+     $data['detalle_venta']= $this->Modelo->verdetalle($id_venta);                           }
+                                
+              $data['idventa']=$id_venta;
+              $data['sub_total']=0;
+                                $this->load->view('administrador/gventas/ventas/header');
+                        $this->load->view('administrador/gventas/ventas/content',$data);
+                        $this->load->view('administrador/gventas/ventas/footer');
+                            }else{
+                                if($this->session->userdata('ir')==1){
+                                   $this->load->view('administrador/gventas/cancel/header');
+                        $this->load->view('administrador/gventas/cancel/content');
+                        $this->load->view('administrador/gventas/cancel/footer');
+                                }
+                            }
+                            
+                            
+                            
                             
                         }else{
                             //gestion inventario
@@ -338,6 +375,49 @@ class Pagina extends CI_Controller {
 
 
         ////////////////////////////seccion de cambio de gestion venta///////////////////////////////////
+        function gventas(){
+           $rut =	$this->session->userdata('usuario');
+	$perfil = $this->session->userdata('perfil');
+	$rut_empresas = $this->session->userdata('rut_empresa');
+	$nombre= $this->session->userdata('nombre_u');
+	$ira =0;
+        $gestion=1;
+	
+	$vector =array(
+                  "usuario"=>$rut,
+                  "rut_empresa"=>$rut_empresas,
+                  "nombre_u"=>$nombre,
+                    "login"=>true,
+                    "perfil"=>$perfil,
+            "gestion"=>$gestion,
+                    "ir"=>$ira
+                );
+	
+	$this->session->set_userdata($vector);
+	redirect(base_url()); 
+        }
+        function V_canceladas(){
+            $rut =	$this->session->userdata('usuario');
+	$perfil = $this->session->userdata('perfil');
+	$rut_empresas = $this->session->userdata('rut_empresa');
+	$nombre= $this->session->userdata('nombre_u');
+	$ira =1;
+        $gestion=1;
+	
+	$vector =array(
+                  "usuario"=>$rut,
+                  "rut_empresa"=>$rut_empresas,
+                  "nombre_u"=>$nombre,
+                    "login"=>true,
+                    "perfil"=>$perfil,
+            "gestion"=>$gestion,
+                    "ir"=>$ira
+                );
+	
+	$this->session->set_userdata($vector);
+	redirect(base_url());
+        }
+
         ////////////////////////////////////////////////////////////////////////////////////////////////
         
         ////////////////////////////seccion de cambio de gestion inventario///////////////////////////////////
@@ -614,7 +694,42 @@ $mensaje="si";
 }
 echo json_encode(array("mensaj"=>$mensaje));
         }
-        function cargarcodigo_proveedor(){
+        function anadirdetalles(){
+            $codigo_barra= $this->input->post("codigo");
+            $id_venta= $this->input->post("id_venta");
+            $cantidad= $this->input->post("cantidad");
+            $ver = $this->Modelo->versinosi($codigo_barra);
+            $mensaje="";
+            $precio="";
+            $diferencia=0;
+            $stock_minimo=0;
+            $stock_actual=0;
+            if($ver=="si"){
+            $sacarproducto = $this->Modelo->sacarproductomisto($codigo_barra);
+            foreach ($sacarproducto->result() as $valor) {
+               $stock_minimo =$valor->stock_minimo;
+               $precio=$valor->precio_bruto;
+               $stock_actual=$valor->cantidad;
+            }
+            if($stock_actual>=$cantidad){
+                $detalle_venta = array(
+                    "codigo_detalle_venta"=>$id_venta,
+                    "codigo_producto_detalle"=>$codigo_barra,
+                    "cantidad"=>$cantidad,
+                    "precio"=>$precio
+                );
+             $captar=   $this->Modelo->almacenardetalleventa($detalle_venta,$codigo_barra,$id_venta,$cantidad);
+             $mensaje=$captar;
+            }else{
+                $mensaje="Error, la cantidad ingresada es superior al stock";
+            }
+            
+            }else{
+                $mensaje="Error, el producto no existe en inventario";
+            }
+            echo json_encode(array("m1"=>$mensaje));
+        }
+                function cargarcodigo_proveedor(){
             $rut= $this->input->post("codigo");
             $verlista = $this->Modelo->verempresaespe($rut);
            $contenido['rut'] = $rut;
@@ -628,6 +743,38 @@ echo json_encode(array("mensaj"=>$mensaje));
             $contenido['region'] = $this->Modelo->verregiones()->result();
             $this->load->view('administrador/ginventario/gestionproveedor/editarproveedor',$contenido);
             
+        }
+        function eliminnardetalleventa(){
+            $codigo= $this->input->post("codigo");
+            $this->Modelo->eliminardetalle($codigo);
+            echo json_encode(array(
+                "m1"=>"listo"
+                ));
+        }
+        function cacelarventaproducto(){
+            $codigo= $this->input->post("codigo");
+            $this->Modelo->cancelarventas($codigo);
+        }
+                function actualizardetalle(){
+            $id_detalle= $this->input->post("id_detalle");
+            $cantidad_ingresada= $this->input->post("cantidad_ahora");
+            $cantidad_anterior= $this->input->post("cantidad_anterior");
+            $total_modificar =$this->input->post("total_modificar");
+           $codigo_barra= $this->input->post("codigo_barra");
+            $stock_ver=$total_modificar+$cantidad_anterior;
+            $mensaje="";
+           
+            if($stock_ver>=$cantidad_ingresada){
+                $stock_inventario= $stock_ver-$cantidad_ingresada;
+                 
+             $this->Modelo->editardetalle($id_detalle,$cantidad_ingresada,$stock_inventario,$codigo_barra); 
+             $mensaje="listo";
+            }else{
+                $mensaje="Error, la cantidad es superior que el inventario";
+            }           
+            echo json_encode(array(
+               "m1"=>$mensaje
+            ));
         }
                 function cargarcodigo_producto(){
             $codigo= $this->input->post("codigo");
@@ -683,7 +830,12 @@ echo json_encode(array("mensaj"=>$mensaje));
 	
     
         }
-        
+        function cargarcantidad_venta(){
+            $codigo = $this->input->post("codigo");
+            $recorrer['venta']= $this->Modelo->cargardetalle($codigo);
+            $this->load->view('administrador/gventas/ventas/editarcantidad',$recorrer);
+        }
+                
         function editar_producto(){
             $codigo_nuevo = $this->input->post("codigo_barra_nuevo");
             $nombre_nuevo = $this->input->post("nombre_nuevo");
