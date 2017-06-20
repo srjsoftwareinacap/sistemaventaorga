@@ -43,13 +43,17 @@ class Pagina extends CI_Controller {
                                       $maximo2=  $this->Modelo->vermaximo();
                                     foreach ($maximo2->result() as $valor) {
             $id_venta = $valor->id_codigo_venta;
+           
         }  
         $data['empesar']="estable";
                                     }else{
                                         $data['empesar']="error";
                                     }
-     $data['detalle_venta']= $this->Modelo->verdetalle($id_venta);                           }
-                                
+     
+     
+                                    }
+     
+             $data['detalle_venta']= $this->Modelo->verdetalle($id_venta);                   
               $data['idventa']=$id_venta;
               $data['sub_total']=0;
                                 $this->load->view('administrador/gventas/ventas/header');
@@ -299,7 +303,7 @@ class Pagina extends CI_Controller {
 
 							 $this->pagination->initialize($config);
                                                          $data['suma']= $this->Modelo->sumatotaldeproductos();
-							$data['productosin']= $this->Modelo->ver_productosexistentes( $offsete,$config['per_page']);
+							$data['productosin']= $this->Modelo->ver_productosexistentes($offsete,$config['per_page']);
                                                         
                                                         $data['stock_minimo']=$this->Modelo->verretockminimo();
                                                         $recorrer= $this->Modelo->vercantidadestockminimo();
@@ -326,14 +330,104 @@ class Pagina extends CI_Controller {
                            }else{
                                //gestion odt
                                if($this->session->userdata('gestion')==3){
+                                   if($this->session->userdata('ir')==0){
+                                       //nueva orden
+                                        $this->load->library('pagination');
+                                       $config['base_url'] = base_url().'Pagina/index';
+							$rut_empresa=$this->session->userdata('rut_empresa');
+
+							$cantidad=0;
+							$consulta=$this->Modelo->total_ordendeentrada();
+							foreach ($consulta->result() as $valor){
+                                                            $cantidad= $valor->datos;
+      							}
+
+							$config['total_rows'] = $cantidad;
+							$config['per_page'] = '15';
+    						$config['num_links']=3;
+
+    						$config['full_tag_open']="<ul class='pagination'>";
+							$config['full_tag_close']='</ul>';
+							 $config['num_tag_open'] = '<li>';
+							    $config['num_tag_close'] = '</li>';
+							    $config['cur_tag_open'] = "<li class='disabled'><li class='active' ><a href='#''>";
+							    $config['cur_tag_close'] = "<span class='sr-only'></span></a></li>";
+                                                            $config['next_tag_open'] = "<li>";
+							    $config['next_tagl_close'] = "</li>";
+                                                            $config['use_page_numbers'] = TRUE;
+                                                            $config['first_link'] = "Primero";
+                                                            $config['prev_link'] = "<< Atras";
+                                                            $config['next_link'] = "Siguiente >>";
+                                                            $config['last_link'] = "Last";
+							    $config['prev_tag_open'] = "<li>";
+							    $config['prev_tagl_close'] = "</li>";
+							    $config['first_tag_open'] = "<li>";
+							    $config['first_tagl_close'] = "</ li>";
+							    $config['last_tag_open'] = "<li>";
+							    $config['last_tagl_close'] = "<li>";
+
+							 $this->pagination->initialize($config);
+                                       $data['links']=$this->pagination->create_links();
+                                       $data['orden_reparacion']= $this->Modelo->obtenerorden($offsete,$config['per_page']);
+                                       $data['mensaje']= "";
+                        $this->load->view('administrador/godecompra/nordecompra/header');
+                        $this->load->view('administrador/godecompra/nordecompra/content',$data);
+                        $this->load->view('administrador/godecompra/nordecompra/footer');
+                                   }else{
+                                       if($this->session->userdata('ir')==1){
+                                           //imprimir
+                                           $this->load->library('pagination');
+                                       $config['base_url'] = base_url().'Pagina/index';
+							$rut_empresa=$this->session->userdata('rut_empresa');
+
+							$cantidad=0;
+							$consulta=$this->Modelo->total_ordendeentrada();
+							foreach ($consulta->result() as $valor){
+                                                            $cantidad= $valor->datos;
+      							}
+
+							$config['total_rows'] = $cantidad;
+							$config['per_page'] = '15';
+    						$config['num_links']=3;
+
+    						$config['full_tag_open']="<ul class='pagination'>";
+							$config['full_tag_close']='</ul>';
+							 $config['num_tag_open'] = '<li>';
+							    $config['num_tag_close'] = '</li>';
+							    $config['cur_tag_open'] = "<li class='disabled'><li class='active' ><a href='#''>";
+							    $config['cur_tag_close'] = "<span class='sr-only'></span></a></li>";
+                                                            $config['next_tag_open'] = "<li>";
+							    $config['next_tagl_close'] = "</li>";
+                                                            $config['use_page_numbers'] = TRUE;
+                                                            $config['first_link'] = "Primero";
+                                                            $config['prev_link'] = "<< Atras";
+                                                            $config['next_link'] = "Siguiente >>";
+                                                            $config['last_link'] = "Last";
+							    $config['prev_tag_open'] = "<li>";
+							    $config['prev_tagl_close'] = "</li>";
+							    $config['first_tag_open'] = "<li>";
+							    $config['first_tagl_close'] = "</ li>";
+							    $config['last_tag_open'] = "<li>";
+							    $config['last_tagl_close'] = "<li>";
+
+							 $this->pagination->initialize($config);
+                                       $data['links']=$this->pagination->create_links();
+                                       $data['orden_reparacion']= $this->Modelo->obtenerordenimprimir($offsete,$config['per_page']);
+                                           $data['mensaje']= "";
+                        $this->load->view('administrador/godecompra/retiro/header');
+                        $this->load->view('administrador/godecompra/retiro/content',$data);
+                        $this->load->view('administrador/godecompra/retiro/footer');
+                                       }
+                                   }
+                                   
+                                   
                                    
                                }else{
                                    //g ingreso de usuarios
                                    if($this->session->userdata('gestion')==4){
                                        $data['mensaje']= "";
                                        $rut_empresas = $this->session->userdata('rut_empresa');
-                                       $data['lista']= $this->Modelo->VerUsuario($rut_empresas);
-                                      
+                                       $data['lista']= $this->Modelo->VerUsuario($rut_empresas); 
                                     $this->load->view('administrador/gusuario/header');
                                     $this->load->view('administrador/gusuario/content',$data);
                                     $this->load->view('administrador/gusuario/footer');  
@@ -342,6 +436,139 @@ class Pagina extends CI_Controller {
                            } 
                         }
                     }
+                }else{
+                    //operador
+                    if($this->session->userdata('gestion')==3){
+                        if($this->session->userdata('ir')==1){
+                                           //imprimir
+                                           $this->load->library('pagination');
+                                       $config['base_url'] = base_url().'Pagina/index';
+							$rut_empresa=$this->session->userdata('rut_empresa');
+
+							$cantidad=0;
+							$consulta=$this->Modelo->total_ordendeentrada();
+							foreach ($consulta->result() as $valor){
+                                                            $cantidad= $valor->datos;
+      							}
+
+							$config['total_rows'] = $cantidad;
+							$config['per_page'] = '15';
+    						$config['num_links']=3;
+
+    						$config['full_tag_open']="<ul class='pagination'>";
+							$config['full_tag_close']='</ul>';
+							 $config['num_tag_open'] = '<li>';
+							    $config['num_tag_close'] = '</li>';
+							    $config['cur_tag_open'] = "<li class='disabled'><li class='active' ><a href='#''>";
+							    $config['cur_tag_close'] = "<span class='sr-only'></span></a></li>";
+                                                            $config['next_tag_open'] = "<li>";
+							    $config['next_tagl_close'] = "</li>";
+                                                            $config['use_page_numbers'] = TRUE;
+                                                            $config['first_link'] = "Primero";
+                                                            $config['prev_link'] = "<< Atras";
+                                                            $config['next_link'] = "Siguiente >>";
+                                                            $config['last_link'] = "Last";
+							    $config['prev_tag_open'] = "<li>";
+							    $config['prev_tagl_close'] = "</li>";
+							    $config['first_tag_open'] = "<li>";
+							    $config['first_tagl_close'] = "</ li>";
+							    $config['last_tag_open'] = "<li>";
+							    $config['last_tagl_close'] = "<li>";
+
+							 $this->pagination->initialize($config);
+                                       $data['links']=$this->pagination->create_links();
+                                       $data['orden_reparacion']= $this->Modelo->obtenerordenimprimir($offsete,$config['per_page']);
+                                           $data['mensaje']= "";
+                        $this->load->view('operador/godecompra/retiro/header');
+                        $this->load->view('operador/godecompra/retiro/content',$data);
+                        $this->load->view('operador/godecompra/retiro/footer');
+                                       }else{
+                                         $this->load->library('pagination');
+                                       $config['base_url'] = base_url().'Pagina/index';
+							$rut_empresa=$this->session->userdata('rut_empresa');
+
+							$cantidad=0;
+							$consulta=$this->Modelo->total_ordendeentrada();
+							foreach ($consulta->result() as $valor){
+                                                            $cantidad= $valor->datos;
+      							}
+
+							$config['total_rows'] = $cantidad;
+							$config['per_page'] = '15';
+    						$config['num_links']=3;
+
+    						$config['full_tag_open']="<ul class='pagination'>";
+							$config['full_tag_close']='</ul>';
+							 $config['num_tag_open'] = '<li>';
+							    $config['num_tag_close'] = '</li>';
+							    $config['cur_tag_open'] = "<li class='disabled'><li class='active' ><a href='#''>";
+							    $config['cur_tag_close'] = "<span class='sr-only'></span></a></li>";
+                                                            $config['next_tag_open'] = "<li>";
+							    $config['next_tagl_close'] = "</li>";
+                                                            $config['use_page_numbers'] = TRUE;
+                                                            $config['first_link'] = "Primero";
+                                                            $config['prev_link'] = "<< Atras";
+                                                            $config['next_link'] = "Siguiente >>";
+                                                            $config['last_link'] = "Last";
+							    $config['prev_tag_open'] = "<li>";
+							    $config['prev_tagl_close'] = "</li>";
+							    $config['first_tag_open'] = "<li>";
+							    $config['first_tagl_close'] = "</ li>";
+							    $config['last_tag_open'] = "<li>";
+							    $config['last_tagl_close'] = "<li>";
+
+							 $this->pagination->initialize($config);
+                                       $data['links']=$this->pagination->create_links();
+                                       $data['orden_reparacion']= $this->Modelo->obtenerorden($offsete,$config['per_page']);
+                                       $data['mensaje']= "";
+                        $this->load->view('operador/godecompra/nordecompra/header');
+                        $this->load->view('operador/godecompra/nordecompra/content',$data);
+                        $this->load->view('operador/godecompra/nordecompra/footer');  
+                                       }
+                    }else{
+                        if($this->session->userdata('gestion')==1){
+                            if($this->session->userdata('ir')==0){
+                             $id_venta=0;
+                                $data['medios']= $this->Modelo->aquerirmedio()->result();
+                                $ver= $this->Modelo->verestableventa();
+                                if($ver=="nuevaventa"){
+                                  $maximo=  $this->Modelo->crearnuevaventa();
+                                    foreach ($maximo->result() as $valor) {
+            $id_venta = $valor->id_codigo_venta;
+        }
+        $data['empesar']="estable";
+                                }else{
+                                    if ($ver=="seleccionarmax"){
+                                      $maximo2=  $this->Modelo->vermaximo();
+                                    foreach ($maximo2->result() as $valor) {
+            $id_venta = $valor->id_codigo_venta;
+           
+        }  
+        $data['empesar']="estable";
+                                    }else{
+                                        $data['empesar']="error";
+                                    }
+     
+     
+                                    }
+     
+             $data['detalle_venta']= $this->Modelo->verdetalle($id_venta);                   
+              $data['idventa']=$id_venta;
+              $data['sub_total']=0;
+                                $this->load->view('operador/gventas/ventas/header');
+                        $this->load->view('operador/gventas/ventas/content',$data);
+                        $this->load->view('operador/gventas/ventas/footer');   
+                            }
+                        } else {
+                            //////inicio
+                            $this->load->view('operador/header');
+                        $this->load->view('operador/contentinicio');
+                        $this->load->view('operador/footer');
+                        }
+                    }
+                    
+                }{
+                    
                 }
             }else{
                 $this->load->view('header');
@@ -583,8 +810,47 @@ function ir_inventario(){
         ///////////////////////////////////////////////////fin de cambio/////////////////////////////////////////////   
         
         
-           ////////////////////////////seccion de cambio de gestion orden de trabajo///////////////////////////////////
-        /////////////////////////////////////////////fin de cambio///////////////////////////////////////////////////
+           ////////////////////////////seccion de cambio de gestion orden de trabajo//////////////////////////////////
+           function ordentrabajo(){
+              $rut =	$this->session->userdata('usuario');
+	$perfil = $this->session->userdata('perfil');
+	$rut_empresas = $this->session->userdata('rut_empresa');
+	$nombre= $this->session->userdata('nombre_u');
+	$ira =0;
+        $gestion=3;
+	$vector =array(
+                  "usuario"=>$rut,
+                  "rut_empresa"=>$rut_empresas,
+                  "nombre_u"=>$nombre,
+                    "login"=>true,
+                    "perfil"=>$perfil,
+                    "gestion"=>$gestion,
+                    "ir"=>$ira
+                );	
+	$this->session->set_userdata($vector);
+	redirect(base_url()); 
+           }
+           
+                   function retiro(){
+               $rut =	$this->session->userdata('usuario');
+	$perfil = $this->session->userdata('perfil');
+	$rut_empresas = $this->session->userdata('rut_empresa');
+	$nombre= $this->session->userdata('nombre_u');
+	$ira =1;
+        $gestion=3;
+	$vector =array(
+                  "usuario"=>$rut,
+                  "rut_empresa"=>$rut_empresas,
+                  "nombre_u"=>$nombre,
+                    "login"=>true,
+                    "perfil"=>$perfil,
+                    "gestion"=>$gestion,
+                    "ir"=>$ira
+                );	
+	$this->session->set_userdata($vector);
+	redirect(base_url());
+           }
+           /////////////////////////////////////////////fin de cambio///////////////////////////////////////////////////
         
         
            ////////////////////////////seccion de cambio de gestion usuario///////////////////////////////////
@@ -617,7 +883,45 @@ function ir_inventario(){
 		$this->session->sess_destroy();
           redirect(base_url());    
 	}
-        function  validarusuario(){
+        function ingresardetalleortrabaj(){
+               $codigo_barra= $this->input->post("codigo_barra");
+               $id_orden=$this->input->post("id_orden");
+               $cantidad =$this->input->post("cantidad");
+             $precio=0;
+             $recorrer = $this->Modelo->verproducto($codigo_barra);
+             foreach ($recorrer->result() as $valor){
+             $precio= $valor->precio_bruto;
+      }
+      $guardar= array(
+          "idf_orden"=>$id_orden,
+          "codigof_producto"=>$codigo_barra,
+          "cantidad"=>$cantidad,
+          "precio_bruto"=>$precio
+      );
+      
+      $variable = $this->Modelo->agregardetalle($guardar,$codigo_barra,$id_orden,$cantidad);
+      if($variable=="listo"){
+          echo json_encode(array(
+              "m1"=>"listo"
+              ));
+      }
+           }
+           
+                   function ordendt(){
+               $id_detalle= $this->input->post("id_detalle");
+               $descuento= $this->input->post("descuento");
+               $descripcion= $this->input->post("descripcion");
+               $mano= $this->input->post("mano");
+               date_default_timezone_set("America/Santiago");
+    $fecha =date("Y-m-d");
+  $captar=  $this->Modelo->actualizarort($id_detalle,$descripcion,$descuento,$mano,$fecha);
+    if($captar=="listo"){
+        echo json_encode(array(
+            "m1"=>$captar
+        ));
+    }
+           }
+                   function  validarusuario(){
         $rut= $this->input->post("rut");
 	$contraseña= $this->input->post("contraseña");
        $respuesta= $this->Modelo->validarempresario($rut,$contraseña);
@@ -682,7 +986,40 @@ function ir_inventario(){
         $this->session->set_userdata($vector);
         echo json_encode($data);
         }
-        function  almacenarfamilia(){
+        function registarventas(){
+           $id_venta= $this->input->post("id_venta");
+           $medio_pago= $this->input->post("medio_pago");
+           $descuento =$this->input->post("descuento");
+           $sub =$this->input->post("sub_total");
+           $iva =0;
+           $sub_total =$sub-($sub*$iva);
+           $total =$sub_total-$descuento;
+           date_default_timezone_set("America/Santiago");
+    $fecha =date("Y-m-d");
+   $rut= $this->session->userdata('usuario');
+   $actualizar = array(
+       "fecha"=>$fecha,
+       "rut_vendedor"=>$rut,
+       "idf_medio"=>$medio_pago,
+       "rut_comprador"=>"",
+       "sub_total"=>$sub,
+       "iva"=>$iva,
+       "descuento"=>$descuento,
+       "total"=>$total,
+        "estado"=>"paraimprimir"   
+   );
+   $mensaje= "";
+ $ver=  $this->Modelo->editarventa($id_venta,$actualizar);
+ if($ver=="listo"){
+     $mensaje=$ver;
+        }else{
+            $mensaje="Error";
+        }
+   echo json_encode(array(
+       "m1"=>$mensaje
+   ));
+        }
+                function  almacenarfamilia(){
             $tipo_familia =$this->input->post("tipo_familia");
             $guardar = array("tipo_familia"=>$tipo_familia);
             $captar= $this->Modelo->guardarfamilia($tipo_familia,$guardar);
@@ -744,6 +1081,11 @@ echo json_encode(array("mensaj"=>$mensaje));
             $this->load->view('administrador/ginventario/gestionproveedor/editarproveedor',$contenido);
             
         }
+        function cargareditarorden(){
+            $codigo= $this->input->post("codigo");
+            $mandar['lista']= $this->Modelo->adquerirorden($codigo)->result();
+            $this->load->view('administrador/godecompra/nordecompra/editar',$mandar);
+           }
         function eliminnardetalleventa(){
             $codigo= $this->input->post("codigo");
             $this->Modelo->eliminardetalle($codigo);
@@ -753,7 +1095,12 @@ echo json_encode(array("mensaj"=>$mensaje));
         }
         function cacelarventaproducto(){
             $codigo= $this->input->post("codigo");
-            $this->Modelo->cancelarventas($codigo);
+           $ver= $this->Modelo->cancelarventas($codigo);
+            if($ver==listo){
+            redirect(base_url());    
+            }
+            
+            
         }
                 function actualizardetalle(){
             $id_detalle= $this->input->post("id_detalle");
@@ -835,8 +1182,234 @@ echo json_encode(array("mensaj"=>$mensaje));
             $recorrer['venta']= $this->Modelo->cargardetalle($codigo);
             $this->load->view('administrador/gventas/ventas/editarcantidad',$recorrer);
         }
-                
-        function editar_producto(){
+        function imprimirpedido(){
+          $codigo = $this->input->post("imprimirregistro");
+          $recorrer= $this->Modelo->verordenimprimir($codigo);
+           $html ="";
+           $html.="<h3 style='text-align: center' > Orden de Trabajo  ";
+           $html.="<h3/>";
+          foreach ($recorrer->result() as $valor){
+$html.="  <div style='float: right; width: 30%;'>fecha recepcion: ".$valor->fecha_recepcion." </div> ";
+$html.="<br />";
+$html.="<br />";
+$html.="  <div style='float: right; width: 30%;'>fecha entrega: ".$valor->fecha_entrega." </div> ";
+$html.="<br />";
+$html.="<br />";
+$html.="<table >";
+$html.="
+ <tr>
+              <td><label  for='psw'><span ></span> <strong>Nombre cliente:"."   "."  </strong></label></td>       
+              <td>".$valor->nombre_cliente."  </td>
+ <td>"."                        "."  </td>
+     <td><label  for='psw'><span ></span> <strong>Rut:"."   "."  </strong></label></td>       
+              <td>".$valor->rut."  </td>
+              </tr>       
+
+ <tr>
+              <td><label  for='psw'><span ></span> <strong>Direccion:"."   "."  </strong></label></td>       
+              <td>".$valor->direccion."  </td>
+ <td>"."                        "."  </td>
+     <td><label  for='psw'><span ></span> <strong>Telefono:"."   "."  </strong></label></td>       
+              <td>".$valor->telefono."  </td>
+              </tr>
+              <tr>
+              <td> <br /></td>
+              </tr>
+              <tr>
+              <td> Datos de el Producto</td>
+              </tr>
+ <tr>
+              <td><label  for='psw'><span ></span> <strong>Modelo:"."   "."  </strong></label></td>       
+              <td>".$valor->modelo."  </td>
+ <td>"."                        "."  </td>
+     <td><label  for='psw'><span ></span> <strong>Marca:"."   "."  </strong></label></td>       
+              <td>".$valor->marca."  </td>
+ <td>"."                        "."  </td>
+     <td><label  for='psw'><span ></span> <strong>Cadena:"."   "."  </strong></label></td>       
+              <td>".$valor->cadena."  </td>                 
+              </tr>       
+
+  <tr>
+              <td><label  for='psw'><span ></span> <strong>Espada:  </strong></label></td>       
+              <td>".$valor->espada."  </td>  
+ <td>"."         "."  </td>
+     <td><label  for='psw'><span ></span> <strong>Serie:"."   "."  </strong></label></td>       
+              <td>".$valor->serie."  </td>
+ <td>"."         "."  </td>
+                     
+              </tr>
+<tr>
+              <td><label  for='psw'><span ></span> <strong>Descripcion de falla:"."   "."  </strong></label></td>       
+              <td>".$valor->descripcion_falla."  </td> 
+              </tr>
+              <tr>
+              <td> <br /></td>
+              </tr>
+              <tr>
+              <td><strong>Productos Requeridos</strong></td>
+              <tr>
+              <td> <br /></td>
+              </tr>
+";
+ $html.="</table >";
+        }
+        $datos = $this->Modelo->adquerirdetalle($codigo);
+        $html.="<table border='1' >";
+        $html.="<tr>
+                 <td><strong>Nombre</strong></td>   
+                 <td><strong>Cantidad</strong></td>
+                 <td><strong>Precio</strong></td>
+                 <td><strong></strong>Importe</td>
+</tr>"; 
+         foreach ($datos->result() as $valores){
+           $html.="<tr>
+                 <td><strong>".$valores->nombre."</strong></td>   
+                 <td style='text-align: center' ><strong>".$valores->cantidad."</strong></td>
+                 <td style='text-align: center' ><strong>".$valores->precio_bruto."</strong></td>
+                 <td><strong>".$valores->precio_bruto*$valores->cantidad."</strong></td>
+</tr>";  
+            
+            
+         }
+         $html.="</table >";
+          $html.="<table  >";
+          $html.="<tr>
+              <td> <br /></td>
+              </tr>";
+          foreach ($recorrer->result() as $valoro){
+              $suma=$valoro->total+$valoro->mano_de_obra-$valoro->descuento_especial;
+              $html.="
+                  <tr>
+              <td><label  for='psw'><span ></span> <strong>Descripcion detalle:"."   "."  </strong></label></td>       
+              <td>".$valoro->descripcion."  </td> 
+              </tr>
+                <tr>
+              <td><label  for='psw'><span ></span> <strong>Sub total:"."   "."  </strong></label></td>       
+              <td>".$valoro->total."  </td> 
+              </tr>
+              <tr>
+              <td><label  for='psw'><span ></span> <strong>Mano de obra:"."   "."  </strong></label></td>       
+              <td>".$valoro->mano_de_obra."  </td> 
+              </tr>
+              <tr>
+              <td><label  for='psw'><span ></span> <strong>Descuento:"."   "."  </strong></label></td>       
+              <td>".$valoro->descuento_especial."  </td> 
+              </tr>
+              <tr>
+              <td><label  for='psw'><span ></span> <strong>Total:"."   "."  </strong></label></td>       
+              <td>".$suma."  </td> 
+              </tr>
+";
+          }
+          $html.="</table >";
+        $estilos = file_get_contents("http://localhost/sistemaventaorga/css/bootstrap.min.css");
+        $this->mpdf->setDisplayMode("fullpage");
+     
+          $this->mpdf->WriteHTML($html);
+          $this->mpdf->Output();
+        exit;
+        
+          }
+                function editar_ordentrabajo(){
+            $nombre_cliente= $this->input->post("nombre_cliente");
+            $rut= $this->input->post("rut");
+            
+            $direccion= $this->input->post("direccion");
+            $telefono= $this->input->post("telefono");
+            $modelo= $this->input->post("modelo");
+            $marca= $this->input->post("marca");
+            $cadena= $this->input->post("cadena");
+            $espada= $this->input->post("espada");
+            $serie= $this->input->post("serie");
+            $descripcionfalla= $this->input->post("descripcionfalla");
+            $id_orden= $this->input->post("id_orden");
+            $rut1=$rut;
+            $mano_obra="";
+            $descripcion="";
+            $total=0;
+            $descuento=0;
+            $estado="pendiente";
+            date_default_timezone_set("America/Santiago");
+    $fecha_recepcion =date("Y-m-d");
+    $fecha_entrega="";
+            $guardar= array(
+               "fecha_recepcion"=>$fecha_recepcion,
+                "fecha_entrega"=>$fecha_entrega,
+                "nombre_cliente"=>$nombre_cliente,
+                "rut"=>$rut1,
+                "direccion"=>$direccion,
+                "telefono"=>$telefono,
+                "modelo"=>$modelo,
+                "marca"=>$marca,
+                "cadena"=>$cadena,
+                "espada"=>$espada,
+                "serie"=>$serie,
+                "descripcion_falla"=>$descripcionfalla,
+                "mano_de_obra"=>$mano_obra,
+                "descripcion"=>$descripcion,
+                "total"=>$total,
+                "descuento_especial"=>$descuento,
+                "estado"=>$estado
+            );
+            
+            $ver = $this->Modelo->editarorden($guardar,$id_orden);
+            if($ver=="editado correctamente"){
+                $mensaje="editado correctamente";
+            }
+            echo json_encode(array(
+                "m1"=>$mensaje
+            ));
+        }
+                function almacenar_ordentrabajo(){
+            $nombre_cliente= $this->input->post("nombre_cliente");
+            $rut= $this->input->post("rut");
+            $des= $this->input->post("des");
+            $direccion= $this->input->post("direccion");
+            $telefono= $this->input->post("telefono");
+            $modelo= $this->input->post("modelo");
+            $marca= $this->input->post("marca");
+            $cadena= $this->input->post("cadena");
+            $espada= $this->input->post("espada");
+            $serie= $this->input->post("serie");
+            $descripcionfalla= $this->input->post("descripcionfalla");
+            $rut1=$rut.$des;
+            $mano_obra="";
+            $descripcion="";
+            $total=0;
+            $descuento=0;
+            $estado="pendiente";
+            date_default_timezone_set("America/Santiago");
+    $fecha_recepcion =date("Y-m-d");
+    $fecha_entrega="";
+            $guardar= array(
+               "fecha_recepcion"=>$fecha_recepcion,
+                "fecha_entrega"=>$fecha_entrega,
+                "nombre_cliente"=>$nombre_cliente,
+                "rut"=>$rut1,
+                "direccion"=>$direccion,
+                "telefono"=>$telefono,
+                "modelo"=>$modelo,
+                "marca"=>$marca,
+                "cadena"=>$cadena,
+                "espada"=>$espada,
+                "serie"=>$serie,
+                "descripcion_falla"=>$descripcionfalla,
+                "mano_de_obra"=>$mano_obra,
+                "descripcion"=>$descripcion,
+                "total"=>$total,
+                "descuento_especial"=>$descuento,
+                "estado"=>$estado
+            );
+            
+            $ver = $this->Modelo->guardarorden($guardar);
+            if($ver=="listo"){
+                $mensaje="Almacenado correctamente";
+            }
+            echo json_encode(array(
+                "m1"=>$mensaje
+            ));
+        }
+                function editar_producto(){
             $codigo_nuevo = $this->input->post("codigo_barra_nuevo");
             $nombre_nuevo = $this->input->post("nombre_nuevo");
             $descripcion  = $this->input->post("descripcion");
@@ -871,7 +1444,33 @@ $mensaje="si";
 }
 echo json_encode(array("mensaj"=>$mensaje));
         }
-function buscar_productosinventario(){
+        function rutcliente(){
+            $codigo= $this->input->post('buscar_rutcliente');
+          if(isset($codigo) and !empty($codigo) ){ 
+              $data['links']='';  
+            $data['orden_reparacion']= $this->Modelo->obtenerordenbuscar($codigo);
+                                       $data['mensaje']= "Para volver, Presione el Boton Buscar";
+                        $this->load->view('administrador/godecompra/nordecompra/header');
+                        $this->load->view('administrador/godecompra/nordecompra/content',$data);
+                        $this->load->view('administrador/godecompra/nordecompra/footer');  
+          }else{
+              redirect(base_url());
+          }  
+        }
+        function rutclientereirp(){
+           $codigo= $this->input->post('buscar_rutclienteretiro');
+          if(isset($codigo) and !empty($codigo) ){ 
+              $data['links']='';  
+            $data['orden_reparacion']= $this->Modelo->obtenerordenbuscarretiro($codigo);
+                                       $data['mensaje']= "Para volver, Presione el Boton Buscar";
+                        $this->load->view('administrador/godecompra/retiro/header');
+                        $this->load->view('administrador/godecompra/retiro/content',$data);
+                        $this->load->view('administrador/godecompra/retiro/footer');  
+          }else{
+              redirect(base_url());
+          }  
+        }
+                function buscar_productosinventario(){
     $codigo= $this->input->post('buscar_inventario');
         if(isset($codigo) and !empty($codigo) ){      
 $data['suma']= $this->Modelo->sumatotaldeproductos();

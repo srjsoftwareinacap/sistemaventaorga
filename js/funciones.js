@@ -44,6 +44,130 @@ function volvernormal() {
         show:true
       });
     }
+    function abrirmodalordencompra(){
+        $("#modalordendecompra").modal({
+        show:true
+      });
+    }
+    function Editarordendetrabajo(){
+        var nombre_cliente= $("#txtcliente1").val();
+        var rut = $("#txtRutregistrar1").val();
+        var direccion = $("#txtdireccion1").val();
+        var telefono = $("#txttelefono1").val();        
+        var serie = $("#txtserie1").val();
+        var descripcionfalla = $("#txtdescrpcionfalla1").val();
+        var id =$("#txtidediarid").val();
+        if($("#txtmodelo1").val().trim().length==0){
+        var modelo = "no aplica";    
+        }else{
+        var modelo = $("#txtmodelo1").val();    
+        }
+        if($("#txtmarca1").val().trim().length==0){
+        var marca= "no aplica";    
+        }else{
+        var marca= $("#txtmarca1").val();    
+        }
+        if($("#txtcadena1").val().trim().length>0){
+        var cadena= $("#txtcadena1").val();    
+        }else{
+        var cadena="no aplica";    
+        }
+        if($("#txtespada1").val().trim().length==0){
+            var espada="no aplica";
+        }else{
+            var espada = $("#txtespada1").val();
+        }
+  $.post(
+    base_url+"Pagina/editar_ordentrabajo",
+    {nombre_cliente:nombre_cliente,rut:rut,direccion:direccion,telefono:telefono,modelo:modelo,marca:marca,cadena:cadena,espada:espada,serie:serie,descripcionfalla:descripcionfalla,id_orden:id},
+    function(pagina){  
+      if(pagina.m1=="editado correctamente"){
+         setTimeout("location.reload()",1); 
+      }       
+    },'json'
+    );   
+    }
+    function almacenar_ordenreapracion(){
+        var nombre_cliente= $("#txtcliente").val();
+        var rut = $("#txtRutregistrar").val();
+        var des = $("#txtrutverificador").val();
+        var direccion = $("#txtdireccion").val();
+        var telefono = $("#txttelefono").val();        
+        var serie = $("#txtserie").val();
+        var descripcionfalla = $("#txtdescrpcionfalla").val();
+        if($("#txtmodelo").val().trim().length==0){
+        var modelo = "no aplica";    
+        }else{
+        var modelo = $("#txtmodelo").val();    
+        }
+        if($("#txtmarca").val().trim().length==0){
+        var marca= "no aplica";    
+        }else{
+        var marca= $("#txtmarca").val();    
+        }
+        if($("#txtcadena").val().trim().length>0){
+        var cadena= $("#txtcadena").val();    
+        }else{
+        var cadena="no aplica";    
+        }
+        if($("#txtespada").val().trim().length==0){
+            var espada="no aplica";
+        }else{
+            var espada = $("#txtespada").val();
+        }
+  $.post(
+    base_url+"Pagina/almacenar_ordentrabajo",
+    {nombre_cliente:nombre_cliente,rut:rut,des:des,direccion:direccion,telefono:telefono,modelo:modelo,marca:marca,cadena:cadena,espada:espada,serie:serie,descripcionfalla:descripcionfalla},
+    function(pagina){  
+      if(pagina.m1=="Almacenado correctamente"){
+         setTimeout("location.reload()",1); 
+      }       
+    },'json'
+    );      
+    }
+    function almacenar_detalleort(){
+        var mano=$("#txtmano").val();
+        var descuento = $("#txtdescuento").val();
+        var descripcion = $("#txtdescripciondetalle").val();
+        var id_detalle = $("#txtdetallenumero").val();
+       alert(id_detalle);
+        $.post(
+    base_url+"Pagina/ordendt",
+    {id_detalle:id_detalle,descuento:descuento,descripcion:descripcion,mano:mano},
+    function(pagina){  
+             if(pagina.m1=="listo"){
+                
+             }
+    },'json'
+    );
+    }
+    function ingresardetalleorden(codigo_barra){
+        var id_orden =$("#txtdetallenumero").val();
+        
+        if($("#txtcantidaddetalleor").val().trim().length==0){
+             var cantidad=1;
+        }else{
+        var cantidad=$("#txtcantidaddetalleor").val();    
+        }
+         $.post(
+    base_url+"Pagina/ingresardetalleortrabaj",
+    {codigo_barra:codigo_barra,id_orden:id_orden,cantidad:cantidad},
+    function(pagina){  
+             if(pagina.m1=="listo"){
+                 $("#txtcantidaddetalleor").val('');
+                 $("#txtdetallecodigo").val('');
+                 $("#txtcantidaddetalleor").focus();
+             }
+    },'json'
+    );
+    }
+  
+    function mostrardetalle_orden(codigo){
+        $("#txtdetallenumero").val(codigo);
+        $("#modalordendecompradetalle").modal({
+        show:true
+      });
+    }
     function abrirmodalentrada(){
         $("#modalentradaproducto").modal({
         show:true
@@ -142,6 +266,19 @@ function almacenar_familia(){
     }
    
     }
+    
+    function mostraredicion_mo_orden(codigo){
+        $.post(
+    base_url+"Pagina/cargareditarorden",
+    {codigo:codigo},
+    function(pagina){  
+        $("#modalordendecompra").html(pagina);
+      $("#modalordendecompra").modal({
+        show:true
+      });      
+    }
+    );
+    }
   
     function mostraredicion_mo_cantidad(codigo){
         $.post(
@@ -166,20 +303,7 @@ function almacenar_familia(){
     },'json'
     );
     }
-    function carcelarventa(){
-    var id_venta = $("#txtidventacancelar").val();
-    $.post(
-    base_url+"Pagina/cacelarventaproducto",
-    {codigo:codigo},
-    function(pagina){  
-          if(pagina.m1=="listo"){
-              setTimeout("location.reload()",1);
-          }   
-    },'json'
-    );
     
-    
-    }
     function Editarventa(){
         var id_detalles = $("#txtiddetalle").val();
         var cantidad_anterior = $("#txtcantidadanterior").val();
@@ -227,6 +351,33 @@ $("#mesajemodaleditarcantidad").html("<p class='alert alert-danger' role='alert'
       });      
     }
     );
+    }
+    function redireccionar(){
+  location.href="http://localhost:57030/index.aspx";
+} 
+    function realizarrventa(){
+        
+        var id_venta = $("#txtidventarealizar").val();
+        var medio_pago = $("#txtmedioselecionado").val();
+        var descuento = $("#txtdescuento").val();
+       var sub_total =  $("#txtsuntotal").val();
+       if(descuento.trim().length==0){
+          descuento =0;
+       }
+       if(sub_total!=0){
+ $.post(
+    base_url+"Pagina/registarventas",
+    {id_venta:id_venta,medio_pago:medio_pago,descuento:descuento,sub_total:sub_total},
+    function(pagina){  
+        if(pagina.m1=="listo"){
+        setTimeout ("redireccionar()", 1);    
+        }
+              
+    },'json'
+    );  
+       }else{
+        $("#txtmensajeventas").html("<p class='alert alert-danger' role='alert' >"+"!! Error,no hay ventas registradas"+"</p>").fadeIn(100).delay(600).fadeOut(3000);   
+       } 
     }
     function mostraredicion_mo_proveedor(codigo){
         $.post(

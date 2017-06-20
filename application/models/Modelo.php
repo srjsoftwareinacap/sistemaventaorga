@@ -32,7 +32,12 @@ class Modelo extends CI_Model{
   
         return $this->db->get('producto');
 }
-function aquerirmedio(){
+function total_ordendeentrada(){
+    $this->db->select("count(*) as datos");
+    $this->db->where('estado',"pendiente");
+     return $this->db->get('orden_reparacion');
+}
+        function aquerirmedio(){
      $this->db->select("*");
      return $this->db->get('medio_pago');
 }
@@ -106,7 +111,57 @@ function aquerirmedio(){
      $query = $this->db->get();
     return $query->result();
   }
-  function sumatotaldeproductos(){
+  function obtenerorden($inicio,$limite){
+      date_default_timezone_set("America/Santiago");
+	$fecha =date("Y-m-d");
+      $estado="pendiente";
+      $query = $this->db->select("id_orden,DATE_FORMAT(fecha_recepcion, '%d-%m-%Y') as fecha,nombre_cliente,rut,direccion,telefono,modelo,marca,serie,descripcion_falla");
+      $query = $this->db->from("orden_reparacion");
+      $query = $this->db->where("estado",$estado);
+      $query =$this->db->order_by("fecha_recepcion",$fecha);
+      $query= $this->db->limit($limite, $inicio);
+     $query = $this->db->get();
+    return $query->result();
+  }
+function obtenerordenimprimir($inicio,$limite){
+  date_default_timezone_set("America/Santiago");
+	$fecha =date("Y-m-d");
+      $estado="imprimir";
+      $query = $this->db->select("id_orden,DATE_FORMAT(fecha_recepcion, '%d-%m-%Y') as fecha,nombre_cliente,rut,direccion,telefono,modelo,marca,serie,descripcion_falla");
+      $query = $this->db->from("orden_reparacion");
+      $query = $this->db->where("estado",$estado);
+      $query =$this->db->order_by("fecha_recepcion",$fecha);
+      $query= $this->db->limit($limite, $inicio);
+     $query = $this->db->get();
+    return $query->result();  
+}
+          function obtenerordenbuscar($rut){
+      $query = $this->db->select("id_orden,DATE_FORMAT(fecha_recepcion, '%d-%m-%Y') as fecha,nombre_cliente,rut,direccion,telefono,modelo,marca,serie,descripcion_falla");
+      $query = $this->db->from("orden_reparacion");
+      
+      $query = $this->db->like('rut',$rut);
+     $query = $this->db->get();
+    return $query->result();
+  }
+  function obtenerordenbuscarretiro($codigo){
+      $query = $this->db->select("id_orden,DATE_FORMAT(fecha_recepcion, '%d-%m-%Y') as fecha,nombre_cliente,rut,direccion,telefono,modelo,marca,serie,descripcion_falla");
+      $query = $this->db->from("orden_reparacion");
+      
+      $query = $this->db->like('rut',$codigo);
+     $query = $this->db->get();
+    return $query->result();
+  }
+  function verordenimprimir($codigo){
+      date_default_timezone_set("America/Santiago");
+	$fecha =date("Y-m-d");
+      $estado="imprimir";
+      $query = $this->db->select("id_orden,DATE_FORMAT(fecha_recepcion, '%d-%m-%Y') as fecha_recepcion,DATE_FORMAT(fecha_entrega, '%d-%m-%Y') as fecha_entrega,nombre_cliente,rut,direccion,telefono,modelo,marca,cadena,serie,descripcion_falla,mano_de_obra,descripcion,total,descuento_especial");   
+      $query = $this->db->from("orden_reparacion");
+      $query = $this->db->where("id_orden",$codigo);
+     $query = $this->db->get();
+    return $query;  
+  }
+          function sumatotaldeproductos(){
       $this->db->select("SUM(cantidad)");
   return $this->db->get("stock_inventario")->result();
   }
@@ -143,7 +198,15 @@ function aquerirmedio(){
      $query = $this->db->get();
     return $query->result(); 
   }
-  function buscar_entrada_empresa($codigo,$rut_empresa){
+  function adquerirdetalle($codigo){
+      $query = $this->db->select("p.nombre,d.cantidad,d.precio_bruto");
+      $query = $this->db->from("producto p");
+      $query = $this->db->join("detalle_reparacion d","d.codigof_producto = p.codigo_barra","inner");
+      $query = $this->db->where("d.idf_orden",$codigo);
+      $query = $this->db->get();
+    return $query;
+  }
+          function buscar_entrada_empresa($codigo,$rut_empresa){
       $query = $this->db->select("p.codigo_barra, p.nombre, p.descripcion,t.tipo_familia,dee.cantidad,DATE_FORMAT(en.fecha, '%d-%m-%Y') as fecha");
       $query = $this->db->from("producto p");
     $query = $this->db->join("familia t","t.id_familia = p.idf_familia","inner");
@@ -321,6 +384,7 @@ function desbloquiar_proveedor($codigo){
             "rut_comprador"=>"",
             "sub_total"=>"",
             "iva"=>"",
+            "descuento"=>"",
             "total"=>"",
             "estado"=>"pendiente"
             );
@@ -335,6 +399,10 @@ function desbloquiar_proveedor($codigo){
         $estado="pendiente";
         $this->db->where('estado',$estado);
         return $this->db->get("venta");
+    }
+    function guardarorden($guardar){
+        $this->db->insert("orden_reparacion",$guardar);
+        return "listo";
     }
             function registrarsalida($codigo_barra,$cantidad,$guardar,$idf_salida){
         $this->db->insert("detalle_salida",$guardar);
@@ -373,8 +441,94 @@ function desbloquiar_proveedor($codigo){
         $this->db->delete("detalle_venta");
         
     }
-    function cancelarventas($codigo){
+    
+    function agregardetalle($guardar,$codigo_barra,$id_orden,$cantidad){
+        $this->db->where('idf_orden',$id_orden);
+        $this->db->where('codigof_producto',$codigo_barra);
+        $restar= $this->db->get("detalle_reparacion");
         
+        if($restar->num_rows()==0){
+            $this->db->insert("detalle_reparacion",$guardar);     
+        }else{
+        foreach ($restar->result() as $valor) {
+            $cantidad1= $valor->cantidad;
+        }
+        $datoeditar['cantidad']=$cantidad+$cantidad1;
+        $this->db->where('idf_orden',$id_orden);
+        $this->db->where('codigof_producto',$codigo_barra);
+        $this->db->update("detalle_reparacion",$datoeditar);
+        }
+$this->db->where('codigo_barra',$codigo_barra);
+        $sacar= $this->db->get("stock_inventario");
+        foreach ($sacar->result() as $valor) {
+            $stock_inventario = $valor->cantidad;
+        }
+        $datomodificar2['cantidad'] = $stock_inventario-$cantidad;
+        $this->db->where('codigo_barra',$codigo_barra);
+        $this->db->update('stock_inventario',$datomodificar2);
+        
+        return "listo";
+        
+       
+    }
+    function adquerirorden($codigo){
+        $this->db->where('id_orden',$codigo);
+        return $this->db->get("orden_reparacion");
+    }
+            function actualizarort($id_detalle,$descripcion,$descuento,$mano,$fecha){
+        $this->db->where('idf_orden',$id_detalle);
+        $recorrer=$this->db->get("detalle_reparacion");
+       $total=0;
+        foreach ($recorrer->result() as $valor) {
+           $total = $total+ ($valor->cantidad*$valor->precio_bruto);
+        }
+        $totaldef= $total;
+        
+        $datomo['fecha_entrega']=$fecha;
+        $datomo['mano_de_obra']=$mano;
+        $datomo['descripcion']=$descripcion;
+        $datomo['total']=$totaldef;
+        $datomo['descuento_especial']=$descuento;
+        $datomo['estado']="imprimir";
+        $this->db->where('id_orden',$id_detalle);
+        $this->db->update("orden_reparacion",$datomo);
+        
+        return "listo";
+    }
+            
+    
+    function cancelarventas($codigo){
+        $this->db->where('codigo_detalle_venta',$codigo);
+        $descartar= $this->db->get("detalle_venta");
+         $codigo_barra="";
+        $cantidad=0;
+        $stock_inventario=0;
+        foreach ($descartar->result() as $valor) {
+            
+          $codigo_barra=  $valor->codigo_producto_detalle;
+          $cantidad= $valor->cantidad;
+        $this->db->where('codigo_barra',$codigo_barra);
+        $sacar= $this->db->get("stock_inventario");
+        foreach ($sacar->result() as $fila) {
+            $stock_inventario = $fila->cantidad;
+        }
+          $data['cantidad']= $stock_inventario+$cantidad;
+          $this->db->where('codigo_barra',$codigo_barra);
+        $this->db->update('stock_inventario',$data);
+          
+        }
+        $enviar['estado']="cancelado";
+        $this->db->where('id_codigo_venta',$codigo);
+        $this->db->update('venta',$enviar);
+        
+      
+        
+        return "listo";
+    }
+    function editarorden($guardar,$id_orden){
+        $this->db->where('id_orden',$id_orden);
+        $this->db->update("orden_reparacion",$guardar);
+        return "editado correctamente";
     }
             function editardetalle($id_detalle,$cantidad_ingresada,$stock_inventario,$codigo_barra){
         $data['cantidad']=$stock_inventario;
@@ -385,6 +539,11 @@ function desbloquiar_proveedor($codigo){
         $cambiar['cantidad']= $cantidad_ingresada;
         $this->db->where('id_detalle',$id_detalle);
         $this->db->update("detalle_venta",$cambiar);
+    }
+    function editarventa($id_venta,$actualizar){
+        $this->db->where('id_codigo_venta',$id_venta);
+        $this->db->update("venta",$actualizar);
+        return "listo";
     }
             
             function versalidas($rut_proveedor,$numero_factura){
@@ -400,7 +559,12 @@ function desbloquiar_proveedor($codigo){
  }
  return $mensaje;
   }
-  function  vercantidad($codigo){
+  function  verproducto($codigo_barra){
+      $this->db->select("*");
+    $this->db->where("codigo_barra",$codigo_barra);
+      return $this->db->get("producto");
+  }
+          function  vercantidad($codigo){
     $mensaje="";
     $this->db->select("*");
     $this->db->where("codigo_barra",$codigo);
