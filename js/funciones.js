@@ -170,19 +170,7 @@ function volvernormal() {
     },'json'
     );
     }
-  function mostrardetalle_ordenproductos(){
-      var codigo = $("#txtdetallenumero").val();
-      $("#modalordendecompradetalle").modal(
-        'hide'
-      );
-      $.post(
-    base_url+"Pagina/editardetalleortrabajproductos",
-    {codigo:codigo},
-    function(pagina){  
-             
-    }
-    );
-  }
+ 
     function mostrardetalle_orden(codigo){
         $("#txtdetallenumero").val(codigo);
         $("#modalordendecompradetalle").modal({
@@ -311,7 +299,22 @@ function almacenar_familia(){
     }
     );
     }
-  
+   function mostrardetalle_ordenproductos(){
+      var codigo = $("#txtdetallenumero").val();
+      $("#modalordendecompradetalle").modal(
+        'hide'
+      );
+      $.post(
+    base_url+"Pagina/editardetalleortrabajproductos",
+    {codigo:codigo},
+    function(pagina){  
+          $("#modalordendecompradetalleproductos").html(pagina);
+      $("#modalordendecompradetalleproductos").modal({
+        show:true
+      });   
+    }
+    );
+  }
     function mostraredicion_mo_cantidad(codigo){
         $.post(
     base_url+"Pagina/cargarcantidad_venta",

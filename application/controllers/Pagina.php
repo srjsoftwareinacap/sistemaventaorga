@@ -1118,7 +1118,7 @@ echo json_encode(array("mensaj"=>$mensaje));
         }
         function editardetalleortrabajproductos(){
             $codigo= $this->input->post("codigo");
-            $mandar['lista']= $this->Modelo->adqueridetallerordenproducto($codigo)->result();
+            $mandar['lista']= $this->Modelo->adqueridetallerordenproducto($codigo);
             $this->load->view('administrador/godecompra/nordecompra/editarporductos',$mandar);
         }
                 function cargareditarorden(){

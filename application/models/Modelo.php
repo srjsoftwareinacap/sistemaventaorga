@@ -106,7 +106,15 @@ $query = $this->db->get();
     $query = $this->db->get();
     return $query->result(); 
   }
-  function ver_salidas($inicio,$limite){
+  function  adqueridetallerordenproducto($codigo){
+     $query = $this-> db->select("dere.id_detalle_reparacion,dere.idf_orden,pro.nombre,dere.precio_bruto,dere.cantidad");
+     $query=$this->db->from("detalle_reparacion dere");
+     $query = $this->db->join("producto pro","pro.codigo_barra = dere.codigof_producto","inner");
+     $query = $this->db->where("dere.idf_orden",$codigo);
+     $query = $this->db->get();
+     return $query->result();
+  }
+          function ver_salidas($inicio,$limite){
       date_default_timezone_set("America/Santiago");
 	$fecha =date("Y-m-d");
       $query = $this->db->select("p.codigo_barra, p.nombre,deesa.cantidad,em.nombre_empresa,DATE_FORMAT(sa.fecha, '%d-%m-%Y') as fecha");

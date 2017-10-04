@@ -314,9 +314,10 @@
     
     
   </div>
-</div>          
+</div>  
+            <!-- modal de detalle productos -->
       <div class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="modalordendecompradetalleproductos">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog " role="document">
     
     
   </div>
