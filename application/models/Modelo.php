@@ -37,17 +37,25 @@ function total_ordendeentrada(){
     $this->db->where('estado',"pendiente");
      return $this->db->get('orden_reparacion');
 }
+function total_usuario(){
+    $perfil=50;
+    $this->db->select("count(*) as datos");
+    $this->db->where('perfil_usuario',$perfil);
+  return $this->db->get('usuario_empresa');
+}
         function aquerirmedio(){
      $this->db->select("*");
      return $this->db->get('medio_pago');
 }
 
-        function VerUsuario($rutempresa){
+        function VerUsuario($inicio,$limite){
     $perfil=50;
-     $this->db->select("*");
-  $this->db->where('rut_empresa_peterneciente',$rutempresa);
-  $this->db->where('perfil_usuario',$perfil);
-        return $this->db->get('usuario_empresa');
+    $query = $this->db->select("*"); 
+     $query = $this->db->from("usuario_empresa");
+  $query =$this->db->where('perfil_usuario',$perfil);
+$query = $this->db->limit($limite, $inicio);
+$query = $this->db->get();
+  return $query->result(); 
 }
     function fetch_productos_admin($inicio,$limite,$rut_empresa){
     $query = $this->db->select("producto.codigo_barra,producto.nombre ,producto.descripcion,producto.stock_minimo,producto.precio_bruto,f.tipo_familia ,producto.estado");
@@ -599,7 +607,20 @@ $this->db->where('codigo_barra',$codigo_barra);
     }
     return $mensaje;
   }
-  function almacenarsalida1($rut_proveedor,$numero_factura,$guardar){
+  function almacenarusuario($rute,$guardar){
+     $this->db->select("*");
+    $this->db->where("rut_usuario",$rute);
+    $captarinformacion= $this->db->get("usuario_empresa");
+    $mensaje="";
+    if($captarinformacion->num_rows()==0){
+        $this->db->insert("usuario_empresa",$guardar);
+        $mensaje="Usuario almacenado correctamente";
+    }else{
+        $mensaje="Error, Rut de usuario ya existe";
+    }
+    return $mensaje;
+  }
+          function almacenarsalida1($rut_proveedor,$numero_factura,$guardar){
       $this->db->select("*");
     $this->db->where("rut_proveedor",$rut_proveedor);
     $this->db->where("numero_factura_despacho",$numero_factura);

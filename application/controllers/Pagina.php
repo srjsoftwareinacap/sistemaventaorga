@@ -426,8 +426,43 @@ class Pagina extends CI_Controller {
                                    //g ingreso de usuarios
                                    if($this->session->userdata('gestion')==4){
                                        $data['mensaje']= "";
-                                       $rut_empresas = $this->session->userdata('rut_empresa');
-                                       $data['lista']= $this->Modelo->VerUsuario($rut_empresas); 
+                                       $this->load->library('pagination');
+                                       $config['base_url'] = base_url().'Pagina/index';
+							$rut_empresa=$this->session->userdata('rut_empresa');
+
+							$cantidad=0;
+							$consulta=$this->Modelo->total_ordendeentrada();
+							foreach ($consulta->result() as $valor){
+                                                            $cantidad= $valor->datos;
+      							}
+
+							$config['total_rows'] = $cantidad;
+							$config['per_page'] = '15';
+    						$config['num_links']=3;
+
+    						$config['full_tag_open']="<ul class='pagination'>";
+							$config['full_tag_close']='</ul>';
+							 $config['num_tag_open'] = '<li>';
+							    $config['num_tag_close'] = '</li>';
+							    $config['cur_tag_open'] = "<li class='disabled'><li class='active' ><a href='#''>";
+							    $config['cur_tag_close'] = "<span class='sr-only'></span></a></li>";
+                                                            $config['next_tag_open'] = "<li>";
+							    $config['next_tagl_close'] = "</li>";
+                                                            $config['use_page_numbers'] = TRUE;
+                                                            $config['first_link'] = "Primero";
+                                                            $config['prev_link'] = "<< Atras";
+                                                            $config['next_link'] = "Siguiente >>";
+                                                            $config['last_link'] = "Last";
+							    $config['prev_tag_open'] = "<li>";
+							    $config['prev_tagl_close'] = "</li>";
+							    $config['first_tag_open'] = "<li>";
+							    $config['first_tagl_close'] = "</ li>";
+							    $config['last_tag_open'] = "<li>";
+							    $config['last_tagl_close'] = "<li>";
+
+							 $this->pagination->initialize($config);
+                                       $data['links']=$this->pagination->create_links();
+                                       $data['lista']= $this->Modelo->VerUsuario($offsete,$config['per_page']); 
                                     $this->load->view('administrador/gusuario/header');
                                     $this->load->view('administrador/gusuario/content',$data);
                                     $this->load->view('administrador/gusuario/footer');  
@@ -1081,7 +1116,12 @@ echo json_encode(array("mensaj"=>$mensaje));
             $this->load->view('administrador/ginventario/gestionproveedor/editarproveedor',$contenido);
             
         }
-        function cargareditarorden(){
+        function editardetalleortrabajproductos(){
+            $codigo= $this->input->post("codigo");
+            $mandar['lista']= $this->Modelo->adqueridetallerordenproducto($codigo)->result();
+            $this->load->view('administrador/godecompra/nordecompra/editarporductos',$mandar);
+        }
+                function cargareditarorden(){
             $codigo= $this->input->post("codigo");
             $mandar['lista']= $this->Modelo->adquerirorden($codigo)->result();
             $this->load->view('administrador/godecompra/nordecompra/editar',$mandar);
@@ -1182,8 +1222,9 @@ echo json_encode(array("mensaj"=>$mensaje));
             $recorrer['venta']= $this->Modelo->cargardetalle($codigo);
             $this->load->view('administrador/gventas/ventas/editarcantidad',$recorrer);
         }
-        function imprimirpedido(){
-          $codigo = $this->input->post("imprimirregistro");
+        function imprimirpedido($codigo){
+            
+          
           $recorrer= $this->Modelo->verordenimprimir($codigo);
            $html ="";
            $html.="<h3 style='text-align: center' > Orden de Trabajo  ";
@@ -1308,6 +1349,9 @@ $html.="
           $this->mpdf->WriteHTML($html);
           $this->mpdf->Output();
         exit;
+        echo json_encode(array(
+                "m1"=>$mensaje
+            ));
         
           }
                 function editar_ordentrabajo(){
@@ -1841,7 +1885,27 @@ function actualizar_inventario(){
       $this->Modelo->editarproveedor($editar,$rut);
        echo json_encode(array("mensaj"=>$mensaje));
 } 
-
+function almacenaruser(){
+   $rut= $this->input->post("rut");
+   $des = $this->input->post("des");
+   $nombre= $this->input->post("nombre");
+   $contrasena =$this->input->post("nombre");
+   $rute = $rut."-".$des;
+   $perfil=50;
+   $estado="activo";
+   $rut_empresas = $this->session->userdata('rut_empresa');
+   $guardar = array(
+       "rut_usuario"=>$rute,
+       "nombre_usuario"=>$nombre,
+       "contraseña"=>$contrasena,
+       "perfil_usuario"=>$perfil,
+       "estado"=>$estado,
+       "rut_empresa_peterneciente"=>$rut_empresas
+   );
+   $ver = $this->Modelo->almacenarusuario($rute,$guardar);
+     echo json_encode(array("mensaj"=>$ver));
+   
+}
         function  almacenarprovedor(){
      $rut= $this->input->post("rut");
       $des = $this->input->post("des");

@@ -125,7 +125,7 @@
       </div>
   </div>            
           
-
+   
 
 
 
@@ -234,11 +234,18 @@
   <table class="table"> 
   <form class="form-inline">
  <div class="form-group">
+     
    <tr>
               <td><label  for="psw"><span ></span> Numero de orden </label></td>       
               <td>  <input type="text" required="true" class="form-control" readonly="readonly"  id="txtdetallenumero" onkeyup="sacargeneral(this)"  placeholder="Nombre" maxlength="45" ></td>
               </tr>
-
+<tr>
+         
+         
+              <td><label  for="psw"><span ></span> Editar detalle de productos </label></td>       
+              <td> <a class="fa btn  fa-list-alt fa-4x" aria-hidden="true"  data-target="#modalordendecompradetalleproductos"  href="javascript:mostrardetalle_ordenproductos()"></a> </td>
+              
+              </tr>
               <tr>
              <td><label  for="psw"><span ></span> Cantidad</label></td>       
             <td>  <input type="number"  class="form-control"  id="txtcantidaddetalleor" onkeyup="sacarletras(this)" onkeyup="sacarletras(this)"  placeholder="0 = 1" maxlength="45" ></td>
@@ -308,7 +315,12 @@
     
   </div>
 </div>          
-            
+      <div class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="modalordendecompradetalleproductos">
+  <div class="modal-dialog" role="document">
+    
+    
+  </div>
+</div>      
             
         </section>
 

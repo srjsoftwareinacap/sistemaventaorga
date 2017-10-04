@@ -106,13 +106,7 @@
       <td  > <?php echo $valor->serie;?> </td>
       <td><?php echo $valor->descripcion_falla;?></td>
       <td>
-   <form class="form-inline" id="form1231313" action="<?php echo base_url().'Pagina/imprimirpedido';?>" method="post" >
-  <div class="form-group">
-  <button type="submit" form="form1231313" class="btn alert-success fa fa-print">Imprimir</button>  
-  </div>
-       <input type="text" class="hidden" name="imprimirregistro"  value="<?php echo $valor->id_orden;?>" placeholder="rut cliente" onkeyup="sacargeneral(this)"  >
-
-</form>
+    <a class="btn alert-success fa fa-print" aria-hidden="true"  data-target="#mosttarpdf"  href="javascript:imprimirorden('<?php echo $valor->id_orden;?>')"></a>
      </td>
       
       

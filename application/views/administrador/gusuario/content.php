@@ -70,7 +70,47 @@
           <a class="btn" data-target="#modalgestion_usuario" id="gestiongestion2" href="javascript:abrirmodalgusuario()">
   <i class="fa fa-plus" aria-hidden="true"></i> Agregar usuario</a>
             
-            
+     <div  id="tablaproveedor" class="box">
+      <div   class="box-body">
+          <table id="example2" class="table table-bordered table-hover" >
+                   <th >rut empresa</th>
+  <th>Rut usuario</th>
+  <th>Nombre Usuario</th>
+  <th>Contraseña</th> 
+  <th>Seleccione</th>
+  
+  <?php foreach($lista as $valor):?>
+   
+    <tr>
+      <td  > <?php echo $valor->rut_usuario;?> </td>
+      <td  > <?php echo $valor->nombre_usuario;?> </td>
+      <td  > <?php echo $valor->giro;?> </td>
+        <td  > **** </td>
+      
+      <td >
+      <?php if( $valor->estado== "activo") :?>
+
+
+      <a class="fa btn fa-pencil-square-o" aria-hidden="true"  data-target="#mostraredicion_mo_proveedor"  href="javascript:mostraredicion_mo_proveedor('<?php echo $valor->rut_usuario;?>')"></a>
+
+      <a class="fa btn fa-lock" aria-hidden="true"  data-target="#mostrarm"  href="javascript:Bloquiarprovedor('<?php echo $valor->rut_usuario;?>')"></a>
+     <?php else: ?>
+<a class="fa btn fa-repeat" aria-hidden="true"  data-target="#mostrarm"  href="javascript:DesBloquiarprovedor('<?php echo $valor->rut_usuario;?>')"></a>
+    
+      </td>
+    </tr>
+    <?php endif;?>
+     <?php endforeach;?>
+          </table>
+           <ul class="pagination" id="numeros">
+            <?php
+                       
+              echo $links
+            ?>
+            </ul>
+            <div id="mesajeproveedor"></div>
+      </div>
+  </div>         
             
             
             
@@ -99,10 +139,8 @@
         <div class="modal-body">
         
     
-<form action="javascript:almacenar_familia()"  method="post" id="form12345" >
+<form action="javascript:almacenar_usuario()"  method="post" id="form12345" >
   <table class="table"> 
-  <form class="form-inline">
- <div class="form-group">
    <tr>
               <td><label  for="psw"><span ></span> Rut de Usuario</label></td>       
             <td>  <input type="text" required="true" class="form-control"  id="txtRutusuario" onkeyup="sacarletras(this)" onkeyup="sacargeneral(this)"  placeholder="12345678" maxlength="45" ></td>
@@ -111,8 +149,15 @@
             </td>
 
               </tr>
-            </div>
-   </form>
+              <tr>
+<td><label  for="psw"><span ></span> Nombre de Usuario</label></td>
+<td>  <input type="text" required="true" class="form-control"  id="txtnombreusuario"  onkeyup="sacargeneral(this)"  placeholder=" ingrese nombre" maxlength="45" ></td>                  
+              </tr>
+              <tr>
+<td><label  for="psw"><span ></span>Contraseña</label></td>
+<td>  <input type="text" required="true" class="form-control"  id="txtcontrasenausuario"  onkeyup="sacargeneral(this)"  placeholder="ingrese contraseña" maxlength="45" ></td>                  
+              </tr>
+  
    </table>
    <button type="submit" id="btnguardarfamilia" class="fa btn btn-success  fa-floppy-o" form="form12345" value="Submit">Guardar Tipo de familia</button><br />
    <br />

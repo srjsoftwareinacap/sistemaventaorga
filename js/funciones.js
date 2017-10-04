@@ -130,16 +130,25 @@ function volvernormal() {
         var descuento = $("#txtdescuento").val();
         var descripcion = $("#txtdescripciondetalle").val();
         var id_detalle = $("#txtdetallenumero").val();
-       alert(id_detalle);
+       
         $.post(
     base_url+"Pagina/ordendt",
     {id_detalle:id_detalle,descuento:descuento,descripcion:descripcion,mano:mano},
     function(pagina){  
              if(pagina.m1=="listo"){
-                
+                setTimeout("location.reload()",1);
              }
     },'json'
     );
+    }
+    function  imprimir(codigo){
+    $.post(
+    base_url+"Pagina/imprimirpedido",
+    {codigo:codigo},
+    function(pagina){  
+             
+    }
+    );    
     }
     function ingresardetalleorden(codigo_barra){
         var id_orden =$("#txtdetallenumero").val();
@@ -161,7 +170,19 @@ function volvernormal() {
     },'json'
     );
     }
-  
+  function mostrardetalle_ordenproductos(){
+      var codigo = $("#txtdetallenumero").val();
+      $("#modalordendecompradetalle").modal(
+        'hide'
+      );
+      $.post(
+    base_url+"Pagina/editardetalleortrabajproductos",
+    {codigo:codigo},
+    function(pagina){  
+             
+    }
+    );
+  }
     function mostrardetalle_orden(codigo){
         $("#txtdetallenumero").val(codigo);
         $("#modalordendecompradetalle").modal({
@@ -267,6 +288,17 @@ function almacenar_familia(){
    
     }
     
+    function imprimirorden(codigo){
+        
+        $.post(
+    base_url+"Pagina/imprimirpedido",
+    {codigo:codigo},
+    function(pagina){  
+        window.location.replace("http://localhost/sistemaventaorga/index.php/Pagina/imprimirpedido/"+codigo+"");
+            
+    }
+    );
+    }
     function mostraredicion_mo_orden(codigo){
         $.post(
     base_url+"Pagina/cargareditarorden",
@@ -635,6 +667,27 @@ $("#txtmensajeventas").html("<p class='alert alert-danger' role='alert' >"+pagin
         }else{
             $("#mesajemodalnuevafacturasalida").html("<p class='alert alert-danger' role='alert' >"+"Error, Seleccione Proveedor "+"</p>").fadeIn(100).delay(600).fadeOut(2000);
         }
+    }
+    function almacenar_usuario(){
+        var rut= $("#txtRutusuario").val();
+        var des = $("#trificadorusuario").val();
+        var nombre = $("#txtnombreusuario").val();
+        var contrasena = $("#txtcontrasenausuario").val();
+         $.post(
+    base_url+"Pagina/almacenaruser",
+    {rut:rut,des:des,nombre:nombre,contrasena:contrasena},
+    function(pagina){  
+         if(pagina.mensaj=="Usuario almacenado correctamente"){
+             $("#mesajemodalgusuario").html("<p class='alert alert-success' role='alert' >"+pagina.mensaj+"</p>").fadeIn(100).delay(600).fadeOut(2000);
+             setTimeout("location.reload()",1500);
+         }else{
+             $("#mesajemodalgusuario").html("<p class='alert alert-danger' role='alert' >"+pagina.mensaj+"</p>").fadeIn(100).delay(600).fadeOut(2000);
+             $("#txtRutusuario").val('');
+             $("#trificadorusuario").val('');
+             $("#txtRutusuario").focus();
+         }    
+    },'json'
+    ); 
     }
     function almacenar_facturaentrada(){
         var rut_proveedor =$("#prooveedorseleccioadoentrada").val();
