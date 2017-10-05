@@ -184,7 +184,6 @@
               <tr>
               <td><label  for="psw"><span ></span>Nombre de Empresa</label></td>       
             <td>  <input type="text" required="true" class="form-control"  id="txtnombre" onkeyup="sacargeneral(this)"  placeholder="Ingrese el Nombre" maxlength="45" ></td>
-
               </tr>
 
               <tr>
