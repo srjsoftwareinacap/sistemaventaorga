@@ -125,6 +125,16 @@ function volvernormal() {
     },'json'
     );      
     }
+    
+    function  imprimir(codigo){
+    $.post(
+    base_url+"Pagina/imprimirpedido",
+    {codigo:codigo},
+    function(pagina){  
+             
+    }
+    );    
+    }
     function almacenar_detalleort(){
         var mano=$("#txtmano").val();
         var descuento = $("#txtdescuento").val();
@@ -141,18 +151,21 @@ function volvernormal() {
     },'json'
     );
     }
-    function  imprimir(codigo){
-    $.post(
-    base_url+"Pagina/imprimirpedido",
+    function mostrardetalle_ordenproductos(codigo){
+      $.post(
+    base_url+"Pagina/editardetalleortrabajproductos",
     {codigo:codigo},
     function(pagina){  
-             
+          $("#modalordendecompradetalleproductos").html(pagina);
+          $("#txtdetallenumero").val(codigo);
+      $("#modalordendecompradetalleproductos").modal({
+        show:true
+      });   
     }
-    );    
-    }
+    );
+  }
     function ingresardetalleorden(codigo_barra){
         var id_orden =$("#txtdetallenumero").val();
-        
         if($("#txtcantidaddetalleor").val().trim().length==0){
              var cantidad=1;
         }else{
@@ -169,14 +182,7 @@ function volvernormal() {
              }
     },'json'
     );
-    }
- 
-    function mostrardetalle_orden(codigo){
-        $("#txtdetallenumero").val(codigo);
-        $("#modalordendecompradetalle").modal({
-        show:true
-      });
-    }
+    }   
     function abrirmodalentrada(){
         $("#modalentradaproducto").modal({
         show:true
@@ -299,22 +305,7 @@ function almacenar_familia(){
     }
     );
     }
-   function mostrardetalle_ordenproductos(){
-      var codigo = $("#txtdetallenumero").val();
-      $("#modalordendecompradetalle").modal(
-        'hide'
-      );
-      $.post(
-    base_url+"Pagina/editardetalleortrabajproductos",
-    {codigo:codigo},
-    function(pagina){  
-          $("#modalordendecompradetalleproductos").html(pagina);
-      $("#modalordendecompradetalleproductos").modal({
-        show:true
-      });   
-    }
-    );
-  }
+   
     function mostraredicion_mo_cantidad(codigo){
         $.post(
     base_url+"Pagina/cargarcantidad_venta",
