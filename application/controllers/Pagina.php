@@ -86,7 +86,7 @@ class Pagina extends CI_Controller {
       							}
 
 							$config['total_rows'] = $cantidad;
-							$config['per_page'] = '10';
+							$config['per_page'] = '4';
     						$config['num_links']=3;
 
     						$config['full_tag_open']="<ul class='pagination'>";
@@ -918,7 +918,12 @@ function ir_inventario(){
 		$this->session->sess_destroy();
           redirect(base_url());    
 	}
-        function ingresardetalleortrabaj(){
+        function cargareditardetalleortrabajproductos(){
+            $id_orden=$this->input->post("id_orden");
+            $mandar['lista'] = $this->Modelo->adqueridetallerordenproducto($id_orden);
+            $this->load->view('administrador/godecompra/nordecompra/editarporductos',$mandar);
+        }
+                function ingresardetalleortrabaj(){
                $codigo_barra= $this->input->post("codigo_barra");
                $id_orden=$this->input->post("id_orden");
                $cantidad =$this->input->post("cantidad");
@@ -935,11 +940,11 @@ function ir_inventario(){
       );
       
       $variable = $this->Modelo->agregardetalle($guardar,$codigo_barra,$id_orden,$cantidad);
-      if($variable=="listo"){
+      
           echo json_encode(array(
-              "m1"=>"listo"
+              "m1"=>$variable
               ));
-      }
+      
            }
            
                    function ordendt(){
@@ -1101,6 +1106,37 @@ echo json_encode(array("mensaj"=>$mensaje));
             }
             echo json_encode(array("m1"=>$mensaje));
         }
+        function cargarcodigo_usuario(){
+            $rut= $this->input->post("codigo");
+            $mostrarlista= $this->Modelo->verusuarioeditar($rut);
+            foreach ($mostrarlista->result() as $valor) {
+                $contenido['rut'] = $valor->rut_usuario;
+                $contenido['nombre_usuario']=$valor->nombre_usuario;
+                $contenido['contraseña']= $valor->contraseña;
+                $contenido['perfil_usuario'] = $valor->perfil_usuario;
+                $contenido['estado']= $valor->estado;
+                $contenido['rut_empresa_peterneciente'] =$valor->rut_empresa_peterneciente;
+                $this->load->view('administrador/gusuario/editarusuario',$contenido);
+                
+            }
+        }
+        
+        function editar_usuario_empresa(){
+            $rut= $this->input->post("rut");
+            $nombre=$this->input->post("nombre");
+            $contraseña = $this->input->post("contraseña");
+            $perfil =$this->input->post("perfil");
+            $Editar = array(
+                "rut_usuario"=>$rut,
+                "nombre_usuario"=>$nombre,
+                "contraseña"=>$contraseña,
+                "perfil_usuario"=>$perfil
+            );
+            $captar = $this->Modelo->editarusuario($rut,$Editar);
+            echo json_encode(array(
+                "m1"=>$captar
+            ));
+        }
                 function cargarcodigo_proveedor(){
             $rut= $this->input->post("codigo");
             $verlista = $this->Modelo->verempresaespe($rut);
@@ -1133,7 +1169,14 @@ echo json_encode(array("mensaj"=>$mensaje));
                 "m1"=>"listo"
                 ));
         }
-        function cacelarventaproducto(){
+        function eliminnardetalleodt(){
+            $codigo= $this->input->post("codigo");
+            $this->Modelo->eliminardetalleodt($codigo);
+            echo json_encode(array(
+                "m1"=>"listo"
+                ));
+        }
+                function cacelarventaproducto(){
             $codigo= $this->input->post("codigo");
            $ver= $this->Modelo->cancelarventas($codigo);
             if($ver==listo){
@@ -1141,6 +1184,26 @@ echo json_encode(array("mensaj"=>$mensaje));
             }
             
             
+        }
+        function actualizardetalleodtcantidad(){
+            $id_detalle= $this->input->post("id_detalle");
+            $cantidad_ingresada= $this->input->post("cantidad_ahora");
+            $cantidad_anterior= $this->input->post("cantidad_anterior");
+            $total_modificar =$this->input->post("total_modificar");
+           $codigo_barra= $this->input->post("codigo_barra");
+            $stock_ver=$total_modificar+$cantidad_anterior;
+            $mensaje="";
+            if($stock_ver>=$cantidad_ingresada){
+                $stock_inventario= $stock_ver-$cantidad_ingresada;
+                 
+             $this->Modelo->editardetalleodt($id_detalle,$cantidad_ingresada,$stock_inventario,$codigo_barra); 
+             $mensaje="listo";
+            }else{
+                $mensaje="Error, la cantidad es superior que el inventario";
+            }           
+            echo json_encode(array(
+               "m1"=>$mensaje
+            ));
         }
                 function actualizardetalle(){
             $id_detalle= $this->input->post("id_detalle");
@@ -1222,7 +1285,12 @@ echo json_encode(array("mensaj"=>$mensaje));
             $recorrer['venta']= $this->Modelo->cargardetalle($codigo);
             $this->load->view('administrador/gventas/ventas/editarcantidad',$recorrer);
         }
-        function imprimirpedido($codigo){
+        function mostraredicioncantidad_modetalle_reparacionodt(){
+            $codigo = $this->input->post("codigo");
+            $recorrer['cantidaddetalle']= $this->Modelo->cargardetalleort($codigo);
+            $this->load->view('administrador/godecompra/nordecompra/editarcantidad',$recorrer);
+        }
+                function imprimirpedido($codigo){
             
           
           $recorrer= $this->Modelo->verordenimprimir($codigo);
@@ -1538,7 +1606,22 @@ $this->load->view('administrador/ginventario/inventario/footer');
     redirect(base_url());
 }
 }
-                function buscar_producto_empresa(){
+function buscar_usuario_empresa(){
+    $codigo= $this->input->post('buscar_usuario');
+    if(isset($codigo) and !empty($codigo) ){
+        $data['mensaje']='Para volver, Presione el Boton Buscar';
+        $rut_empresa= $this->session->userdata('rut_empresa');
+       
+        $data['lista']= $this->Modelo->buscar_usuario_empresa($codigo,$rut_empresa);
+        $data['links']='';
+        $this->load->view('administrador/gusuario/header');
+        $this->load->view('administrador/gusuario/content',$data);
+        $this->load->view('administrador/gusuario/footer');
+    }else{
+    redirect(base_url());
+}
+}
+        function buscar_producto_empresa(){
 	$codigo= $this->input->post('buscar_producto');
         if(isset($codigo) and !empty($codigo) ){
         $data['mensaje']='Para volver, Presione el Boton Buscar';
@@ -1602,7 +1685,19 @@ function  buscar_salida(){
     $data="xas";
     echo json_encode($data);
 }
-function  bloquiar_proveedor(){
+function desbloquiar_usuario(){
+    $codigo= $this->input->post("codigo");
+	$this->Modelo->desbloquiar_usuario_empresa($codigo);
+    $data="xas";
+    echo json_encode($data);
+}
+        function bloquiar_usuario(){
+    $codigo= $this->input->post("codigo");
+	$this->Modelo->bloquiar_usuario_empresa($codigo);
+    $data="xas";
+    echo json_encode($data);
+}
+        function  bloquiar_proveedor(){
     $codigo= $this->input->post("codigo");
     $this->Modelo->bloquiar_proveedor($codigo);
     $data="xas";

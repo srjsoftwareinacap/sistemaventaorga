@@ -59,11 +59,11 @@
             
             
             
-            <form class="form-inline" id="form12" action="<?php echo base_url().'Pagina/buscar_producto_empresa';?>" method="post" >
+            <form class="form-inline" id="form12" action="<?php echo base_url().'Pagina/buscar_usuario_empresa';?>" method="post" >
   <div class="form-group">
   <button type="submit" form="form12" class="btn alert-success fa fa-search">Buscar por</button>  
   </div>
-  <input type="text" class="form-control"  name="buscar_producto" placeholder="codigo o por nombre" onkeyup="sacargeneral(this)"  >
+  <input type="text" class="form-control"  name="buscar_usuario" placeholder="rut o por nombre" onkeyup="sacargeneral(this)"  >
   
   <p style="color:#03a9f4;" ><?php echo $mensaje;?></p>
 </form>
@@ -73,29 +73,40 @@
      <div  id="tablaproveedor" class="box">
       <div   class="box-body">
           <table id="example2" class="table table-bordered table-hover" >
-                   <th >rut empresa</th>
+                   <th >Rut empresa</th>
   <th>Rut usuario</th>
   <th>Nombre Usuario</th>
-  <th>Contraseña</th> 
+  <th>Contraseña</th>
+  <th>Perfil</th>
   <th>Seleccione</th>
   
   <?php foreach($lista as $valor):?>
    
     <tr>
+      <td  > <?php echo $valor->rut_empresa_peterneciente;?> </td>  
       <td  > <?php echo $valor->rut_usuario;?> </td>
       <td  > <?php echo $valor->nombre_usuario;?> </td>
-      <td  > <?php echo $valor->giro;?> </td>
+     
         <td  > **** </td>
+        <?php if( $valor->perfil_usuario== "100") :?>
+        <td  >
+          Administrador
+      </td>
+        <?php else: ?>
+      <td  >
+          Vendedor / reparador
+      </td>
+        <?php endif;?>
       
       <td >
       <?php if( $valor->estado== "activo") :?>
 
 
-      <a class="fa btn fa-pencil-square-o" aria-hidden="true"  data-target="#mostraredicion_mo_proveedor"  href="javascript:mostraredicion_mo_proveedor('<?php echo $valor->rut_usuario;?>')"></a>
+      <a class="fa btn fa-pencil-square-o" aria-hidden="true"  data-target="#mostraredicion_mo_usuario"  href="javascript:mostraredicion_modal_usuario('<?php echo $valor->rut_usuario;?>')"></a>
 
-      <a class="fa btn fa-lock" aria-hidden="true"  data-target="#mostrarm"  href="javascript:Bloquiarprovedor('<?php echo $valor->rut_usuario;?>')"></a>
+      <a class="fa btn fa-lock" aria-hidden="true"  data-target="#mostrarm"  href="javascript:Bloquiarusuario('<?php echo $valor->rut_usuario;?>')"></a>
      <?php else: ?>
-<a class="fa btn fa-repeat" aria-hidden="true"  data-target="#mostrarm"  href="javascript:DesBloquiarprovedor('<?php echo $valor->rut_usuario;?>')"></a>
+<a class="fa btn fa-repeat" aria-hidden="true"  data-target="#mostrarm"  href="javascript:DesBloquiarusuario('<?php echo $valor->rut_usuario;?>')"></a>
     
       </td>
     </tr>
@@ -108,7 +119,7 @@
               echo $links
             ?>
             </ul>
-            <div id="mesajeproveedor"></div>
+            <div id="mesajeusuario"></div>
       </div>
   </div>         
             
@@ -117,7 +128,12 @@
             
             
             
-            
+            <div class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="mostraredicion_mo_usuario">
+  <div class="modal-dialog" role="document">
+    
+    
+  </div>
+</div>
             
             
             

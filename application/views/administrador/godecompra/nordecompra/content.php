@@ -93,7 +93,6 @@
   <th>Editar Orden</th>
   
   <?php foreach($orden_reparacion as $valor):?>
-   
     <tr>
       <td  > <?php echo $valor->id_orden;?> </td>
       <td  > <?php echo $valor->fecha;?> </td>
@@ -203,19 +202,27 @@
     </div>
   </div>
 
-  <div class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="mostraredicion_ordentrabajo">
-  <div class="modal-dialog" role="document">
+  <div class="modal fade bs-example-modal-lg"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="mostraredicion_ordentrabajo">
+  <div class="modal-dialog " role="document">
     
     
   </div>
 </div>  
             <!-- modal de detalle productos -->
       <div class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="modalordendecompradetalleproductos">
+  <div class="modal-dialog modal-lg" role="document">
+    
+    
+  </div>
+</div>
+            
+            <!-- modal de cantidad detalleproducto -->
+      <div class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="mostraredicion_mo_cantidadordenproducto">
   <div class="modal-dialog " role="document">
     
     
   </div>
-</div>      
+</div>    
             
         </section>
 

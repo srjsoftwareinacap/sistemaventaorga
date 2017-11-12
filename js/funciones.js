@@ -179,7 +179,27 @@ function volvernormal() {
                  $("#txtcantidaddetalleor").val('');
                  $("#txtdetallecodigo").val('');
                  $("#txtcantidaddetalleor").focus();
+                 $("#modalordendecompradetalleproductos").modal({
+        show:false
+      });
+      $.post(
+    base_url+"Pagina/cargareditardetalleortrabajproductos",
+    {id_orden:id_orden},
+    function(pagina){
+        $("#modalordendecompradetalleproductos").html(pagina);
+          $("#txtdetallenumero").val(id_orden);
+            $("#modalordendecompradetalleproductos").modal({
+        show:true
+      });
+    }
+    );
+             }else{
+                 $("#txtcantidaddetalleor").val('');
+                 $("#txtdetallecodigo").val('');
+                 $("#txtcantidaddetalleor").focus();
+                 $("#mesajemodalpresupuesto").html("<p class='alert alert-danger' role='alert' >"+pagina.m1+"</p>").fadeIn(100).delay(600).fadeOut(3000);
              }
+             
     },'json'
     );
     }   
@@ -298,14 +318,26 @@ function almacenar_familia(){
     base_url+"Pagina/cargareditarorden",
     {codigo:codigo},
     function(pagina){  
-        $("#modalordendecompra").html(pagina);
-      $("#modalordendecompra").modal({
+        $("#mostraredicion_ordentrabajo").html(pagina);
+      $("#mostraredicion_ordentrabajo").modal({
         show:true
       });      
     }
     );
     }
-   
+   function mostraredicioncantidad_modetalle_reparacion(codigo){
+      $("#modalordendecompradetalleproductos").modal('hide'); 
+       $.post(
+    base_url+"Pagina/mostraredicioncantidad_modetalle_reparacionodt",
+    {codigo:codigo},
+    function(pagina){  
+        $("#modalordendecompradetalleproductos").html(pagina);
+        $("#modalordendecompradetalleproductos").modal({
+        show:true
+      });      
+    }
+    );
+   }
     function mostraredicion_mo_cantidad(codigo){
         $.post(
     base_url+"Pagina/cargarcantidad_venta",
@@ -318,6 +350,7 @@ function almacenar_familia(){
     }
     );
     }
+    
     function eliminarrpoductoventa(codigo){
         $.post(
     base_url+"Pagina/eliminnardetalleventa",
@@ -329,7 +362,82 @@ function almacenar_familia(){
     },'json'
     );
     }
+    function eliminarrpoductomodetalle_reparacion(codigo){
+       var codigo_ordenf = $("#txtidf_orden").val();
+       
+        
+        $.post(
+    base_url+"Pagina/eliminnardetalleodt",
+    {codigo:codigo},
+    function(pagina){  
+          if(pagina.m1=="listo"){
+              $("#modalordendecompradetalleproductos").modal('hide');
+              mostrardetalle_ordenproductos(codigo_ordenf);
+          }   
+    },'json'
+    );
+    }
+    function ingresarmanodeobraydescuento(descuento_especial){
+        var mano_obra = $("#txtmanodeobratrabajooo").val();
+        var sub_total = $("#txtsuntotal").val();
+       if($("#txtdescuentoparaorden").val().trim().length==0){
+            descuento_especial =0;
+       }else{
+           if(parseInt(descuento_especial)>= parseInt(sub_total) || parseInt(descuento_especial)>= parseInt(sub_total)+parseInt(mano_obra) ){
+            $("#mesajemodalpresupuesto").html("<p class='alert alert-danger' role='alert' >"+"!! Error, el descuento no puede ser mayor que el sub_total"+"</p>").fadeIn(100).delay(600).fadeOut(1000);
+            $("#txtmanodeobratrabajooo").val('');
+               $("#txtdescuentoparaorden").val('');
+               $("#txtmanodeobratrabajooo").focus();
+               $("#txtversiguardar").val("no");
+           }else{
+               
+               if($("#txtsuntotal").val().trim().length==0){
+ $("#mesajemodalpresupuesto").html("<p class='alert alert-danger' role='alert' >"+"!! Error, agregue productos para la reparacion"+"</p>").fadeIn(100).delay(600).fadeOut(1000);
+ $("#txtmanodeobratrabajooo").val('');
+               $("#txtdescuentoparaorden").val('');
+               $("#txtcantidaddetalleor").focus();
+               $("#txtversiguardar").val("no");
+               }else{
+                   var mostrar =parseInt(sub_total)+parseInt(mano_obra)-parseInt(descuento_especial)
+                   $("#txtversiguardar").val("si");
+                   $("#modificarordendelalledeinformacion").html("<p class='alert alert-success' role='alert' >"+"En Total son: "+mostrar+"</p>");
+               }
+           }
+       }
+    }
+    function Editarodtdetallecantidad(){
+        var id_detalles = $("#txtiddetalleodt").val();
+        var cantidad_anterior = $("#txtcantidadanteriorodt").val();
+        var cantidad_ahora = $("#txtcantidadventaodt").val();
+        var total_cantidad = $("#txtproducotstolaninventarioodt").val();
+        var codigo_barra = $("#txtcodigobarraodtdetalle").val();
+        var codigoid = $("#txtidorden").val();
+        if(parseInt(cantidad_ahora)==0){
+  $("#mesajemodaleditarcantidadodt").html("<p class='alert alert-danger' role='alert' >"+"!! Error, la cantidad no puede ser 0"+"</p>").fadeIn(100).delay(600).fadeOut(1000);          
+        }else{
+            if(parseInt(cantidad_ahora)>=1){
+             $.post(
+    base_url+"Pagina/actualizardetalleodtcantidad",
+    {id_detalle:id_detalles,cantidad_ahora:cantidad_ahora,cantidad_anterior:cantidad_anterior,total_modificar:total_cantidad,codigo_barra:codigo_barra},
+    function(pagina){  
+        if(pagina.m1=="listo"){
+            $("#mostraredicion_mo_cantidadordenproducto").modal('hide');
+            mostrardetalle_ordenproductos(codigoid);
+            
+        }else{
+$("#mesajemodaleditarcantidadodt").html("<p class='alert alert-danger' role='alert' >"+pagina.m1+"</p>").fadeIn(100).delay(600).fadeOut(1000);            
+        }      
+    },
+    'json'
+    );   
+            }else{
+                $("#mesajemodaleditarcantidadodt").html("<p class='alert alert-danger' role='alert' >"+"!! Error, la cantidad no puede ser negativo"+"</p>").fadeIn(100).delay(600).fadeOut(1000);
+            }
+ 
     
+            
+        }
+    } 
     function Editarventa(){
         var id_detalles = $("#txtiddetalle").val();
         var cantidad_anterior = $("#txtcantidadanterior").val();
@@ -339,7 +447,8 @@ function almacenar_familia(){
         if(parseInt(cantidad_ahora)==0){
   $("#mesajemodaleditarcantidad").html("<p class='alert alert-danger' role='alert' >"+"!! Error, la cantidad no puede ser 0"+"</p>").fadeIn(100).delay(600).fadeOut(1000);          
         }else{
-$.post(
+            if(parseInt(cantidad_ahora)>=1){
+             $.post(
     base_url+"Pagina/actualizardetalle",
     {id_detalle:id_detalles,cantidad_ahora:cantidad_ahora,cantidad_anterior:cantidad_anterior,total_modificar:total_cantidad,codigo_barra:codigo_barra},
     function(pagina){  
@@ -350,7 +459,13 @@ $("#mesajemodaleditarcantidad").html("<p class='alert alert-danger' role='alert'
         }      
     },
     'json'
-    );    
+    );   
+            }else{
+                $("#mesajemodaleditarcantidad").html("<p class='alert alert-danger' role='alert' >"+"!! Error, la cantidad no puede ser negativo"+"</p>").fadeIn(100).delay(600).fadeOut(1000);
+            }
+ 
+    
+            
         }
         
     }
@@ -405,6 +520,18 @@ $("#mesajemodaleditarcantidad").html("<p class='alert alert-danger' role='alert'
         $("#txtmensajeventas").html("<p class='alert alert-danger' role='alert' >"+"!! Error,no hay ventas registradas"+"</p>").fadeIn(100).delay(600).fadeOut(3000);   
        } 
     }
+    function mostraredicion_modal_usuario(codigo){
+        $.post(
+    base_url+"Pagina/cargarcodigo_usuario",
+    {codigo:codigo},
+    function(pagina){  
+        $("#mostraredicion_mo_usuario").html(pagina);
+      $("#mostraredicion_mo_usuario").modal({
+        show:true
+      });      
+    }
+    );
+    } 
     function mostraredicion_mo_proveedor(codigo){
         $.post(
     base_url+"Pagina/cargarcodigo_proveedor",
@@ -442,6 +569,27 @@ $("#mesajemodaleditarcantidad").html("<p class='alert alert-danger' role='alert'
     }else{
          $("#mesajemodaleditarinventario").html("<p class='alert alert-danger' role='alert' >"+"!! Error,El stock ingresado no puede ser 0 o menor"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
     }
+    }
+    function  Editarusuarioempresa(){
+        var rut= $("#txteditar_usuario").val();
+        var nombre= $("#txteditar_nombre").val();
+        var contraseña = $("#txteditar_contraseña").val();
+        var perfil = $("#perfil_editar").val();
+        if(perfil==0){
+            $("#mesajemodaleditarusuario").html("<p class='alert alert-danger' role='alert' >"+"!! Error,Seleccione un perfil"+"</p>").fadeIn(100).delay(600).fadeOut(2000);
+        }else{
+        $.post(
+    base_url+"Pagina/editar_usuario_empresa",
+    {rut:rut,nombre:nombre,contraseña:contraseña,perfil:perfil},
+    function(pagina){  
+              if(pagina.m1=="listo"){
+               $("#mesajemodaleditarusuario").html("<p class='alert alert-success' role='alert' >"+"Usuario editado correctamente"+"</p>").fadeIn(100).delay(600).fadeOut(2000);
+               setTimeout("location.reload()",3000);
+              }
+    },
+      'json'      
+    );    
+        }
     }
     function Editarproveedor(){
         var rut = $("#txtrut").val();
@@ -978,6 +1126,32 @@ function  registrar_producto_inventario(){
     }else{
         $("#mensajegsalida").html("<p class='alert alert-danger' role='alert' >"+"Error, Registros no encontrados"+"</p>").fadeIn(100).delay(600).fadeOut(1000);
     }
+ }
+ function DesBloquiarusuario(codigo){
+     $.post(
+    base_url+"Pagina/desbloquiar_usuario",
+    {codigo:codigo},
+    function(vector){  
+    var mes="";
+              mes="El usuario ha sido desbloqueado  correctamente";
+              $("#mesajeusuario").html("<p class='alert alert-success' role='alert' >"+mes+"</p>").fadeIn(100).delay(600).fadeOut(1000);  
+     setTimeout("location.reload()",1000);        
+    },
+    'json'
+    );
+ }
+ function Bloquiarusuario(codigo){
+     $.post(
+    base_url+"Pagina/bloquiar_usuario",
+    {codigo:codigo},
+    function(vector){  
+    var mes="";
+              mes="El usuario ha sido bloqueado  correctamente";
+              $("#mesajeusuario").html("<p class='alert alert-success' role='alert' >"+mes+"</p>").fadeIn(100).delay(600).fadeOut(1000);  
+     setTimeout("location.reload()",1000);        
+    },
+    'json'
+    );
  }
     function Bloquiarprovedor(codigo){
         $.post(

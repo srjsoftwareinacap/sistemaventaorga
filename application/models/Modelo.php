@@ -49,10 +49,10 @@ function total_usuario(){
 }
 
         function VerUsuario($inicio,$limite){
-    $perfil=50;
+    
     $query = $this->db->select("*"); 
      $query = $this->db->from("usuario_empresa");
-  $query =$this->db->where('perfil_usuario',$perfil);
+
 $query = $this->db->limit($limite, $inicio);
 $query = $this->db->get();
   return $query->result(); 
@@ -190,7 +190,16 @@ function obtenerordenimprimir($inicio,$limite){
      $query = $this->db->get();
     return $query->result();
   }
-  function buscar_productosexistentes($codigo){
+  function buscar_usuario_empresa($codigo,$rut_empresa){
+        $query = $this->db->select("*"); 
+     $query = $this->db->from("usuario_empresa");
+     $query = $this->db->like('usuario_empresa.rut_usuario',$codigo);
+    $query= $this->db->Or_like("usuario_empresa.nombre_usuario",$codigo);
+     $query = $this->db->get();
+    return $query->result();
+  }
+  
+          function buscar_productosexistentes($codigo){
       $query = $this->db->select("p.codigo_barra,p.nombre,p.descripcion,f.tipo_familia,p.stock_minimo,sto.cantidad");
       $query = $this->db->from("producto p");
       $query = $this->db->join("familia f ","f.id_familia = p.idf_familia","inner");
@@ -286,7 +295,12 @@ function obtener_productoinventario2($codigoproducto){
     $this->db->where("codigo_barra_entrada",$codigoproducto);
     return $this->db->get("detalle_entrada");
   }
-  
+  function editarusuario($rut,$Editar){
+      $this->db->where("rut_usuario",$rut);
+      $this->db->update("usuario_empresa",$Editar);
+      return "listo";
+  }
+          
   function editarproveedor($editar,$rut){
       $this->db->where('rut_empresa',$rut);
    
@@ -434,7 +448,29 @@ function desbloquiar_proveedor($codigo){
         $this->db->update('stock_inventario',$datomodificar);
         return "se a registrado salida de Producto";
     }
-    function eliminardetalle($codigo){
+    function eliminardetalleodt($codigo){
+        $this->db->where('id_detalle_reparacion',codigo);
+        $restar= $this->db->get("detalle_reparacion");
+        $codigo_barra="";
+        $cantidad=0;
+        $stock_inventario=0;
+        foreach ($restar->result() as $valor) {
+            $codigo_barra = $valor->codigof_producto;
+            $cantidad= $valor->cantidad;
+        }
+        $this->db->where('codigo_barra',$codigo_barra);
+        $sacar= $this->db->get("stock_inventario");
+        foreach ($sacar->result() as $valor) {
+            $stock_inventario = $valor->cantidad;
+        }
+        $datomodificar['cantidad'] = $stock_inventario+$cantidad;
+        $this->db->where('codigo_barra',$codigo_barra);
+        $this->db->update('stock_inventario',$datomodificar);
+        
+        $this->db->where('id_detalle_reparacion',$codigo);
+        $this->db->delete("detalle_reparacion");
+    }
+            function eliminardetalle($codigo){
         $this->db->where('id_detalle',$codigo);
         $restar= $this->db->get("detalle_venta");
         $codigo_barra="";
@@ -459,12 +495,25 @@ function desbloquiar_proveedor($codigo){
     }
     
     function agregardetalle($guardar,$codigo_barra,$id_orden,$cantidad){
+        $this->db->where('codigo_barra',$codigo_barra);
+        $sacar= $this->db->get("stock_inventario");
+        $mensaje="";
+        foreach ($sacar->result() as $valor) {
+            $stock_inventario = $valor->cantidad;
+        }
+        if($sacar->num_rows()==0){
+            $mensaje= "Error, producto no existe";
+        }else{
+        if($stock_inventario>=$cantidad){
+        $datomodificar2['cantidad'] = $stock_inventario-$cantidad;
+        $this->db->where('codigo_barra',$codigo_barra);
+        $this->db->update('stock_inventario',$datomodificar2);
         $this->db->where('idf_orden',$id_orden);
         $this->db->where('codigof_producto',$codigo_barra);
         $restar= $this->db->get("detalle_reparacion");
-        
         if($restar->num_rows()==0){
-            $this->db->insert("detalle_reparacion",$guardar);     
+            $this->db->insert("detalle_reparacion",$guardar);
+            $mensaje="listo";
         }else{
         foreach ($restar->result() as $valor) {
             $cantidad1= $valor->cantidad;
@@ -473,19 +522,14 @@ function desbloquiar_proveedor($codigo){
         $this->db->where('idf_orden',$id_orden);
         $this->db->where('codigof_producto',$codigo_barra);
         $this->db->update("detalle_reparacion",$datoeditar);
+        $mensaje="listo";
         }
-$this->db->where('codigo_barra',$codigo_barra);
-        $sacar= $this->db->get("stock_inventario");
-        foreach ($sacar->result() as $valor) {
-            $stock_inventario = $valor->cantidad;
+    }else{
+        $mensaje= "Error, Sin stock";
+    }    
         }
-        $datomodificar2['cantidad'] = $stock_inventario-$cantidad;
-        $this->db->where('codigo_barra',$codigo_barra);
-        $this->db->update('stock_inventario',$datomodificar2);
-        
-        return "listo";
-        
-       
+        return $mensaje;
+    
     }
     function adquerirorden($codigo){
         $this->db->where('id_orden',$codigo);
@@ -545,6 +589,16 @@ $this->db->where('codigo_barra',$codigo_barra);
         $this->db->where('id_orden',$id_orden);
         $this->db->update("orden_reparacion",$guardar);
         return "editado correctamente";
+    }
+    function editardetalleodt($id_detalle,$cantidad_ingresada,$stock_inventario,$codigo_barra){
+        $data['cantidad']=$stock_inventario;
+        $this->db->where('codigo_barra',$codigo_barra);
+        $this->db->update("stock_inventario",$data);
+        
+        $cambiar['cantidad']= $cantidad_ingresada;
+        $this->db->where('id_detalle_reparacion',$id_detalle);
+        $this->db->update("detalle_reparacion",$cambiar);
+        
     }
             function editardetalle($id_detalle,$cantidad_ingresada,$stock_inventario,$codigo_barra){
         $data['cantidad']=$stock_inventario;
@@ -694,8 +748,18 @@ function verificar_bloproductoinventario($codigo){
    $estado="bloquiado";
     $consulta = "update producto set estado='".$estado."' where codigo_barra='".$codigo."' ";
     $this->db->query($consulta);
-} 
-function bloquiar_proveedor($codigo){
+}
+function bloquiar_usuario_empresa($codigo){
+    $estado="bloquiado";
+    $consulta = "update usuario_empresa set estado='".$estado."' where rut_usuario='".$codigo."' ";
+    $this->db->query($consulta);
+}
+function desbloquiar_usuario_empresa($codigo){
+    $estado="activo";
+    $consulta = "update usuario_empresa set estado='".$estado."' where rut_usuario='".$codigo."' ";
+    $this->db->query($consulta);
+}
+                function bloquiar_proveedor($codigo){
     $estado="bloquiado";
     $consulta = "update empresa set estado='".$estado."' where rut_empresa='".$codigo."' ";
     $this->db->query($consulta);
@@ -777,7 +841,16 @@ function verdetalle($id_venta){
      $query = $this->db->get();
     return $query->result();
     }
-    function cargardetalle($codigo){
+    function cargardetalleort($codigo){
+        $query = $this->db->select("dere.id_detalle_reparacion,p.codigo_barra,p.nombre,dere.cantidad as cantidad_detalle,dere.precio_bruto,p.stock_minimo,si.cantidad,dere.idf_orden");
+        $query = $this->db->from("detalle_reparacion dere");
+     $query = $this->db->join("producto  p ","p.codigo_barra = dere.codigof_producto","inner");
+     $query = $this->db->join("stock_inventario  si ","si.codigo_barra = dere.codigof_producto","inner");
+     $query= $this->db->where("dere.id_detalle_reparacion",$codigo);
+     $query = $this->db->get();
+    return $query->result();
+    }
+            function cargardetalle($codigo){
         $query= $this->db->select("deta.id_detalle,p.codigo_barra,p.nombre,deta.cantidad as cantidad_detalle,deta.precio,p.stock_minimo,si.cantidad");
      $query = $this->db->from("detalle_venta deta");
      $query = $this->db->join("producto  p ","p.codigo_barra = deta.codigo_producto_detalle","inner");
@@ -829,6 +902,11 @@ function verdetalle($id_venta){
       $this->db->select("*");   
       $this->db->where('rut_empresa',$rut);
         return  $this->db->get('empresa');
+  }
+  function verusuarioeditar($rut){
+      $this->db->select("*");   
+      $this->db->where('rut_usuario',$rut);
+        return  $this->db->get('usuario_empresa');
   }
           function  verregiones(){
       $this->db->select("*");    
