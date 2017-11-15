@@ -54,8 +54,7 @@
       <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
-          <h1>
-            
+          <h1>            
             <small>Panel de Control</small>
           </h1>
           <ol class="breadcrumb">
@@ -94,7 +93,6 @@
   <th>Editar Orden</th>
   
   <?php foreach($orden_reparacion as $valor):?>
-   
     <tr>
       <td  > <?php echo $valor->id_orden;?> </td>
       <td  > <?php echo $valor->fecha;?> </td>
@@ -107,7 +105,7 @@
       <td  > <?php echo $valor->serie;?> </td>
       <td><?php echo $valor->descripcion_falla;?></td>
       <td>
-    <a class="fa btn fa-plus-circle" aria-hidden="true"  data-target="#modalordendecompradetalle"  href="javascript:mostrardetalle_orden('<?php echo $valor->id_orden;?>')"></a>
+    <a class="fa btn fa-plus-circle" aria-hidden="true"  data-target="#modalordendecompradetalleproductos"  href="javascript:mostrardetalle_ordenproductos('<?php echo $valor->id_orden;?>')"></a>
      </td>
       <td><a class="fa btn fa-pencil-square-o" aria-hidden="true"  data-target="#mostraredicion_ordentrabajo"  href="javascript:mostraredicion_mo_orden('<?php echo $valor->id_orden;?>')"></a></td>
       
@@ -124,13 +122,6 @@
             <div id="mesajeproveedor"></div>
       </div>
   </div>            
-          
-
-
-
-
-
-
 <div class="modal fade" id="modalordendecompra" role="dialog">
     <div class="modal-dialog">
 
@@ -210,105 +201,28 @@
       </div>
     </div>
   </div>
-            
-            
-            
-            
-            
-            
-            
-            
-           <div class="modal fade" id="modalordendecompradetalle" role="dialog">
-    <div class="modal-dialog">
 
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div id="idhee" class="modal-header alert-info">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h2 style="text-align: center"> Agregar detalle orden de trabajo</h2>      
-        </div>
-        <div class="modal-body">
-        
-    
-<form action="javascript:almacenar_detalleort()"  method="post" id="form123dwe24" >
-  <table class="table"> 
-  <form class="form-inline">
- <div class="form-group">
-   <tr>
-              <td><label  for="psw"><span ></span> Numero de orden </label></td>       
-              <td>  <input type="text" required="true" class="form-control" readonly="readonly"  id="txtdetallenumero" onkeyup="sacargeneral(this)"  placeholder="Nombre" maxlength="45" ></td>
-              </tr>
-
-              <tr>
-             <td><label  for="psw"><span ></span> Cantidad</label></td>       
-            <td>  <input type="number"  class="form-control"  id="txtcantidaddetalleor" onkeyup="sacarletras(this)" onkeyup="sacarletras(this)"  placeholder="0 = 1" maxlength="45" ></td>
-            
-              </tr>
-
-              <tr>
-              <td><label  for="psw"><span ></span>Codigo barra</label></td>       
-              <td><input type="text"  class="form-control"   id="txtdetallecodigo" onkeyup="sacargeneral(this)" onblur="ingresardetalleorden(this.value)"  placeholder="534353656" maxlength="45" ></td>
-
-              </tr>
-              <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  
-              </tr>
-              <tr>
-                   
-                  <td><label  for="psw"><span ></span>mano de obra</label></td>
-                  <td><input type="number" required="true" class="form-control"  id="txtmano" onkeyup="sacarletras(this)"   placeholder="$" maxlength="45" ></td>
-              </tr>
-              <tr>
-                    <tr>
-              <td><label  for="psw"><span ></span>Descuento especial</label></td>       
-              <td><input type="text" required="true" class="form-control"   id="txtdescuento" onkeyup="sacargeneral(this)"  placeholder="$" maxlength="45" ></td>
-              </tr>
-              <tr>
-          <td><label  for="psw"><span ></span>descripcion</label></td>       
-          <td><textarea class="form-control" id="txtdescripciondetalle"></textarea></td>        
-              </tr>
-              <tr>
-                  <td>
-                      <label  for="psw"><span ></span>Una ves de que acepte reparacion  tiene que ir a retiro de producto</label>
-                  </td>
-              </tr>
-
-              
-              
-            </div>
-      
-   </form>
-     
-   </table>
-   <button type="submit" id="btnguardardetalle" class="fa btn btn-success  fa-floppy-o" form="form123dwe24" value="Submit">Guardar detalle</button><br />
-   <br />
-<div style="text-align: center" id="mesajemodalproveedor"></div>
-     <br />
-     <br />
-     <br />
-     
-</form>
-     
-        </div>
-        
-      </div>
-    </div>
-  </div> 
-    
-            
-  <div class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="mostraredicion_ordentrabajo">
-  <div class="modal-dialog" role="document">
+  <div class="modal fade bs-example-modal-lg"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="mostraredicion_ordentrabajo">
+  <div class="modal-dialog " role="document">
     
     
   </div>
-</div>          
+</div>  
+            <!-- modal de detalle productos -->
+      <div class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="modalordendecompradetalleproductos">
+  <div class="modal-dialog modal-lg" role="document">
+    
+    
+  </div>
+</div>
             
+            <!-- modal de cantidad detalleproducto -->
+      <div class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="mostraredicion_mo_cantidadordenproducto">
+  <div class="modal-dialog " role="document">
+    
+    
+  </div>
+</div>    
             
         </section>
 

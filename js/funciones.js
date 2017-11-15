@@ -136,12 +136,25 @@ function volvernormal() {
     );    
     }
     function almacenar_detalleort(){
-        var mano=$("#txtmano").val();
-        var descuento = $("#txtdescuento").val();
-        var descripcion = $("#txtdescripciondetalle").val();
-        var id_detalle = $("#txtdetallenumero").val();
-       
-        $.post(
+        var mano=$("#txtmanodeobratrabajooo").val();
+        var descuento = $("#txtdescuentoparaorden").val();
+        var descripcion = $("#txtdescripciondetalletrabajo").val();
+        var id_detalle = $("#txtidf_orden").val();
+        
+    if($("#txtmanodeobratrabajooo").val().trim().length==0  || $("#txtdescuentoparaorden").val().trim().length==0 || $("#txtdescripciondetalletrabajo").val().trim().length==0){
+        $("#mesajemodalpresupuesto").html("<p class='alert alert-danger' role='alert' >"+"Error, se debe tener los descuentos, mano de obra y descripcion para completar la orden de trabajo"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+        $("#txtmanodeobratrabajooo").val('');
+        $("#txtdescuentoparaorden").val('');
+        $("#txtdescripciondetalletrabajo").val('');
+        $("#txtmanodeobratrabajooo").focus();
+    }else{
+        if(parseInt(mano)==0){
+        $("#mesajemodalpresupuesto").html("<p class='alert alert-danger' role='alert' >"+"Se requiere que la mano de obra sea mayor que 0"+"</p>").fadeIn(100).delay(600).fadeOut(3000);    
+        $("#txtmanodeobratrabajooo").val('');
+        $("#txtmanodeobratrabajooo").focus();
+        
+            }else{
+             $.post(
     base_url+"Pagina/ordendt",
     {id_detalle:id_detalle,descuento:descuento,descripcion:descripcion,mano:mano},
     function(pagina){  
@@ -149,7 +162,13 @@ function volvernormal() {
                 setTimeout("location.reload()",1);
              }
     },'json'
-    );
+    );   
+            }
+    }    
+       
+        
+    
+    
     }
     function mostrardetalle_ordenproductos(codigo){
       $.post(
@@ -505,6 +524,10 @@ $("#mesajemodaleditarcantidad").html("<p class='alert alert-danger' role='alert'
        if(descuento.trim().length==0){
           descuento =0;
        }
+       
+       if($("#txtmedioselecionado").val()==0){
+     $("#txtmensajeventas").html("<p class='alert alert-danger' role='alert' >"+"!! Error, seleccione un medio de pago"+"</p>").fadeIn(100).delay(600).fadeOut(3000);      
+       }else{
        if(sub_total!=0){
  $.post(
     base_url+"Pagina/registarventas",
@@ -518,7 +541,12 @@ $("#mesajemodaleditarcantidad").html("<p class='alert alert-danger' role='alert'
     );  
        }else{
         $("#txtmensajeventas").html("<p class='alert alert-danger' role='alert' >"+"!! Error,no hay ventas registradas"+"</p>").fadeIn(100).delay(600).fadeOut(3000);   
-       } 
+       }    
+       }
+       
+       
+       
+       
     }
     function mostraredicion_modal_usuario(codigo){
         $.post(

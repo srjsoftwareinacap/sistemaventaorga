@@ -556,8 +556,33 @@ function desbloquiar_proveedor($codigo){
         return "listo";
     }
             
-    
-    function cancelarventas($codigo){
+    function cancelardetalle($codigo){
+    $this->db->where('idf_orden',$codigo);
+        $descartar= $this->db->get("detalle_reparacion");
+         $codigo_barra="";
+        $cantidad=0;
+        $stock_inventario=0;
+        foreach ($descartar->result() as $valor) {
+          $codigo_barra=  $valor->codigof_producto;
+          $cantidad= $valor->cantidad;
+        $this->db->where('codigo_barra',$codigo_barra);
+        $sacar= $this->db->get("stock_inventario");
+        foreach ($sacar->result() as $fila) {
+            $stock_inventario = $fila->cantidad;
+        }
+          $data['cantidad']= $stock_inventario+$cantidad;
+          $this->db->where('codigo_barra',$codigo_barra);
+        $this->db->update('stock_inventario',$data);
+        }
+        
+        $this->db->where('idf_orden',$codigo);
+        $this->db->delete('detalle_reparacion');
+        
+        $this->db->where('id_orden',$codigo);
+        $this->db->delete('orden_reparacion');
+        return "listo";    
+    }
+            function cancelarventas($codigo){
         $this->db->where('codigo_detalle_venta',$codigo);
         $descartar= $this->db->get("detalle_venta");
          $codigo_barra="";
@@ -579,10 +604,7 @@ function desbloquiar_proveedor($codigo){
         }
         $enviar['estado']="cancelado";
         $this->db->where('id_codigo_venta',$codigo);
-        $this->db->update('venta',$enviar);
-        
-      
-        
+        $this->db->update('venta',$enviar); 
         return "listo";
     }
     function editarorden($guardar,$id_orden){

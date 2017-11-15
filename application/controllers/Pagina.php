@@ -1176,6 +1176,13 @@ echo json_encode(array("mensaj"=>$mensaje));
                 "m1"=>"listo"
                 ));
         }
+        function cacelardetalleproducto(){
+            $codigo= $this->input->post("codigo");
+           $ver= $this->Modelo->cancelardetalle($codigo);
+            if($ver==listo){
+            redirect(base_url());    
+            }
+        }
                 function cacelarventaproducto(){
             $codigo= $this->input->post("codigo");
            $ver= $this->Modelo->cancelarventas($codigo);
