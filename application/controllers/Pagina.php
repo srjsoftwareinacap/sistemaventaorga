@@ -596,8 +596,9 @@ class Pagina extends CI_Controller {
                             }
                         } else {
                             //////inicio
+                            $contenido['rut'] =$this->session->userdata('usuario');
                             $this->load->view('operador/header');
-                        $this->load->view('operador/contentinicio');
+                        $this->load->view('operador/contentinicio',$contenido);
                         $this->load->view('operador/footer');
                         }
                     }
@@ -1106,7 +1107,20 @@ echo json_encode(array("mensaj"=>$mensaje));
             }
             echo json_encode(array("m1"=>$mensaje));
         }
-        function cargarcodigo_usuario(){
+        function cargarcodigo_usuarioperfil(){
+            $rut= $this->input->post("codigo");
+            $mostrarlista= $this->Modelo->verusuarioeditar($rut);
+            foreach ($mostrarlista->result() as $valor) {
+                $contenido['rut'] = $valor->rut_usuario;
+                $contenido['nombre_usuario']=$valor->nombre_usuario;
+                $contenido['contraseña']= $valor->contraseña;
+                $contenido['perfil_usuario'] = $valor->perfil_usuario;
+                $contenido['estado']= $valor->estado;
+                $contenido['rut_empresa_peterneciente'] =$valor->rut_empresa_peterneciente;
+                $this->load->view('operador/editarusuario',$contenido);
+            }
+        }
+                function cargarcodigo_usuario(){
             $rut= $this->input->post("codigo");
             $mostrarlista= $this->Modelo->verusuarioeditar($rut);
             foreach ($mostrarlista->result() as $valor) {
@@ -1120,8 +1134,23 @@ echo json_encode(array("mensaj"=>$mensaje));
                 
             }
         }
-        
-        function editar_usuario_empresa(){
+        function editar_usuario_empresa2(){
+            $rut= $this->input->post("rut");
+            $nombre=$this->input->post("nombre");
+            $contraseña = $this->input->post("contraseña");
+            
+            $Editar = array(
+                "rut_usuario"=>$rut,
+                "nombre_usuario"=>$nombre,
+                "contraseña"=>$contraseña
+            );
+            $captar = $this->Modelo->editarusuario($rut,$Editar);
+            session_destroy();
+            echo json_encode(array(
+                "m1"=>$captar
+            ));
+        }
+                function editar_usuario_empresa(){
             $rut= $this->input->post("rut");
             $nombre=$this->input->post("nombre");
             $contraseña = $this->input->post("contraseña");

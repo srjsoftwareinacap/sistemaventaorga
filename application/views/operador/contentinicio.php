@@ -15,13 +15,14 @@
             <span class="sr-only">Toggle navigation</span>
           </a>
             
-                  
+              <a id="moverperfilusuario"  aria-hidden="true"  data-target="#mostraredicion_usuario"  href="javascript:mostraredicionusuarioperfil('<?php echo $rut;?>')">Perfil usuario<i class="fa fa-user"></i></a>    
                  
-            <li   id="sessiones" >
+            <li   id="sessiones2" >
                 <a style="color: white" class="btn btn-info  " href="<?php echo base_url().'Pagina/cerrar';?>">
   <i class="fa fa-sign-out  btn-info pull-left"></i> Cerrar session</a>
              
               </li>
+              
         </nav>
          
       </header>
@@ -87,9 +88,16 @@
                 <a href="<?php echo base_url().'Pagina/ordentrabajo';?>" class="small-box-footer">Ir<i class="fa fa-arrow-circle-right"></i></a>
               </div>
             </div>
+            
+     
           </div><!-- /.row -->
           <!-- Main row -->
-         
+          <div class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" id="mostraredicion_usuario">
+  <div class="modal-dialog" role="document">
+    
+    
+  </div>
+</div>  
 
         </section><!-- /.content -->
       </div><!-- /.content-wrapper -->

@@ -15,6 +15,11 @@
     margin-top: -2%;
     width: 79%;
 }
+#moverperfilusuario{
+color: white;
+    margin-left: 800px;
+    
+}
 #tablaentrada{
     width: 79%;
 }
@@ -129,6 +134,14 @@ margin-left: 900px;
 }
 #agregarfamiliamodal{
     background-color: #03a9f4;
+}
+#sessiones2{
+    color: white;
+ margin-top: -1.2%;
+	text-align: center;
+	list-style:none;   
+	
+        margin-left: 85%;
 }
 #sessiones{
     color: white;

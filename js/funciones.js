@@ -548,6 +548,18 @@ $("#mesajemodaleditarcantidad").html("<p class='alert alert-danger' role='alert'
        
        
     }
+    function mostraredicionusuarioperfil(codigo){
+        $.post(
+    base_url+"Pagina/cargarcodigo_usuarioperfil",
+    {codigo:codigo},
+    function(pagina){  
+        $("#mostraredicion_usuario").html(pagina);
+      $("#mostraredicion_usuario").modal({
+        show:true
+      });      
+    }
+    );  
+    }
     function mostraredicion_modal_usuario(codigo){
         $.post(
     base_url+"Pagina/cargarcodigo_usuario",
@@ -597,6 +609,22 @@ $("#mesajemodaleditarcantidad").html("<p class='alert alert-danger' role='alert'
     }else{
          $("#mesajemodaleditarinventario").html("<p class='alert alert-danger' role='alert' >"+"!! Error,El stock ingresado no puede ser 0 o menor"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
     }
+    }
+    function Editarusuarioempresa2(){
+         var rut= $("#txteditar_usuario").val();
+        var nombre= $("#txteditar_nombre").val();
+        var contraseña = $("#txteditar_contraseña").val();
+        $.post(
+    base_url+"Pagina/editar_usuario_empresa2",
+    {rut:rut,nombre:nombre,contraseña:contraseña},
+    function(pagina){  
+              if(pagina.m1=="listo"){
+               $("#mesajemodaleditarusuario").html("<p class='alert alert-success' role='alert' >"+"Usuario editado correctamente"+"</p>").fadeIn(100).delay(600).fadeOut(2000);
+               setTimeout("location.reload()",3000);
+              }
+    },
+      'json'      
+    ); 
     }
     function  Editarusuarioempresa(){
         var rut= $("#txteditar_usuario").val();
