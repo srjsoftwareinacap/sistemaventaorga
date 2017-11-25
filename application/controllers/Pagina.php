@@ -64,6 +64,12 @@ class Pagina extends CI_Controller {
                                    $this->load->view('administrador/gventas/cancel/header');
                         $this->load->view('administrador/gventas/cancel/content');
                         $this->load->view('administrador/gventas/cancel/footer');
+                                }else{
+                                    if($this->session->userdata('ir')==2){
+                                        $this->load->view('administrador/gventas/cancel/reporte2/header');
+                        $this->load->view('administrador/gventas/cancel/reporte2/content');
+                        $this->load->view('administrador/gventas/cancel/reporte2/footer');
+                                    }
                                 }
                             }
                             
@@ -659,7 +665,28 @@ class Pagina extends CI_Controller {
 	$this->session->set_userdata($vector);
 	redirect(base_url()); 
         }
-        function V_canceladas(){
+        function gporte2(){
+            $rut =	$this->session->userdata('usuario');
+	$perfil = $this->session->userdata('perfil');
+	$rut_empresas = $this->session->userdata('rut_empresa');
+	$nombre= $this->session->userdata('nombre_u');
+	$ira =2;
+        $gestion=1;
+	
+	$vector =array(
+                  "usuario"=>$rut,
+                  "rut_empresa"=>$rut_empresas,
+                  "nombre_u"=>$nombre,
+                    "login"=>true,
+                    "perfil"=>$perfil,
+            "gestion"=>$gestion,
+                    "ir"=>$ira
+                );
+	
+	$this->session->set_userdata($vector);
+	redirect(base_url());
+        }
+                function V_canceladas(){
             $rut =	$this->session->userdata('usuario');
 	$perfil = $this->session->userdata('perfil');
 	$rut_empresas = $this->session->userdata('rut_empresa');
@@ -2085,6 +2112,19 @@ function almacenaruser(){
         }	       
              echo json_encode(array("mensaj"=>$mensaje));
              
+}
+function adquerirventasporpersonas(){
+    $mes = $this->input->post("mes");
+   $verlista['listaarrecorrer'] = $this->Modelo->vernombresdetrabajadores($mes)->result();
+   
+   foreach ($this->Modelo->vernombresdetrabajadores($mes)->result() as $value) {
+       $nombre = $valor->nombre_usuario;
+   }
+   $verlista['vernombre']=$nombre;
+   $this->load->view('administrador/gventas/cancel/header');
+                        $this->load->view('administrador/gventas/cancel/content',$verlista);
+                        $this->load->view('administrador/gventas/cancel/footer');
+    
 }
         function almacenar_producto(){
         $rut_empresa= $this->session->userdata('rut_empresa');

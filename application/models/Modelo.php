@@ -863,7 +863,17 @@ function verdetalle($id_venta){
      $query = $this->db->get();
     return $query->result();
     }
-    function cargardetalleort($codigo){
+    function vernombresdetrabajadores($mes){
+        $año=Date("y");
+        $sql="SELECT SUM(venta.total) as total ,MONTHNAME(venta.fecha) as mes, usuario_empresa.nombre_usuario  from venta INNER JOIN usuario_empresa on venta.rut_vendedor= usuario_empresa.rut_usuario where venta.fecha like '2017-".$mes."-%' GROUP by usuario_empresa.nombre_usuario, mes ORDER by mes";
+        return $this->db->query($sql);
+    }
+    function versumadetrabajadores($mes){
+        $año=Date("y");
+        $sql="select SUM(venta.total) as totaldeusuario from venta INNER join usuario_empresa on venta.rut_vendedor = usuario_empresa.rut_usuario where venta.fecha like '".$año."-".$mes."-%' GROUP by usuario_empresa.rut_usuario";
+        return $this->db->query($sql);
+    }
+            function cargardetalleort($codigo){
         $query = $this->db->select("dere.id_detalle_reparacion,p.codigo_barra,p.nombre,dere.cantidad as cantidad_detalle,dere.precio_bruto,p.stock_minimo,si.cantidad,dere.idf_orden");
         $query = $this->db->from("detalle_reparacion dere");
      $query = $this->db->join("producto  p ","p.codigo_barra = dere.codigof_producto","inner");

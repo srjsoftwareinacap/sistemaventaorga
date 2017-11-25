@@ -1,4 +1,8 @@
 <!DOCTYPE html>
+
+
+<?php require_once($_SERVER['DOCUMENT_ROOT'].'/css/conect.php'); ?>
+
 <html lang="es">
      <head>
  
@@ -41,7 +45,10 @@
          <link rel="stylesheet" type="text/css" href="<?php echo base_url()?>../css/micss.css">
        <script type="text/javascript" src="<?php echo base_url()?>../js/funciones.js"></script>
        <script type="text/javascript" src="<?php echo base_url()?>../plugins/jQuery/jQuery-2.1.4.min.js"></script>
-     
+       
+     <script src="<?php echo base_url()?>../code/highcharts.js"></script>
+<script src="<?php echo base_url()?>../code/modules/exporting.js"></script>
+<script src="<?php echo base_url()?>../code/modules/variwide.js"></script>
         <script type="text/javascript">
             var base_url = '<?php echo base_url()?>';
         </script>

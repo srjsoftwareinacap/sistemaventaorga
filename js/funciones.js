@@ -8,8 +8,12 @@ $(document).ready(function(){
            }
        }
    });
-
+$("#accordion").accordion();
+$( "#tabs" ).tabs();
+//cargarprimergrafico();
 });
+
+
 function volvernormal() {
       setTimeout(function() {
         $( "#efecto" ).removeAttr( "style" ).hide().fadeIn();

@@ -38,8 +38,8 @@
             </li>
         <li class="treeview">
               <a href="<?php echo base_url().'Pagina/V_canceladas';?>">
-                <i class="fa fa-info"></i>
-                <span>Ventas Canceladas</span>
+                <i class="fa fa-bar-chart"></i>
+                <span>Reporte de ventas</span>
                 
               </a>  
             </li>
