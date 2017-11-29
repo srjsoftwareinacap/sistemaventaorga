@@ -26,7 +26,29 @@ class Modelo extends CI_Model{
         }
         return $ver;
     }
-    function mosedi_producto($codigo){
+    function verusuariomodificado($rutcaptar,$perfil_cokie){
+        $this->db->select("*");
+        $this->db->where('rut_usuario',$rutcaptar);
+        $resultado1 = $this->db->get('usuario_empresa');
+        if($resultado1->num_rows()==0){
+            $mensaje="destruir";
+            session_destroy();
+            redirect(base_url());
+        }else{
+            $perfil=0;
+            foreach ($resultado1->result() as $valor) {
+                $perfil = $valor->perfil_usuario;
+            }
+            if($perfil!=$perfil_cokie){
+                $mensaje="destruir";
+                session_destroy();
+                redirect(base_url());
+            }
+            
+        }
+        return mensaje;
+    }
+            function mosedi_producto($codigo){
   $this->db->select("*");
   $this->db->where('codigo_barra',$codigo);
   

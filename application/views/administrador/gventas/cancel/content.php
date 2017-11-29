@@ -115,7 +115,7 @@ Highcharts.chart('primergrafico', {
             <?php
             $sql2 =mysql_query("SET lc_time_names = 'es_cl';
 ");
-            $sql = mysql_query("SELECT SUM(venta.total) as total ,MONTHNAME(venta.fecha) as mes, usuario_empresa.nombre_usuario  from venta INNER JOIN usuario_empresa on venta.rut_vendedor= usuario_empresa.rut_usuario where venta.fecha like '2017-%-%' GROUP by usuario_empresa.nombre_usuario, mes ORDER by mes");
+            $sql = mysql_query("SELECT SUM(venta.total) as venta ,MONTHNAME(venta.fecha) as mes, usuario_empresa.nombre_usuario, MONTH(venta.fecha) as numero from venta INNER JOIN usuario_empresa on venta.rut_vendedor= usuario_empresa.rut_usuario where venta.fecha like '2017-%-%' GROUP by usuario_empresa.nombre_usuario,mes,numero ORDER by numero");
             while ($row = mysql_fetch_array($sql)) {
                 ?>
                 ['<?php echo $row['nombre_usuario'].' '.$row['mes'] ?>'],
@@ -173,12 +173,12 @@ Highcharts.chart('primergrafico', {
      <?php
             $sql2 =mysql_query("SET lc_time_names = 'es_cl';
 ");
-            $sql = mysql_query("SELECT SUM(venta.total) as total ,MONTHNAME(venta.fecha) as mes, usuario_empresa.nombre_usuario  from venta INNER JOIN usuario_empresa on venta.rut_vendedor= usuario_empresa.rut_usuario where venta.fecha like '2017-%-%' GROUP by usuario_empresa.nombre_usuario, mes ORDER by mes");
+            $sql = mysql_query("SELECT SUM(venta.total) as venta ,MONTHNAME(venta.fecha) as mes, usuario_empresa.nombre_usuario, MONTH(venta.fecha) as numero from venta INNER JOIN usuario_empresa on venta.rut_vendedor= usuario_empresa.rut_usuario where venta.fecha like '2017-%-%' GROUP by usuario_empresa.nombre_usuario,mes,numero ORDER by numero");
             
             while ($row = mysql_fetch_array($sql)) {
                 ?>
                             
-                <?php echo $row['total']?>,
+                <?php echo $row['venta']?>,
                     
 <?php
             }
@@ -227,7 +227,7 @@ Highcharts.chart('segundografico', {
             <?php
             $sql3 =mysql_query("SET lc_time_names = 'es_cl';
 ");
-            $sql5 = mysql_query("SELECT SUM(venta.total) as venta,MONTHNAME(venta.fecha) as mes from venta where venta.fecha like '2017-%-%' GROUP by mes");
+            $sql5 = mysql_query("SELECT SUM(venta.total) as venta,MONTHNAME(venta.fecha) as mes,MONTH(venta.fecha) as numero from venta where venta.fecha like '2017-%-%' GROUP by mes,numero ORDER by numero");
             
             while ($row = mysql_fetch_array($sql5)) {
                 ?>

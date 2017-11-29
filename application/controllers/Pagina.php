@@ -16,8 +16,19 @@ class Pagina extends CI_Controller {
         $offsete = $this->uri->segment(3);
     }
             if($this->session->userdata('login')==true){
+                
+              
+                
                 if($this->session->userdata('perfil')==100){
                     //inicio
+                    $rutcaptar = $this->session->userdata("usuario");
+                    $cokie =$this->session->userdata('perfil');
+                $mensaje= $this->Modelo->verusuariomodificado($rutcaptar,$cokie);
+                
+                if($mensaje=="destruir"){
+                    session_destroy();
+                    redirect(base_url());
+                }
                     if($this->session->userdata('gestion')==0){
                         if($this->session->userdata('ir')==0){
                             $this->load->view('administrador/header');
@@ -479,6 +490,14 @@ class Pagina extends CI_Controller {
                     }
                 }else{
                     //operador
+                    $rutcaptar = $this->session->userdata("usuario");
+                    $cokie =$this->session->userdata('perfil');
+                $mensaje= $this->Modelo->verusuariomodificado($rutcaptar,$cokie);
+                
+                if($mensaje=="destruir"){
+                    session_destroy();
+                    redirect(base_url());
+                }
                     if($this->session->userdata('gestion')==3){
                         if($this->session->userdata('ir')==1){
                                            //imprimir
@@ -973,8 +992,7 @@ function ir_inventario(){
               "m1"=>$variable
               ));
       
-           }
-           
+           }           
                    function ordendt(){
                $id_detalle= $this->input->post("id_detalle");
                $descuento= $this->input->post("descuento");
@@ -1487,8 +1505,7 @@ $html.="
           }
                 function editar_ordentrabajo(){
             $nombre_cliente= $this->input->post("nombre_cliente");
-            $rut= $this->input->post("rut");
-            
+            $rut= $this->input->post("rut");            
             $direccion= $this->input->post("direccion");
             $telefono= $this->input->post("telefono");
             $modelo= $this->input->post("modelo");
@@ -1504,6 +1521,7 @@ $html.="
             $total=0;
             $descuento=0;
             $estado="pendiente";
+            $rut_vendedor = $this->session->userdata("usuario");
             date_default_timezone_set("America/Santiago");
     $fecha_recepcion =date("Y-m-d");
     $fecha_entrega="";
@@ -1512,6 +1530,7 @@ $html.="
                 "fecha_entrega"=>$fecha_entrega,
                 "nombre_cliente"=>$nombre_cliente,
                 "rut"=>$rut1,
+                "rut_vendedor"=>$rut_vendedor,
                 "direccion"=>$direccion,
                 "telefono"=>$telefono,
                 "modelo"=>$modelo,
@@ -1553,6 +1572,7 @@ $html.="
             $total=0;
             $descuento=0;
             $estado="pendiente";
+            $rutvendedor = $this->session->userdata("usuario");
             date_default_timezone_set("America/Santiago");
     $fecha_recepcion =date("Y-m-d");
     $fecha_entrega="";
@@ -1561,6 +1581,7 @@ $html.="
                 "fecha_entrega"=>$fecha_entrega,
                 "nombre_cliente"=>$nombre_cliente,
                 "rut"=>$rut1,
+                "rut_vendedor"=>$rutvendedor,
                 "direccion"=>$direccion,
                 "telefono"=>$telefono,
                 "modelo"=>$modelo,

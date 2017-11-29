@@ -9,10 +9,10 @@
 
         <link rel="stylesheet" type="text/css" href="<?php echo base_url()?>../css/jquery-ui.css">
       
-       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">      
+       <link rel="stylesheet" href="<?php echo base_url()?>../css/font-awesome.min.css">      
         
 <link rel="stylesheet" type="text/css" href="<?php echo base_url()?>../css/font-awesome.css">
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    
        
         <script type="text/javascript" src="<?php echo base_url()?>../js/jquery.js"></script>
 
