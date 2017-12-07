@@ -64,7 +64,7 @@
               </a>  
             </li>
             <li class="treeview">
-              <a  style="color: red" href="#">
+              <a  style="color: white" href="#">
                 <i class="fa fa-list-ol"></i>
                 <span>Inventario</span>
                 
@@ -227,7 +227,7 @@
             
            <form class="form-inline" id="form1fasdf24122" action="<?php echo base_url().'Pagina/buscar_productosinventario';?>" method="post" >
   <div class="form-group">
-  <button type="submit" form="form1fasdf24122" class="btn alert-success fa fa-search">Buscar por</button>  
+  <button type="submit" form="form1fasdf24122" class="btn btn-primary fa fa-search">Buscar por</button>  
   </div>
   <input type="text" class="form-control"  name="buscar_inventario" placeholder="codigo o por nombre" onkeyup="sacargeneral(this)"  >
   <p style="color:#03a9f4;" ><?php echo $mensaje;?></p>

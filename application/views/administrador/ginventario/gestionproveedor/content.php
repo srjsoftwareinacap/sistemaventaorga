@@ -71,7 +71,7 @@
               </a>  
             </li>
             <li  class="active treeview">
-              <a style="color: red" href="#">
+              <a style="color: white" href="#">
                 <i class="fa fa-shopping-cart"></i>
                 <span>Gestion Proveedor</span>
               </a>  
@@ -96,7 +96,7 @@
         <section class="content">
           <form class="form-inline" id="form1fasdf24122" action="<?php echo base_url().'Pagina/buscar_proveedor_empresa';?>" method="post" >
   <div class="form-group">
-  <button type="submit" form="form1fasdf24122" class="btn alert-success fa fa-search">Buscar por</button>  
+  <button type="submit" form="form1fasdf24122" class="btn btn-primary fa fa-search">Buscar por</button>  
   </div>
   <input type="text" class="form-control"  name="buscar_proveedor" placeholder="codigo o por nombre" onkeyup="sacargeneral(this)"  >
   
@@ -178,22 +178,24 @@
             <td>
                 <input id="txtrutverificador" type="number"   placeholder="9" onblur="vereficarrut(this.value)" required="true" onkeyup="sacarletras(this)" class="form-control"  >
             </td>
-
+<td>*</td>
               </tr>
 
               <tr>
               <td><label  for="psw"><span ></span>Nombre de Empresa</label></td>       
             <td>  <input type="text" required="true" class="form-control"  id="txtnombre" onkeyup="sacargeneral(this)"  placeholder="Ingrese el Nombre" maxlength="45" ></td>
+              <td>*</td>
               </tr>
 
               <tr>
               <td><label  for="psw"><span ></span>Giro</label></td>       
             <td>  <input type="text" required="true" class="form-control"  id="txtgiro" onkeyup="sacargeneral(this)"   placeholder="Ingrese el Giro" maxlength="45" ></td>
-
+<td>*</td>
               </tr>
               <tr>
               <td><label  for="psw"><span ></span>Telefono</label></td>       
               <td>  <input type="number" required="true" class="form-control"  id="txttelefono" onkeyup="sacarletras(this)"   placeholder="12345678" maxlength="45" ></td>
+              <td>*</td>
               </tr>
               
              <tr>
@@ -208,6 +210,7 @@
      <?php endforeach?>
 </select> 
               </td>
+              <td>*</td>
               </tr>
               <tr id="cargarprovincia">
                   
@@ -220,17 +223,19 @@
                <td>
                    <input type="text" required="true" class="form-control"  id="txtcalle" onkeyup="sacargeneral(this)"   placeholder="av" maxlength="45" >
                </td>
+               <td>*</td>
               </tr>
               <tr>
               <td><label  for="psw"><span ></span>Correo electronico</label></td>       
               <td>  <input type="email" required="true" class="form-control"  id="txtcorreo"   placeholder="@" maxlength="45" ></td>
+              <td>*</td>
               </tr>
             </div>
       
    </form>
      
    </table>
-   <button type="submit" id="btnguardarproveedor" class="fa btn btn-success  fa-floppy-o" form="form36adad18736" value="Submit">Guardar proveedor</button><br />
+   <button type="submit" id="btnguardarproveedor" class="fa btn btn-primary  fa-floppy-o" form="form36adad18736" value="Submit">Guardar proveedor</button><br />
    <br />
 <div id="mesajemodalproveedor"></div>
      <br />

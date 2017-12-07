@@ -35,7 +35,7 @@
               <li style="color: white" class="header">Panel de Navegación</li>
             <li class="active treeview">
               <a href="#">
-                <i class="fa fa-dashboard"></i> <span>Inicio</span> <i class="fa fa-angle-left pull-right"></i>
+                  <i class="fa fa-dashboard" style="color:white"></i> <span style="color: white">Inicio</span> 
               </a>
              
             </li>
@@ -91,7 +91,7 @@
               <div class="small-box bg-yellow">
                 <div class="inner">
                   <h3>Gestion</h3>
-                  <h4>Orden de Trabajo</h4>
+                  <h4>Orden de Reparación</h4>
                 </div>
                 <div class="icon">
                   <i class="ion ion-hammer"></i>

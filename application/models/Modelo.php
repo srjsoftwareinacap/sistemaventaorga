@@ -99,9 +99,10 @@ $query = $this->db->get();
   }
   return $mensaje;
   }
-  function verestableventa(){
+  function verestableventa($rut){
     $estado="pendiente";
     $this->db->select("*");
+    $this->db->where('rut_vendedor',$rut);
     $this->db->where('estado',$estado);
     $captar= $this->db->get('venta');
     $mensaje="";
@@ -128,7 +129,13 @@ $query = $this->db->get();
     $query = $this->db->get();
     return $query->result(); 
   }
-  function  adqueridetallerordenproducto($codigo){
+  function sacarusurios(){
+      $query = $this->db->select("*");
+      $query = $this->db->from("usuario_empresa");
+      $query = $this->db->get();
+      return $query;
+  }
+          function  adqueridetallerordenproducto($codigo){
      $query = $this-> db->select("dere.id_detalle_reparacion,dere.idf_orden,pro.nombre,dere.precio_bruto,dere.cantidad");
      $query=$this->db->from("detalle_reparacion dere");
      $query = $this->db->join("producto pro","pro.codigo_barra = dere.codigof_producto","inner");
@@ -136,6 +143,49 @@ $query = $this->db->get();
      $query = $this->db->get();
      return $query->result();
   }
+  function adquerirusuariosgrafico1($codigo){
+      $año =date("Y");
+      $primero = "SET lc_time_names = 'es_cl'";
+      $this->db->query($primero);
+      $consulta ="SELECT SUM(venta.total) as venta ,MONTHNAME(venta.fecha) as mes, usuario_empresa.nombre_usuario,MONTH(venta.fecha)  from venta INNER JOIN usuario_empresa on venta.rut_vendedor= usuario_empresa.rut_usuario where venta.fecha like '".$año."-%-%'   GROUP by usuario_empresa.nombre_usuario, mes,MONTH(venta.fecha) ORDER by MONTH(venta.fecha)";
+return $this->db->query($consulta)->result();
+  }
+  function adquerirusuariosgrafico2($codigo){
+      $año =date("Y");
+      $primero = "SET lc_time_names = 'es_cl'";
+      $this->db->query($primero);
+      $consulta ="SELECT SUM(venta.total) as venta,MONTHNAME(venta.fecha) as mes,MONTH(venta.fecha) as numero from venta where venta.fecha like '".$año."-%-%' GROUP by mes,numero ORDER by numero";
+return $this->db->query($consulta)->result();
+  }
+  function adquerorusuariosgrafico3($codigo){
+      $año =date("Y");
+      $primero = "SET lc_time_names = 'es_cl'";
+      $this->db->query($primero);
+      $consulta ="SELECT SUM(orden_reparacion.total) as total, MONTHNAME(orden_reparacion.fecha_entrega) as mes,usuario_empresa.nombre_usuario, MONTH(orden_reparacion.fecha_entrega) as numero FROM orden_reparacion INNER JOIN usuario_empresa on orden_reparacion.rut_vendedor = usuario_empresa.rut_usuario WHERE orden_reparacion.fecha_entrega LIKE '".$año."-%-%' AND orden_reparacion.estado = 'imprimir' GROUP by usuario_empresa.nombre_usuario,mes, numero ORDER by numero";
+return $this->db->query($consulta)->result();
+  }
+  function adquerorusuariosgrafico3buscar($codigo){
+      $año =date("Y");
+      $primero = "SET lc_time_names = 'es_cl'";
+      $this->db->query($primero);
+      $consulta ="SELECT SUM(orden_reparacion.total) as total, MONTHNAME(orden_reparacion.fecha_entrega) as mes,usuario_empresa.nombre_usuario, MONTH(orden_reparacion.fecha_entrega) as numero FROM orden_reparacion INNER JOIN usuario_empresa on orden_reparacion.rut_vendedor = usuario_empresa.rut_usuario WHERE orden_reparacion.fecha_entrega LIKE '".$año."-%-%' AND orden_reparacion.estado = 'imprimir' and orden_reparacion.rut_vendedor ='".$codigo."' GROUP by usuario_empresa.nombre_usuario,mes, numero ORDER by numero";
+return $this->db->query($consulta)->result();
+  }
+  function adquerorusuariosgrafico4($codigo){
+      $año =date("Y");
+      $primero = "SET lc_time_names = 'es_cl'";
+      $this->db->query($primero);
+      $consulta ="SELECT SUM(orden_reparacion.total) as venta,MONTHNAME(orden_reparacion.fecha_entrega) as mes,MONTH(orden_reparacion.fecha_entrega) as numero from orden_reparacion where orden_reparacion.fecha_entrega like '".$año."-%-%' and orden_reparacion.estado='imprimir' GROUP by mes,numero ORDER BY numero";
+return $this->db->query($consulta)->result();
+  }
+          function adquerirusuariosgraficobuscar($codigo){
+              $año =date("Y");
+      $primero = "SET lc_time_names = 'es_cl'";
+      $this->db->query($primero);
+      $consulta ="SELECT SUM(venta.total) as venta ,MONTHNAME(venta.fecha) as mes, usuario_empresa.nombre_usuario,MONTH(venta.fecha)  from venta INNER JOIN usuario_empresa on venta.rut_vendedor= usuario_empresa.rut_usuario where venta.fecha like '".$año."-%-%' and venta.rut_vendedor ='".$codigo."'  GROUP by usuario_empresa.nombre_usuario, mes,MONTH(venta.fecha) ORDER by MONTH(venta.fecha)";
+return $this->db->query($consulta)->result();
+  }
+  
           function ver_salidas($inicio,$limite){
       date_default_timezone_set("America/Santiago");
 	$fecha =date("Y-m-d");
@@ -428,10 +478,10 @@ function desbloquiar_proveedor($codigo){
          
          return $mensaje;
     }
-            function crearnuevaventa(){
+            function crearnuevaventa($rut){
         $crear = array( 
             "fecha"=>"",
-            "rut_vendedor"=>"",
+            "rut_vendedor"=>$rut,
             "idf_medio"=>"",
             "rut_comprador"=>"",
             "sub_total"=>"",
@@ -443,12 +493,14 @@ function desbloquiar_proveedor($codigo){
         $this->db->insert("venta",$crear);
         
         $estado="pendiente";
+        $this->db->where('rut_vendedor',$rut);
         $this->db->where('estado',$estado);
         return $this->db->get("venta");
     }
     
-            function vermaximo(){
+            function vermaximo($rut){
         $estado="pendiente";
+        $this->db->where('rut_vendedor',$rut);
         $this->db->where('estado',$estado);
         return $this->db->get("venta");
     }

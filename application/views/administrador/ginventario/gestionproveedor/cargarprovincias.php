@@ -9,4 +9,4 @@
      <?php endforeach?>
 </select> 
               </td>
-              
+              <td>*</td>

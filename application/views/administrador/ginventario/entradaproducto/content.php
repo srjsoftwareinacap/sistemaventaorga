@@ -37,7 +37,7 @@
               
             </li>
             <li  class="active treeview">
-              <a style="color: red" href=#"">
+              <a style="color: white" href=#"">
                 <i class="fa fa-plus"></i>
                 <strong><span>Entrada de Producto</span></strong>
                
@@ -112,6 +112,7 @@
      <?php endforeach?>
 </select>  
          </td>
+         <td>*</td>
          <td>
      <li id="sacarpunto" >
               <a href="<?php echo base_url().'Pagina/G_proveedor';?>">
@@ -127,6 +128,7 @@
       <td>
           <input class="form-control" required="true" type="text" id="txtcodigofacturaver" onkeyup="sacargeneral(this)" maxlength="45" placeholder="671827"   >
       </td>
+      <td>*</td>
       <td>
           <a class="btn" data-target="#modalentradaproducto" id="entradaproducto2" href="javascript:abrirmodalentrada()">
   <i class="fa fa-plus" aria-hidden="true"></i> Agregar nueva Factura</a>
@@ -138,7 +140,8 @@
    <tr>
               <td><label  for="psw"><span ></span> Codigo barra</label></td>       
               <td>  <input type="text" required="true" class="form-control"  onblur="vereficaridinventario12(this.value)" id="txtcodigoentrada"   onkeyup="sacargeneral(this)" maxlength="45" placeholder="112234" >
-            </td>
+            <td>*</td>
+              </td>
 
               </tr>
 
@@ -167,6 +170,7 @@
                   <td>
      <input type="text" required="true" class="form-control"  id="txtptrcioneto"   placeholder="$" >                 
                   </td>
+                  <td>*</td>
               </tr>
               <tr>
                   <td>
@@ -180,7 +184,7 @@
               <tr>
               <td><label  for="psw"><span ></span>Stock</label></td>       
             <td>  <input type="text" required="true" class="form-control"  id="txtstockingresado" onkeyup="sacarletras(this)"   placeholder="ingrese el stock" maxlength="45" ></td>
-
+<td>*</td>
               </tr>
 
               <input type="text" required="true" class="form-control hidden"  id="txtstock_minimo"    >
@@ -190,7 +194,7 @@
    </form>
    </table>
    
-   <button type="submit" id="btnregistrarentrada"  class="fa btn btn-success" form="form54321" value="Submit">Registrar Entrada</button>
+   <button type="submit" id="btnregistrarentrada"  class="fa btn btn-primary" form="form54321" value="Submit">Registrar Entrada</button>
    <br />
    <br />
    
@@ -222,25 +226,26 @@
      <?php endforeach?>
 </select>  
             </td>
+            <td>*</td>
               </tr>
 
               <tr>
               <td><label  for="psw"><span ></span>Numero de Factura</label></td>       
             <td>  <input type="number" required="true" class="form-control"  id="txtnombre" onkeyup="sacarletras(this)"  placeholder="0001" maxlength="45" ></td>
-
+<td>*</td>
               </tr>
 
               <tr>
               <td><label  for="psw"><span ></span>Descripcion</label></td>       
               <td>  <textarea type="text" required="true" class="form-control"  id="txtdescripcion_entrada" onkeyup="sacargeneral(this)"   placeholder="ingrese la descripcion" maxlength="45" ></textarea></td>
-
+<td>*</td>
               </tr>
             </div>
       
    </form>
      
    </table>
-   <button type="submit" id="btnguardarentradafactura" class="fa btn btn-success  fa-floppy-o" form="form123456facturaentrada" value="Submit">Guardar Factura</button><br />
+   <button type="submit" id="btnguardarentradafactura" class="fa btn btn-primary  fa-floppy-o" form="form123456facturaentrada" value="Submit">Guardar Factura</button><br />
    <br />
 <div style="text-align: center" id="mesajemodalnuevafactura"></div>
      <br />

@@ -31,7 +31,7 @@
               <li  style="color: white" class="header">Panel de Navegacion</li>
               
               <li   class="active treeview">
-              <a style="color: red" href="#">
+              <a style="color: white" href="#">
                   <i class="fa fa-barcode"></i> <strong><span>Gestion Producto</span> </strong>
               </a>
               
@@ -97,7 +97,7 @@
             
          <form class="form-inline" id="form12" action="<?php echo base_url().'Pagina/buscar_producto_empresa';?>" method="post" >
   <div class="form-group">
-  <button type="submit" form="form12" class="btn alert-success fa fa-search">Buscar por</button>  
+  <button type="submit" form="form12" class="btn btn-primary fa fa-search">Buscar por</button>  
   </div>
   <input type="text" class="form-control"  name="buscar_producto" placeholder="codigo o por nombre" onkeyup="sacargeneral(this)"  >
   
@@ -173,19 +173,23 @@
  <div class="form-group">
    <tr>
               <td><label  for="psw"><span ></span> Codigo barra</label></td>       
-            <td>  <input type="text" required="true" class="form-control"  id="txtcodigo" onkeyup="sacargeneral(this)"  placeholder="112234" maxlength="45" ></td>
+              <td>
+                  
+                  <input type="text" required="true" class="form-control"  id="txtcodigo" onkeyup="sacargeneral(this)"  placeholder="112234  " maxlength="45" ></td>
+              <td>*</td>
 
               </tr>
 
               <tr>
               <td><label  for="psw"><span ></span>Nombre producto</label></td>       
             <td>  <input type="text" required="true" class="form-control"  id="txtnombre" onkeyup="sacargeneral(this)"  placeholder="ingrese el nombre" maxlength="45" ></td>
-
+<td>*</td>
               </tr>
 
               <tr>
               <td><label  for="psw"><span ></span>Descripcion</label></td>       
               <td>  <textarea type="text" required="true" class="form-control"  id="txtdescripcion" onkeyup="sacargeneral(this)"   placeholder="ingrese la descripcion" maxlength="45" ></textarea></td>
+              <td>*</td>
 <td>
     <a class="btn" style="color: white" data-target="#modalfamiala" id="agregarfamiliamodal" href="javascript:abrirmodalfamiliaycerrardeproducto()">
         <i style="color: white" class="fa fa-plus" aria-hidden="true"></i> Agregar nueva Familia</a>
@@ -202,7 +206,7 @@
 
      <?php endforeach?>
 </select> </td>
-
+<td>*</td>
               </tr>
              
               
@@ -210,18 +214,19 @@
               <tr>
               <td><label  for="psw"><span ></span>Stock minimo</label></td>       
               <td>  <input type="number" required="true" class="form-control"  id="txtstock" onkeyup="sacarletras(this)"   placeholder="ingrese stock minimo " maxlength="45" ></td>
-
+<td>*</td>
               </tr>
               <tr>
                   <td><label  for="psw"><span ></span>Precio venta Bruto</label></td>       
               <td>  <input type="number" required="true" class="form-control"  id="txtpreciobrutoproducto" onkeyup="sacarletras(this)"   placeholder="ingrese su precio $" maxlength="45" ></td>
+              <td>*</td>
               </tr>
             </div>
       
    </form>
      
    </table>
-   <button type="submit" id="btnguardarproducto" class="fa btn btn-success  fa-floppy-o" form="form1234" value="Submit">Guardar producto</button><br />
+   <button type="submit" id="btnguardarproducto" class="fa btn btn-primary  fa-floppy-o" form="form1234" value="Submit">Guardar producto</button><br />
    <br />
 <div style="text-align: center" id="mesajemodalproducto"></div>
      <br />
@@ -258,7 +263,7 @@
    <tr>
               <td><label  for="psw"><span ></span> Nombre Tipo de Familia</label></td>       
               <td>  <input type="text" required="true" autofocus="true" class="form-control"  id="txttipofamilia" onkeyup="sacargeneral(this)"  placeholder="Ingrese familia" maxlength="45" ></td>
-
+<td>*</td>
               </tr>
             </div>
    </form>

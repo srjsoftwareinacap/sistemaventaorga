@@ -30,6 +30,9 @@
               <div class="col-lg-5">
              <input class="form-control" id="txtnombree_nuevo" type="text"  required="true" value="<?php echo $nombre;?>" onkeyup="sacargeneral(this)" >
              </div>
+                <div class="col-lg-3">
+                    <label for=""><span ></span>*</label>
+                </div>
             </div>
 <div class="row">
 <div class="col-lg-4">
@@ -39,6 +42,9 @@
               <div class="col-lg-5">
                   <textarea class="form-control" id="txtdescripcion_nuevo" type="text"  required="true"  onkeyup="sacargeneral(this)" ><?php echo $descripccion;?></textarea>
              </div>
+    <div class="col-lg-3">
+                    <label for=""><span ></span>*</label>
+                </div>
             </div>
             <div class="row">
 <div class="col-lg-4">
@@ -56,6 +62,9 @@
      <?php endforeach?>
 </select>
              </div>
+                <div class="col-lg-3">
+                    <label for=""><span ></span>*</label>
+                </div>
             </div>
     
             <div class="row">
@@ -66,6 +75,9 @@
               <div class="col-lg-5">
              <input class="form-control" id="txtstockminimonuevo" type="number"  required="true" value="<?php echo $stock_minimo;?>" onkeyup="sacarletras(this)" maxlength="45" >
              </div>
+                <div class="col-lg-3">
+                    <label for=""><span ></span>*</label>
+                </div>
             </div>
     <div class="row">
         <div class="col-lg-4">
@@ -74,6 +86,9 @@
         <div class="col-lg-5">
             <input class="form-control" id="txtpreciobrutoeditar" type="number"  required="true" value="<?php echo $precio_bruto;?>" onkeyup="sacarletras(this)" maxlength="45" >
         </div>
+        <div class="col-lg-3">
+                    <label for=""><span ></span>*</label>
+                </div>
     </div>
          
     <br />

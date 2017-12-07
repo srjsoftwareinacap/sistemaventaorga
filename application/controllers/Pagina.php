@@ -42,16 +42,17 @@ class Pagina extends CI_Controller {
                             if($this->session->userdata('ir')==0){
                                 $id_venta=0;
                                 $data['medios']= $this->Modelo->aquerirmedio()->result();
-                                $ver= $this->Modelo->verestableventa();
+                                $rut =	$this->session->userdata('usuario');
+                                $ver= $this->Modelo->verestableventa($rut);
                                 if($ver=="nuevaventa"){
-                                  $maximo=  $this->Modelo->crearnuevaventa();
+                                  $maximo=  $this->Modelo->crearnuevaventa($rut);
                                     foreach ($maximo->result() as $valor) {
             $id_venta = $valor->id_codigo_venta;
         }
         $data['empesar']="estable";
                                 }else{
                                     if ($ver=="seleccionarmax"){
-                                      $maximo2=  $this->Modelo->vermaximo();
+                                      $maximo2=  $this->Modelo->vermaximo($rut);
                                     foreach ($maximo2->result() as $valor) {
             $id_venta = $valor->id_codigo_venta;
            
@@ -72,15 +73,16 @@ class Pagina extends CI_Controller {
                         $this->load->view('administrador/gventas/ventas/footer');
                             }else{
                                 if($this->session->userdata('ir')==1){
+                                     $data['recorrer'] = $this->Modelo->adquerirusuariosgrafico1($codigo);
+                                     $data['recorrer2dografico']= $this->Modelo->adquerirusuariosgrafico2($codigo);
+                                     $data['recorrer3tergrafico']= $this->Modelo->adquerorusuariosgrafico3($codigo);
+                                     $data['recorrer4tografico']= $this->Modelo->adquerorusuariosgrafico4($codigo);
+     $data['usuarios']= $this->Modelo->sacarusurios()->result();
                                    $this->load->view('administrador/gventas/cancel/header');
-                        $this->load->view('administrador/gventas/cancel/content');
+                        $this->load->view('administrador/gventas/cancel/content',$data);
                         $this->load->view('administrador/gventas/cancel/footer');
                                 }else{
-                                    if($this->session->userdata('ir')==2){
-                                        $this->load->view('administrador/gventas/cancel/reporte2/header');
-                        $this->load->view('administrador/gventas/cancel/reporte2/content');
-                        $this->load->view('administrador/gventas/cancel/reporte2/footer');
-                                    }
+                                    
                                 }
                             }
                             
@@ -590,16 +592,17 @@ class Pagina extends CI_Controller {
                             if($this->session->userdata('ir')==0){
                              $id_venta=0;
                                 $data['medios']= $this->Modelo->aquerirmedio()->result();
-                                $ver= $this->Modelo->verestableventa();
+                                $rut = $this->session->userdata("usuario");
+                                $ver= $this->Modelo->verestableventa($rut);
                                 if($ver=="nuevaventa"){
-                                  $maximo=  $this->Modelo->crearnuevaventa();
+                                  $maximo=  $this->Modelo->crearnuevaventa($rut);
                                     foreach ($maximo->result() as $valor) {
             $id_venta = $valor->id_codigo_venta;
         }
         $data['empesar']="estable";
                                 }else{
                                     if ($ver=="seleccionarmax"){
-                                      $maximo2=  $this->Modelo->vermaximo();
+                                      $maximo2=  $this->Modelo->vermaximo($rut);
                                     foreach ($maximo2->result() as $valor) {
             $id_venta = $valor->id_codigo_venta;
            
@@ -1903,7 +1906,32 @@ $mensaje=$info;
                 "precio_bruto"=>$precio_bruto
 		));
 }
-function verificarinventariosalida(){
+function cargarusuariografico1(){
+    $codigo = $this->input->post("nombre");
+    $data['recorrer'] = $this->Modelo->adquerirusuariosgrafico1($codigo);
+     $data['usuarios']= $this->Modelo->sacarusurios()->result();
+                                   $this->load->view('administrador/gventas/cancel/header');
+                        $this->load->view('administrador/gventas/cancel/content',$data);
+                        $this->load->view('administrador/gventas/cancel/footer');    
+}
+function cargarusuariograficococodigo(){
+    $codigo = $this->input->post("usuarioverseleccioada");
+    if($codigo==0){
+        redirect(base_url());
+    }else{
+        $data['recorrer'] = $this->Modelo->adquerirusuariosgraficobuscar($codigo);
+    $data['recorrer2dografico']= $this->Modelo->adquerirusuariosgrafico2($codigo);
+    $data['recorrer3tergrafico']= $this->Modelo->adquerorusuariosgrafico3buscar($codigo);
+    $data['recorrer4tografico']= $this->Modelo->adquerorusuariosgrafico4($codigo);
+     $data['usuarios']= $this->Modelo->sacarusurios()->result();
+                        $this->load->view('administrador/gventas/cancel/header');
+                        $this->load->view('administrador/gventas/cancel/content',$data);
+                        $this->load->view('administrador/gventas/cancel/footer');
+    }
+    
+}
+      
+        function verificarinventariosalida(){
     $codigo = $this->input->post("codigo"); 
     $rut_proveedor = $this->input->post("id_proveedor");
     $numero_factura = $this->input->post("numero_factura");

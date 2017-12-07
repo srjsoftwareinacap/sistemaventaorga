@@ -50,7 +50,7 @@
               </a>
             </li>
             <li  class="treeview">
-              <a style="color: red" href="#">
+              <a style="color: white" href="#">
                 <i class="fa fa-info"></i>
                 <strong> <span>Reporte Entrada</span></strong>
                 
@@ -96,7 +96,7 @@
         <section class="content">
             <form class="form-inline" id="form12" action="<?php echo base_url().'Pagina/buscar_entrada';?>" method="post" >
   <div class="form-group">
-  <button type="submit" form="form12" class="btn alert-success fa fa-search">Buscar por</button>  
+  <button type="submit" form="form12" class="btn btn-primary fa fa-search">Buscar por</button>  
   </div>
   <input type="text" class="form-control"  name="buscar_entrada" placeholder="codigo o por nombre" onkeyup="sacargeneral(this)"  >
   

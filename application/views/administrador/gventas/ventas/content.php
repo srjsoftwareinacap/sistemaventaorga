@@ -31,7 +31,7 @@
           <ul class="sidebar-menu">
               <li style="color: white" class="header">Panel de Navegación</li>
             <li class="active treeview">
-                <a style="color: red" href="#">
+                <a style="color: white" href="#">
                     <i class="fa fa-shopping-cart"></i> <span>Realizar ventas</span>
               </a>
              

@@ -40,7 +40,7 @@
              
             </li>
         <li class="active treeview">
-              <a  style="color: red" href="#">
+              <a  style="color: white" href="#">
                 <i class="fa fa-bars"></i> <span>Retiro</span> 
               </a>
              
@@ -69,7 +69,7 @@
         <section class="content">
           <form class="form-inline" id="form12" action="<?php echo base_url().'Pagina/rutclientereirp';?>" method="post" >
   <div class="form-group">
-  <button type="submit" form="form12" class="btn alert-success fa fa-search">Buscar por</button>  
+  <button type="submit" form="form12" class="btn btn-primary fa fa-search">Buscar por</button>  
   </div>
   <input type="text" class="form-control"  name="buscar_rutclienteretiro" placeholder="rut cliente" onkeyup="sacargeneral(this)"  >
   
@@ -106,7 +106,7 @@
       <td  > <?php echo $valor->serie;?> </td>
       <td><?php echo $valor->descripcion_falla;?></td>
       <td>
-       <a class="btn alert-success fa fa-print" aria-hidden="true"  data-target="#mosttarpdf"  href="javascript:imprimirorden('<?php echo $valor->id_orden;?>')"></a>   
+       <a class="btn btn-primary fa fa-print" aria-hidden="true"  data-target="#mosttarpdf"  href="javascript:imprimirorden('<?php echo $valor->id_orden;?>')"></a>   
    
      </td></tr>
    

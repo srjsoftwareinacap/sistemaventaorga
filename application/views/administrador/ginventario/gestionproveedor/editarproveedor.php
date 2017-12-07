@@ -23,6 +23,7 @@
               <td>
                   <input id="txtrut" type="text"  readonly="readonly"   value="<?php echo $rut;?>"  required="true"  class="form-control"  >
               </td>
+              <td>*</td>
           </tr>
      <tr>
               <td>
@@ -31,6 +32,7 @@
               <td>
                   <input id="txteditnombre" type="text"  value="<?php echo $nombre;?>"   required="true"  onkeyup="sacargeneral(this)" class="form-control"  >
               </td>
+              <td>*</td>
           </tr>
             <tr>
               <td>
@@ -39,6 +41,7 @@
               <td>
                   <input id="txteditgiro" type="text"  value="<?php echo $giro;?>"   required="true"  onkeyup="sacargeneral(this)" class="form-control"  >
               </td>
+              <td>*</td>
           </tr>
           <tr>
               <td>
@@ -47,6 +50,7 @@
               <td>
                   <input id="txtedittelefono" type="text"  value="<?php echo $telefono;?>"   required="true"  onkeyup="sacargeneral(this)" class="form-control"  >
               </td>
+              <td>*</td>
           </tr>
           <tr>
               <td>
@@ -62,6 +66,7 @@
      <?php endforeach?>
 </select> 
               </td>
+              <td>*</td>
           </tr>
            
     <tr id="cargarprovincia2">
@@ -78,10 +83,12 @@
                   <td>
 <input id="txteditcalle" type="text"  value="<?php echo $calle;?>"   required="true"  onkeyup="sacargeneral(this)" class="form-control"  >                      
                   </td>
+                  <td>*</td>
               </tr>
               <tr>
                   <td><label  for="psw"><span ></span>Correo electronico</label></td>
                   <td><input id="txteditcorreo" type="email"  value="<?php echo $correo;?>"   required="true"  class="form-control"  ></td>
+              <td>*</td>
               </tr>
               <tr>
                   <td></td>

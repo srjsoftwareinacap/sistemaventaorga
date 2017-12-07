@@ -25,15 +25,18 @@
               <tr>
               <td><label  for="psw"><span ></span>Mano de obra</label></td>       
               <td>  <input type="number" required="true" class="form-control"  id="txtmanodeobratrabajooo" onkeyup="sacarletras(this)"  placeholder="$ precio" maxlength="45" ></td>
+              <td>*</td>
               </tr>
               <tr>
               <td><label  for="psw"><span ></span>Descuento especial</label></td>       
             <td>  <input type="number" required="true" class="form-control"  id="txtdescuentoparaorden" onkeyup="sacarletras(this)" onblur="ingresarmanodeobraydescuento(this.value)"  placeholder="descuento" maxlength="45" ></td>
+              <td>*</td>
               </tr>
               <tr>
               <td><label  for="psw"><span ></span>Descripcion</label></td>       
           <td><textarea class="form-control" id="txtdescripciondetalletrabajo"></textarea></td>
-          </tr>
+          <td>*</td>
+              </tr>
       </table>
           
   </div>
@@ -89,7 +92,7 @@
       <form action="javascript:almacenar_detalleort()" method="post" id="formrelizar3455" >
                         
                         
-                        <button type="submit" id="btndetalleprosupuesto"  class="fa btn btn-success" form="formrelizar3455" >Confirmar Presupuesto</button>
+                        <button type="submit" id="btndetalleprosupuesto"  class="fa btn btn-primary" form="formrelizar3455" >Confirmar Presupuesto</button>
                     </form>  </div>
 </div><br />
 
