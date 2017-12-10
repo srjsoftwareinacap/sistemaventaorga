@@ -31,7 +31,7 @@
           <ul class="sidebar-menu">
               <li style="color: white" class="header">Panel de Navegación</li>
             <li class="active treeview">
-                <a style="color: red" href="#">
+                <a style="color: white" href="#">
                     <i class="fa fa-shopping-cart"></i> <span>Realizar ventas</span>
               </a>
              
@@ -75,7 +75,7 @@
                         <strong>Cantidad :</strong>
                     </div> 
                     <div class="col-xs-2">
-                     <input type="number"  id="txtcantidad" class="form-control" onkeyup="sacarletras(this)" placeholder="cantidad 0 = 1" >    
+                        <input type="text"  id="txtcantidad" class="form-control" onkeyup="sacarletras(this)" placeholder="cantidad 0 = 1" >    
                     </div>  
                 </div>
                 <br />
@@ -123,7 +123,7 @@
       <form action="javascript:realizarrventa()" method="post" id="formrelizar3455" >
                         <input id="txtidventarealizar" value="<?php echo $idventa;?>" class="hidden">
                         
-                        <button type="submit" id="btnralizarventa"  class="fa btn btn-success" form="formrelizar3455" >Confirmar venta</button>
+                        <button type="submit" id="btnralizarventa"  class="fa btn btn-primary" form="formrelizar3455" >Confirmar venta</button>
                     </form>  </div>
 </div>
                 

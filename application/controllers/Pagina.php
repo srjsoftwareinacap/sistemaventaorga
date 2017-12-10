@@ -1256,7 +1256,7 @@ echo json_encode(array("mensaj"=>$mensaje));
         function cacelardetalleproducto(){
             $codigo= $this->input->post("codigo");
            $ver= $this->Modelo->cancelardetalle($codigo);
-            if($ver==listo){
+            if($ver=="listo"){
             redirect(base_url());    
             }
         }

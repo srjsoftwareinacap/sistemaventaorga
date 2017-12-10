@@ -1,5 +1,5 @@
 <div id="vermodaleditarodt" class="modal-content">
-    <div class="modal-header alert-info">
+    <div class="modal-header btn-primary">
 
         <button type="button" class="close" data-dismiss="modal" id="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 style="text-align: center" id="tituloeempresa" ><span class="fa fa-money"></span> Detalle Presupuesto</h4>
@@ -11,7 +11,7 @@
       <table class="table">
           <tr>
               <td><label  for="psw"><span ></span>Cantidad</label></td>       
-              <td>  <input type="number" required="true" class="form-control"  id="txtcantidaddetalleor" onkeyup="sacarletras(this)"   placeholder="0 = 1" maxlength="45" ></td>
+              <td>  <input type="text" required="true" class="form-control"  id="txtcantidaddetalleor" onkeyup="sacarletras(this)"   placeholder="0 = 1" maxlength="45" ></td>
               </tr>
               <tr>
               <td><label  for="psw"><span ></span>Codigo</label></td>       
@@ -24,12 +24,12 @@
       </tr>
               <tr>
               <td><label  for="psw"><span ></span>Mano de obra</label></td>       
-              <td>  <input type="number" required="true" class="form-control"  id="txtmanodeobratrabajooo" onkeyup="sacarletras(this)"  placeholder="$ precio" maxlength="45" ></td>
+              <td>  <input type="text" required="true" class="form-control"  id="txtmanodeobratrabajooo" onkeyup="sacarletras(this)"  placeholder="$ precio" maxlength="45" ></td>
               <td>*</td>
               </tr>
               <tr>
               <td><label  for="psw"><span ></span>Descuento especial</label></td>       
-            <td>  <input type="number" required="true" class="form-control"  id="txtdescuentoparaorden" onkeyup="sacarletras(this)" onblur="ingresarmanodeobraydescuento(this.value)"  placeholder="descuento" maxlength="45" ></td>
+              <td>  <input type="text" required="true" class="form-control"  id="txtdescuentoparaorden" onkeyup="sacarletras(this)" onblur="ingresarmanodeobraydescuento(this.value)"  placeholder="descuento" maxlength="45" ></td>
               <td>*</td>
               </tr>
               <tr>
@@ -84,19 +84,20 @@
       <div  id="rowbotones" class="row">
   <div class="col-md-1"></div>
   <div class="col-md-2"><form action="<?php echo base_url().'Pagina/cacelardetalleproducto';?>" method="post" id="formcancel12341" >
-      <input id="txtiddetallecancelar" name="codigo" value="<?php echo $idf_ordenir;?>" class="hidden">    
+      <input id="txtiddetallecancelar" name="codigo"  class="hidden">    
                         
-                        <button type="submit" id="btncancelarprosupuesto"  class="fa btn btn-danger" form="formcancel12341" >Cancelar Presupuesto</button>
+                        <button type="submit" id="btncancelarprosupuesto"  class="fa btn btn-danger" form="formcancel12341" >Eliminar Orden</button>
                     </form> </div>
   <div class="col-md-2">
       <form action="javascript:almacenar_detalleort()" method="post" id="formrelizar3455" >
                         
                         
-                        <button type="submit" id="btndetalleprosupuesto"  class="fa btn btn-primary" form="formrelizar3455" >Confirmar Presupuesto</button>
+                        <button type="submit" id="btndetalleprosupuesto"  class="fa btn btn-primary" form="formrelizar3455" >Confirmar Orden</button>
                     </form>  </div>
 </div><br />
-
+<label   for="psw"><span ></span><strong>Al Eliminar el orden de reparacion se cancelará y eliminará todos los datos asociados con esta orden</strong></label><br />
 <label   for="psw"><span ></span><strong>Una vez Que Acepte el presupuesto se Debera Ir a retiro de producto</strong></label>
+
 <div id="modificarordendelalledeinformacion"></div>
   </div>
 </div></div>

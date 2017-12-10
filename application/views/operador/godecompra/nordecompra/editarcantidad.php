@@ -31,6 +31,10 @@
               <div class="col-lg-5">
              <input class="form-control" id="txtcantidadventaodt" type="number"  required="true" value="<?php echo $valor->cantidad_detalle;?>" onkeyup="sacarletras(this)" maxlength="45" >
              </div>
+                <div class="col-lg-3">
+      
+              <label for=""><span ></span>*</label>
+              </div>
             </div>
     <input class="form-control hidden" id="txtcodigobarraodtdetalle" type="text"   value="<?php echo $valor->codigo_barra;?>"
          

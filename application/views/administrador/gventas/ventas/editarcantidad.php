@@ -1,5 +1,5 @@
 <div id="vermodaleditar" class="modal-content ">
-<div class="modal-header alert-info">
+<div class="modal-header btn-primary">
 
         <button type="button" class="close" data-dismiss="modal" id="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 style="text-align: center" id="tituloeempresa" ><span class="fa fa-pencil-square-o"></span> Editar Cantidad Venta</h4>
@@ -29,7 +29,7 @@
               <label for=""><span ></span>Cantidad actual</label>
               </div>
               <div class="col-lg-5">
-             <input class="form-control" id="txtcantidadventa" type="number"  required="true" value="<?php echo $valor->cantidad_detalle;?>" onkeyup="sacarletras(this)" maxlength="45" >
+             <input class="form-control" id="txtcantidadventa" type="text"  required="true" value="<?php echo $valor->cantidad_detalle;?>" onkeyup="sacarletras(this)" maxlength="45" >
              </div>
             </div>
     <input class="form-control hidden" id="txtcodigobarraventa" type="text"   value="<?php echo $valor->codigo_barra;?>"

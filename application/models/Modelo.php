@@ -637,7 +637,11 @@ function desbloquiar_proveedor($codigo){
          $codigo_barra="";
         $cantidad=0;
         $stock_inventario=0;
-        foreach ($descartar->result() as $valor) {
+        if($descartar->num_rows()==0){
+             $this->db->where('id_orden',$codigo);
+        $this->db->delete('orden_reparacion');
+        }else{
+            foreach ($descartar->result() as $valor) {
           $codigo_barra=  $valor->codigof_producto;
           $cantidad= $valor->cantidad;
         $this->db->where('codigo_barra',$codigo_barra);
@@ -649,12 +653,18 @@ function desbloquiar_proveedor($codigo){
           $this->db->where('codigo_barra',$codigo_barra);
         $this->db->update('stock_inventario',$data);
         }
-        
-        $this->db->where('idf_orden',$codigo);
+         $this->db->where('idf_orden',$codigo);
         $this->db->delete('detalle_reparacion');
         
         $this->db->where('id_orden',$codigo);
         $this->db->delete('orden_reparacion');
+        }
+        
+        
+        
+        
+        
+       
         return "listo";    
     }
             function cancelarventas($codigo){

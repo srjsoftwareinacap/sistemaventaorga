@@ -34,7 +34,7 @@
           <ul class="sidebar-menu">
               <li style="color: white" class="header">Panel de Navegación</li>
             <li class="active treeview">
-                <a style="color: red" href="#">
+                <a style="color: white" href="#">
                 <i class="fa fa-bars"></i> <span>Nueva orden de Registro</span> 
               </a>
              
@@ -67,7 +67,7 @@
           
          <form class="form-inline" id="form12" action="<?php echo base_url().'Pagina/rutcliente';?>" method="post" >
   <div class="form-group">
-  <button type="submit" form="form12" class="btn alert-success fa fa-search">Buscar por</button>  
+  <button type="submit" form="form12" class="btn btn-primary fa fa-search">Buscar por</button>  
   </div>
   <input type="text" class="form-control"  name="buscar_rutcliente" placeholder="rut cliente" onkeyup="sacargeneral(this)"  >
   
@@ -127,9 +127,9 @@
 
       <!-- Modal content-->
       <div class="modal-content">
-        <div id="idhee" class="modal-header alert-info">
+        <div id="idhee" class="modal-header btn-primary">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h2 style="text-align: center"> Agregar nueva orden de trabajo</h2>      
+          <h2 style="text-align: center"> Agregar nueva orden de Reparación</h2>      
         </div>
         <div class="modal-body">
         
@@ -141,25 +141,27 @@
    <tr>
               <td><label  for="psw"><span ></span> Nombre cliente</label></td>       
             <td>  <input type="text" required="true" class="form-control"  id="txtcliente" onkeyup="sacargeneral(this)"  placeholder="Nombre" maxlength="45" ></td>
-
+            <td>*</td>
               </tr>
 
               <tr>
              <td><label  for="psw"><span ></span> Rut de Cliente</label></td>       
-            <td>  <input type="number" required="true" class="form-control"  id="txtRutregistrar" onkeyup="sacarletras(this)" onkeyup="sacarletras(this)"  placeholder="12345678" maxlength="45" ></td>
+             <td>  <input type="text" required="true" class="form-control"  id="txtRutregistrar" onkeyup="sacarletras(this)" onkeyup="sacarletras(this)"  placeholder="12345678" maxlength="45" ></td>
             <td>
-                <input id="txtrutverificador" type="number"   placeholder="9" onblur="vereficarrut(this.value)" required="true" onkeyup="sacarletras(this)" class="form-control"  >
+                <input id="txtrutverificador" type="text"   placeholder="9" onblur="vereficarrut(this.value)" required="true" onkeyup="sacarletras(this)" class="form-control"  >
             </td>
+            <td>*</td>
               </tr>
 
               <tr>
               <td><label  for="psw"><span ></span>Direccion</label></td>       
               <td>  <textarea type="text" required="true" class="form-control"  id="txtdireccion" onkeyup="sacargeneral(this)"   placeholder="ingrese la direccion" maxlength="45" ></textarea></td>
-
+<td>*</td>
               </tr>
               <tr>
                   <td><label  for="psw"><span ></span>Telefono</label></td>
-                  <td><input type="number" required="true" class="form-control"  id="txttelefono" onkeyup="sacarletras(this)"   placeholder="ingrese telefono" maxlength="45" ></td>
+                  <td><input type="text" required="true" class="form-control"  id="txttelefono" onkeyup="sacarletras(this)"   placeholder="ingrese telefono" maxlength="45" ></td>
+              <td>*</td>
               </tr>
               <tr>
                   <td><input type="text"  class="form-control"  id="txtmodelo" onkeyup="sacargeneral(this)"  placeholder="Modelo" maxlength="45" ></td>
@@ -174,10 +176,12 @@
               <tr>
                   <td><label  for="psw"><span ></span>Serie</label></td>
                   <td><input type="text" required="true" class="form-control"  id="txtserie" onkeyup="sacargeneral(this)"  placeholder="Serie" maxlength="45" ></td> 
+              <td>*</td>
               </tr>
               <tr>
                   <td><label  for="psw"><span ></span>Descripcion Falla</label></td>
                   <td><textarea id="txtdescrpcionfalla" required="true" placeholder="Defina Falla" ></textarea></td>
+              <td>*</td>
               </tr>
 
               
@@ -187,7 +191,7 @@
    </form>
      
    </table>
-   <button type="submit" id="btnguardarproducto" class="fa btn btn-success  fa-floppy-o" form="form1234" value="Submit">Guardar producto</button><br />
+   <button type="submit" id="btnguardarproducto" class="fa btn btn-primary  fa-floppy-o" form="form1234" value="Submit">Guardar Orden de reparacion</button><br />
    <br />
 <div style="text-align: center" id="mesajemodalproveedor"></div>
      <br />

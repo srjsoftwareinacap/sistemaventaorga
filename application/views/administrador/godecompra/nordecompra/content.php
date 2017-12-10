@@ -127,7 +127,7 @@
 
       <!-- Modal content-->
       <div class="modal-content">
-        <div id="idhee" class="modal-header alert-info">
+        <div id="idhee" class="modal-header btn-primary">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h2 style="text-align: center"> Agregar nueva orden de Reparación</h2>      
         </div>
@@ -146,9 +146,9 @@
 
               <tr>
              <td><label  for="psw"><span ></span> Rut de Cliente</label></td>       
-            <td>  <input type="number" required="true" class="form-control"  id="txtRutregistrar" onkeyup="sacarletras(this)" onkeyup="sacarletras(this)"  placeholder="12345678" maxlength="45" ></td>
+             <td>  <input type="text" required="true" class="form-control"  id="txtRutregistrar" onkeyup="sacarletras(this)" onkeyup="sacarletras(this)"  placeholder="12345678" maxlength="45" ></td>
             <td>
-                <input id="txtrutverificador" type="number"   placeholder="9" onblur="vereficarrut(this.value)" required="true" onkeyup="sacarletras(this)" class="form-control"  >
+                <input id="txtrutverificador" type="text"   placeholder="9" onblur="vereficarrut(this.value)" required="true" onkeyup="sacarletras(this)" class="form-control"  >
             </td>
             <td>*</td>
               </tr>
@@ -160,7 +160,7 @@
               </tr>
               <tr>
                   <td><label  for="psw"><span ></span>Telefono</label></td>
-                  <td><input type="number" required="true" class="form-control"  id="txttelefono" onkeyup="sacarletras(this)"   placeholder="ingrese telefono" maxlength="45" ></td>
+                  <td><input type="text" required="true" class="form-control"  id="txttelefono" onkeyup="sacarletras(this)"   placeholder="ingrese telefono" maxlength="45" ></td>
               <td>*</td>
               </tr>
               <tr>

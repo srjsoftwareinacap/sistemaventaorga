@@ -1,6 +1,6 @@
 <div id="vermodaleditarproveedor" class="modal-content ">
 
-<div class="modal-header alert-info">
+<div class="modal-header btn-primary">
 
         <button type="button" class="close" data-dismiss="modal" id="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 style="text-align: center" id="tituloeempresa" ><span class="fa fa-pencil-square-o"></span> Editar Orden</h4>
@@ -35,7 +35,7 @@
               </tr>
               <tr>
                   <td><label  for="psw"><span ></span>Telefono</label></td>
-                  <td><input type="number" required="true" class="form-control" value="<?php echo $valor->telefono;?>"  id="txttelefono1" onkeyup="sacarletras(this)"   placeholder="ingrese telefono" maxlength="45" ></td>
+                  <td><input type="text" required="true" class="form-control" value="<?php echo $valor->telefono;?>"  id="txttelefono1" onkeyup="sacarletras(this)"   placeholder="ingrese telefono" maxlength="45" ></td>
               <td>*</td>
               </tr>
               <tr>

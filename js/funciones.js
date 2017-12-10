@@ -181,6 +181,7 @@ function volvernormal() {
     function(pagina){  
           $("#modalordendecompradetalleproductos").html(pagina);
           $("#txtdetallenumero").val(codigo);
+          $("#txtiddetallecancelar").val(codigo);
       $("#modalordendecompradetalleproductos").modal({
         show:true
       });   

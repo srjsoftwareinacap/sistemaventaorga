@@ -75,7 +75,7 @@
                         <strong>Cantidad :</strong>
                     </div> 
                     <div class="col-xs-2">
-                     <input type="number"  id="txtcantidad" class="form-control" onkeyup="sacarletras(this)" placeholder="cantidad 0 = 1" >    
+                        <input type="text"  id="txtcantidad" class="form-control" onkeyup="sacarletras(this)" placeholder="cantidad 0 = 1" >    
                     </div>  
                 </div>
                 <br />
