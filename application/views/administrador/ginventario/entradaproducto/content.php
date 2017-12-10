@@ -231,7 +231,7 @@
 
               <tr>
               <td><label  for="psw"><span ></span>Numero de Factura</label></td>       
-            <td>  <input type="number" required="true" class="form-control"  id="txtnombre" onkeyup="sacarletras(this)"  placeholder="0001" maxlength="45" ></td>
+              <td>  <input type="text" required="true" class="form-control"  id="txtnombre" onkeyup="sacarletras(this)"  placeholder="0001" maxlength="45" ></td>
 <td>*</td>
               </tr>
 

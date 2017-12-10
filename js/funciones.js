@@ -269,7 +269,7 @@ function almacenar_familia(){
                  $("#mesajemodalfamilia").html("<p class='alert alert-success' role='alert' >"+"Tipo Familia Almacenada  Correctamente"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
      setTimeout("location.reload()",3000);
              }else{
-                $("#mesajemodalfamilia").html("<p class='alert alert-danger' role='alert' >"+"!!Eroor ,El codigo ya existe"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
+                $("#mesajemodalfamilia").html("<p class='alert alert-danger' role='alert' >"+"!!Eroor ,El nombre familia ya existe"+"</p>").fadeIn(100).delay(600).fadeOut(3000);
   $("#txttipofamilia").val('');
   $("#txttipofamilia").focus(); 
              }
@@ -1278,10 +1278,13 @@ function verificarusuario(){
              $("#mesaje").html("<div class='alert alert-success' role='alert' >"+vector.mensaj+"</div>").fadeIn(100).delay(600).fadeOut(3000);
      setTimeout("location.reload()",2000);  
          }else{
+             $("#rut").val('');
+           $("#contraseña").val('');
+           $("#rut").focus()
  $("#mesaje").html("<div class='alert alert-danger' role='alert' >"+vector.mensaj+"</div>").fadeIn(100).delay(600).fadeOut(3000);
              ejecutarefecto1();
            return false;
-             
+           
          }  
     },
     'json'

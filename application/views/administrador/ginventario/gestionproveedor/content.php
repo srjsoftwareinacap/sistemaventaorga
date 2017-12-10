@@ -194,7 +194,7 @@
               </tr>
               <tr>
               <td><label  for="psw"><span ></span>Telefono</label></td>       
-              <td>  <input type="number" required="true" class="form-control"  id="txttelefono" onkeyup="sacarletras(this)"   placeholder="12345678" maxlength="45" ></td>
+              <td>  <input type="text" required="true" class="form-control"  id="txttelefono" onkeyup="sacarletras(this)"   placeholder="12345678" maxlength="45" ></td>
               <td>*</td>
               </tr>
               

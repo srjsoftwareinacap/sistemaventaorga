@@ -31,7 +31,7 @@
               <li  style="color: white" class="header">Panel de Navegacion</li>
               
             <li   class="treeview">
-                <a href="#" style="color:red">
+                <a href="#" style="color:white">
                 <i class="fa fa-barcode"></i> <span>Gestion Usuario</span> 
                
               </a>
@@ -61,7 +61,7 @@
             
             <form class="form-inline" id="form12" action="<?php echo base_url().'Pagina/buscar_usuario_empresa';?>" method="post" >
   <div class="form-group">
-  <button type="submit" form="form12" class="btn alert-success fa fa-search">Buscar por</button>  
+  <button type="submit" form="form12" class="btn btn-primary fa fa-search">Buscar por</button>  
   </div>
   <input type="text" class="form-control"  name="buscar_usuario" placeholder="rut o por nombre" onkeyup="sacargeneral(this)"  >
   
@@ -148,7 +148,7 @@
 
       <!-- Modal content-->
       <div class="modal-content">
-        <div id="idhee" class="modal-header alert-danger">
+        <div id="idhee" class="modal-header btn-primary">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h2 style="text-align: center"> Agregar nuevo usuario</h2>      
         </div>
@@ -161,21 +161,23 @@
               <td><label  for="psw"><span ></span> Rut de Usuario</label></td>       
             <td>  <input type="text" required="true" class="form-control"  id="txtRutusuario" onkeyup="sacarletras(this)" onkeyup="sacargeneral(this)"  placeholder="12345678" maxlength="45" ></td>
             <td>
-                <input id="trificadorusuario" type="number"   placeholder="9" onblur="vereficarrutusuario(this.value)" required="true" onkeyup="sacarletras(this)" class="form-control"  >
+                <input id="trificadorusuario" type="text"   placeholder="9" onblur="vereficarrutusuario(this.value)" required="true" onkeyup="sacarletras(this)" class="form-control"  >
             </td>
-
+<td>*</td>
               </tr>
               <tr>
 <td><label  for="psw"><span ></span> Nombre de Usuario</label></td>
 <td>  <input type="text" required="true" class="form-control"  id="txtnombreusuario"  onkeyup="sacargeneral(this)"  placeholder=" ingrese nombre" maxlength="45" ></td>                  
+              <td>*</td>
               </tr>
               <tr>
 <td><label  for="psw"><span ></span>Contraseña</label></td>
 <td>  <input type="text" required="true" class="form-control"  id="txtcontrasenausuario"  onkeyup="sacargeneral(this)"  placeholder="ingrese contraseña" maxlength="45" ></td>                  
+<td>*</td>
               </tr>
   
    </table>
-   <button type="submit" id="btnguardarfamilia" class="fa btn btn-success  fa-floppy-o" form="form12345" value="Submit">Guardar Tipo de familia</button><br />
+   <button type="submit" id="btnguardarfamilia" class="fa btn btn-primary  fa-floppy-o" form="form12345" value="Submit">Guardar usuario</button><br />
    <br />
 <div id="mesajemodalgusuario"></div>
      <br />

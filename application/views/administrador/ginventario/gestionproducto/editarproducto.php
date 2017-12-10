@@ -73,7 +73,7 @@
               <label for=""><span ></span>Stock minimo</label>
               </div>
               <div class="col-lg-5">
-             <input class="form-control" id="txtstockminimonuevo" type="number"  required="true" value="<?php echo $stock_minimo;?>" onkeyup="sacarletras(this)" maxlength="45" >
+             <input class="form-control" id="txtstockminimonuevo" type="text"  required="true" value="<?php echo $stock_minimo;?>" onkeyup="sacarletras(this)" maxlength="45" >
              </div>
                 <div class="col-lg-3">
                     <label for=""><span ></span>*</label>
@@ -84,7 +84,7 @@
             <label for=""><span ></span>Precio bruto Venta</label>
         </div>
         <div class="col-lg-5">
-            <input class="form-control" id="txtpreciobrutoeditar" type="number"  required="true" value="<?php echo $precio_bruto;?>" onkeyup="sacarletras(this)" maxlength="45" >
+            <input class="form-control" id="txtpreciobrutoeditar" type="text"  required="true" value="<?php echo $precio_bruto;?>" onkeyup="sacarletras(this)" maxlength="45" >
         </div>
         <div class="col-lg-3">
                     <label for=""><span ></span>*</label>

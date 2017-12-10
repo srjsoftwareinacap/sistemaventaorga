@@ -123,7 +123,7 @@
       <form action="javascript:realizarrventa()" method="post" id="formrelizar3455" >
                         <input id="txtidventarealizar" value="<?php echo $idventa;?>" class="hidden">
                         
-                        <button type="submit" id="btnralizarventa"  class="fa btn btn-success" form="formrelizar3455" >Confirmar venta</button>
+                        <button type="submit" id="btnralizarventa"  class="fa btn btn-primary" form="formrelizar3455" >Confirmar venta</button>
                     </form>  </div>
 </div>
                 

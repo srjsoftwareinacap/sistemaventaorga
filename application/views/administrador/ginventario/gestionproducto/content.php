@@ -213,12 +213,12 @@
 
               <tr>
               <td><label  for="psw"><span ></span>Stock minimo</label></td>       
-              <td>  <input type="number" required="true" class="form-control"  id="txtstock" onkeyup="sacarletras(this)"   placeholder="ingrese stock minimo " maxlength="45" ></td>
+              <td>  <input type="text" required="true" class="form-control"  id="txtstock" onkeyup="sacarletras(this)"   placeholder="ingrese stock minimo " maxlength="45" ></td>
 <td>*</td>
               </tr>
               <tr>
                   <td><label  for="psw"><span ></span>Precio venta Bruto</label></td>       
-              <td>  <input type="number" required="true" class="form-control"  id="txtpreciobrutoproducto" onkeyup="sacarletras(this)"   placeholder="ingrese su precio $" maxlength="45" ></td>
+              <td>  <input type="text" required="true" class="form-control"  id="txtpreciobrutoproducto" onkeyup="sacarletras(this)"   placeholder="ingrese su precio $" maxlength="45" ></td>
               <td>*</td>
               </tr>
             </div>
@@ -249,7 +249,7 @@
 
       <!-- Modal content-->
       <div class="modal-content">
-        <div id="idhee" class="modal-header alert-danger">
+        <div id="idhee" class="modal-header btn-primary">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h2 style="text-align: center"> Agregar nueva familia</h2>      
         </div>
@@ -268,7 +268,7 @@
             </div>
    </form>
    </table>
-   <button type="submit" id="btnguardarfamilia" class="fa btn btn-success  fa-floppy-o" form="form12345" value="Submit">Guardar Tipo de familia</button><br />
+   <button type="submit" id="btnguardarfamilia" class="fa btn btn-primary  fa-floppy-o" form="form12345" value="Submit">Guardar Tipo de familia</button><br />
    <br />
 <div style="text-align: center" id="mesajemodalfamilia"></div>
      <br />

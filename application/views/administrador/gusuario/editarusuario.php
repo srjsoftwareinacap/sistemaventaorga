@@ -30,6 +30,10 @@
               <div class="col-lg-5">
              <input class="form-control" id="txteditar_nombre" type="text"  required="true" value="<?php echo $nombre_usuario;?>" onkeyup="sacargeneral(this)" >
              </div>
+                <div class="col-lg-3">
+      
+              <label for=""><span ></span>*</label>
+              </div>
             </div>
 <div class="row">
 <div class="col-lg-4">
@@ -39,6 +43,10 @@
               <div class="col-lg-5">
              <input class="form-control" id="txteditar_contraseña" type="text"  required="true" value="<?php echo $contraseña;?>" onkeyup="sacargeneral(this)" >
              </div>
+    <div class="col-lg-3">
+      
+              <label for=""><span ></span>*</label>
+              </div>
             </div>
             <div class="row">
 <div class="col-lg-4">
@@ -56,6 +64,10 @@
      
 </select>
              </div>
+                <div class="col-lg-3">
+      
+              <label for=""><span ></span>*</label>
+              </div>
             </div>
     
             

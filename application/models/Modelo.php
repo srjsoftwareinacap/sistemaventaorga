@@ -90,7 +90,7 @@ $query = $this->db->get();
   function verentradas($rut_proveedor,$numero_factura){
       $this->db->select("*");
       $this->db->where("rut_proveedor",$rut_proveedor);
-      $this->db->where("numero_factura",$rut_proveedor);
+      $this->db->where("numero_factura",$numero_factura);
   $captar  =$this->db->get("entrada");
   if($captar->num_rows()==0){
       $mensaje="si";
@@ -343,6 +343,7 @@ function obtenerordenimprimir($inicio,$limite){
       $ver ="proveedor";
       $this->db->select("*");
       $this->db->where('tipo_empresa',$ver);
+      $this->db->where('estado',"activo");
       return $this->db->get('empresa');
   }
           function buscar_producto_empresa($codigo,$rut_empresa){
@@ -907,7 +908,16 @@ function versinosi($codigo_barra){
   if($consulta1->num_rows()==0){
       $mandar="no";
   }else{
-      $mandar="si";
+      $this->db->select("*");
+  $this->db->where('codigo_barra',$codigo_barra);
+  $this->db->where('estado',"activo");
+  $consulta2= $this->db->get('producto');
+  if($consulta2->num_rows()==0){
+      $mandar="no";
+  }else{
+  $mandar="si";    
+  }
+      
   }
   return $mandar;
 }

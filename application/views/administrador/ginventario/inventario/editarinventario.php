@@ -55,7 +55,7 @@
               <label for=""><span ></span>Cantidad actual</label>
               </div>
               <div class="col-lg-5">
-             <input class="form-control" id="txtstockinventarionuevo" type="number"  required="true" value="<?php echo $valor->cantidad;?>" onkeyup="sacarletras(this)" maxlength="45" >
+                  <input class="form-control" id="txtstockinventarionuevo" type="text"  required="true" value="<?php echo $valor->cantidad;?>" onkeyup="sacarletras(this)" maxlength="45" >
              </div>
                 <div class="col-lg-3">
                     <label for=""><span ></span>*</label>
